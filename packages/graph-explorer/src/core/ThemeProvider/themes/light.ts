@@ -3,15 +3,15 @@ import type { ProcessedTheme } from "../types";
 const spacing = (scale: number) => `${scale * 4}px`;
 
 const grey = {
-  100: "#f8f8f8",
-  200: "#eeeeee",
-  300: "#e0e0e0",
-  400: "#bdbdbd",
-  500: "#9e9e9e",
-  600: "#757575",
-  700: "#616161",
-  800: "#424242",
-  900: "#212121",
+  100: "#f4f4f5",
+  200: "#e5e5e5",
+  300: "#d4d4d4",
+  400: "#a3a3a3",
+  500: "#737373",
+  600: "#525252",
+  700: "#404040",
+  800: "#262626",
+  900: "#171717",
 };
 
 const palette: DeepRequired<ProcessedTheme["palette"]> = {
@@ -20,9 +20,9 @@ const palette: DeepRequired<ProcessedTheme["palette"]> = {
     black: "#000",
   },
   primary: {
-    light: "#64c7ff",
-    main: "#128ee5",
-    dark: "#17457b",
+    light: "#38bdf8",
+    main: "#0ea5e9",
+    dark: "#0284c7",
     contrastText: "#ffffff",
   },
   secondary: {
@@ -32,9 +32,9 @@ const palette: DeepRequired<ProcessedTheme["palette"]> = {
     contrastText: "#ffffff",
   },
   info: {
-    light: "#64c7ff",
-    main: "#128ee5",
-    dark: "#17457b",
+    light: "#7dd3fc",
+    main: "#0ea5e9",
+    dark: "#0369a1",
     contrastText: "#ffffff",
   },
   error: {
@@ -56,17 +56,17 @@ const palette: DeepRequired<ProcessedTheme["palette"]> = {
     contrastText: "#ffffff",
   },
   text: {
-    primary: "rgba(0,0,0,0.87)",
-    secondary: "rgba(0,0,0,0.6)",
-    disabled: "rgba(0,0,0,0.38)",
+    primary: "#0a0a0a",
+    secondary: "#404040",
+    disabled: "#78716c",
   },
   divider: grey["200"],
   border: grey["200"],
   background: {
     default: "#ffffff",
-    secondary: "#E0E9F6",
-    contrast: grey["200"],
-    contrastSecondary: grey["300"],
+    secondary: "#f0f9ff",
+    contrast: grey["100"],
+    contrastSecondary: grey["200"],
   },
   grey,
 };
