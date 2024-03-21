@@ -1,11 +1,7 @@
 import { css, cx } from "@emotion/css";
 import type { ThemeStyleFn } from "../../core";
 import { fade } from "../../core";
-import {
-  baseStyles,
-  defaultStyles,
-  getHeightBySize,
-} from "../Button/Button.styles";
+import { baseStyles, getHeightBySize } from "../Button/Button.styles";
 
 type stylesProps = {
   variant: "filled" | "default" | "text";
@@ -239,105 +235,6 @@ export const defaultIconButtonStyles =
     `;
 
     return cx(variants[variant], baseStyles(theme, size), iconButtonStyles);
-  };
-
-type toggleButtonStylesProps = {
-  variant: "filled" | "default" | "text";
-  size: "small" | "base" | "large";
-  rounded: boolean;
-  isDisabled?: boolean;
-  isSelected: boolean;
-  styleLike: "button" | "iconButton";
-};
-
-export const defaultToggleButtonStyles =
-  ({
-    variant,
-    size,
-    styleLike,
-    isSelected,
-    isDisabled,
-    rounded,
-  }: toggleButtonStylesProps): ThemeStyleFn =>
-  activeTheme => {
-    const { isDarkTheme, theme } = activeTheme;
-    const {
-      palette: { primary, background, text },
-    } = theme;
-
-    const themeByVariant =
-      variant !== "default"
-        ? theme?.[styleLike]?.variants?.[variant]
-        : theme.iconButton;
-
-    const selectedStylesByVariantMap = {
-      filled: css`
-        background-color: ${themeByVariant?.hover?.background || primary.dark};
-        color: ${themeByVariant?.hover?.color || primary.contrastText};
-        &:disabled,
-        &[disabled] {
-          background-color: ${themeByVariant?.hover?.background ||
-          primary.dark} !important;
-          color: ${themeByVariant?.hover?.color ||
-          primary.contrastText} !important;
-          filter: opacity(70%) !important;
-        }
-      `,
-      default: css`
-        background-color: ${themeByVariant?.hover?.background ||
-        (isDarkTheme ? fade(primary.dark, 0.25) : "transparent")};
-        color: ${themeByVariant?.hover?.color || primary.main};
-        &:disabled,
-        &[disabled] {
-          background-color: ${themeByVariant?.hover?.background ||
-          (isDarkTheme ? fade(primary.dark, 0.25) : "transparent")} !important;
-          color: ${themeByVariant?.hover?.color || primary.main} !important;
-          filter: opacity(70%) !important;
-        }
-      `,
-      text: css`
-        background-color: ${themeByVariant?.hover?.background ||
-        fade(theme.palette.primary.main, 0.2)};
-        color: ${themeByVariant?.hover?.color ||
-        (isDarkTheme ? primary.light : primary.main)};
-        &:hover {
-          background-color: ${themeByVariant?.hover?.background ||
-          fade(theme.palette.primary.main, 0.5)};
-          color: ${themeByVariant?.hover?.color || primary.dark};
-          &:focus {
-            box-shadow: none !important;
-            border: 1px solid
-              ${themeByVariant?.hover?.background ||
-              (isDarkTheme ? background.contrast : "transparent")};
-          }
-        }
-        &:disabled,
-        &[disabled] {
-          background-color: ${themeByVariant?.hover?.background ||
-          (isDarkTheme ? background.contrast : "transparent")} !important;
-          color: ${themeByVariant?.hover?.color ||
-          (isDarkTheme ? primary.light : primary.main)} !important;
-          filter: opacity(70%) !important;
-        }
-      `,
-    };
-
-    const stylesByVariantMap = {
-      filled: "",
-      default: css`
-        color: ${themeByVariant?.color ||
-        (isDarkTheme ? text.disabled : primary.dark)};
-      `,
-      text: "",
-    };
-
-    const styles =
-      styleLike === "button" ? defaultStyles : defaultIconButtonStyles;
-    return cx(
-      styles({ variant, size, isDisabled, rounded })(activeTheme),
-      stylesByVariantMap[variant],
-      isSelected ? selectedStylesByVariantMap[variant] : ""
-    );
   };
 
 export const defaultBadgeStyles =
