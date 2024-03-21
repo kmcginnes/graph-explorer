@@ -4,7 +4,7 @@ import { fade } from "../../core";
 import { baseStyles, getHeightBySize } from "../Button/Button.styles";
 
 type stylesProps = {
-  variant: "filled" | "default" | "text";
+  variant: "filled" | "text";
   size: "small" | "base" | "large";
   rounded?: boolean;
   isDisabled?: boolean;
@@ -18,14 +18,10 @@ export const defaultIconButtonStyles =
       palette: { primary, text, background },
     } = theme;
 
-    const themeByVariant =
-      variant !== "default"
-        ? theme?.iconButton?.variants?.[variant]
-        : theme.iconButton;
+    const themeByVariant = theme?.variants?.[variant];
 
     const variants: {
       filled: string;
-      default: string;
       text: string;
     } = {
       filled: css`
@@ -80,78 +76,6 @@ export const defaultIconButtonStyles =
           background-color: ${themeByVariant?.active?.background ||
           (isDarkTheme ? primary.dark : primary.main)};
           color: ${themeByVariant?.active?.color || primary.contrastText};
-          border: ${themeByVariant?.active?.border?.width || "1px"} solid
-            ${themeByVariant?.active?.border?.color || "transparent"};
-        }
-
-        &:focus {
-          box-shadow: ${isDarkTheme
-            ? "none"
-            : `0 0 3px ${themeByVariant?.hover?.background || primary.main}`};
-          outline: ${isDarkTheme
-            ? `1px solid ${themeByVariant?.hover?.background || primary.light}`
-            : "none"};
-        }
-      `,
-      default: css`
-        &.color-primary {
-          color: ${theme.palette.primary.main};
-          background: ${fade(theme.palette.primary.main, 0.2)};
-        }
-        &.color-info {
-          color: ${theme.palette.info.main};
-          background: ${fade(theme.palette.info.main, 0.2)};
-        }
-        &.color-success {
-          color: ${theme.palette.success.main};
-          background: ${fade(theme.palette.success.main, 0.2)};
-        }
-        &.color-warning {
-          color: ${theme.palette.warning.main};
-          background: ${fade(theme.palette.warning.main, 0.2)};
-        }
-        &.color-error {
-          color: ${theme.palette.error.main};
-          background: ${fade(theme.palette.error.main, 0.2)};
-        }
-        position: relative;
-        background-color: ${themeByVariant?.background ||
-        (isDarkTheme ? background.secondary : background.contrast)};
-        color: ${themeByVariant?.color ||
-        (isDarkTheme ? primary.main : primary.dark)};
-        border: ${themeByVariant?.border?.width || "1px"} solid
-          ${themeByVariant?.border?.color || "transparent"};
-        border-radius: ${rounded
-          ? "50%"
-          : themeByVariant?.border?.radius || "5px"};
-        box-shadow: ${isDarkTheme
-          ? "none"
-          : themeByVariant?.shadow || "0 2px 6px 0 rgba(0, 0, 0, 0.3)"};
-
-        &:disabled,
-        &[disabled] {
-          pointer-events: none;
-          background-color: ${themeByVariant?.disabled?.background ||
-          fade(background.contrast, 0.7)};
-          color: ${themeByVariant?.disabled?.color ||
-          (isDarkTheme ? primary.main : primary.dark)};
-          border: ${themeByVariant?.disabled?.border?.width || "1px"} solid
-            ${themeByVariant?.disabled?.border?.color || "transparent"};
-        }
-
-        &:hover {
-          background-color: ${themeByVariant?.hover?.background ||
-          (isDarkTheme ? background.contrast : background.default)};
-          color: ${themeByVariant?.hover?.color ||
-          (isDarkTheme ? primary.light : primary.main)};
-          border: ${themeByVariant?.hover?.border?.width || "1px"} solid
-            ${themeByVariant?.hover?.border?.color || "transparent"};
-        }
-
-        &:active {
-          background-color: ${themeByVariant?.active?.background ||
-          (isDarkTheme ? background.contrastSecondary : background.secondary)};
-          color: ${themeByVariant?.active?.color || primary.dark};
           border: ${themeByVariant?.active?.border?.width || "1px"} solid
             ${themeByVariant?.active?.border?.color || "transparent"};
         }

@@ -16,7 +16,7 @@ export interface IconButtonProps
   classNamePrefix?: string;
   className?: string;
   color?: "primary" | "error" | "info" | "success" | "warning";
-  variant?: "filled" | "default" | "text";
+  variant?: "filled" | "text";
   rounded?: boolean;
   size?: "small" | "base" | "large";
   icon: ReactNode;
@@ -55,7 +55,7 @@ export const IconButton = (
 
   const {
     className,
-    variant = "default",
+    variant = "text",
     size = "base",
     rounded = false,
     isDisabled,
