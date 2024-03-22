@@ -80,14 +80,16 @@ export const defaultIconButtonStyles =
             ${themeByVariant?.active?.border?.color || "transparent"};
         }
 
+        /*
         &:focus {
           box-shadow: ${isDarkTheme
-            ? "none"
-            : `0 0 3px ${themeByVariant?.hover?.background || primary.main}`};
+          ? "none"
+          : `0 0 3px ${themeByVariant?.hover?.background || primary.main}`};
           outline: ${isDarkTheme
-            ? `1px solid ${themeByVariant?.hover?.background || primary.light}`
-            : "none"};
+          ? `1px solid ${themeByVariant?.hover?.background || primary.light}`
+          : "none"};
         }
+        */
       `,
       text: css`
         &.color-primary {
@@ -126,10 +128,8 @@ export const defaultIconButtonStyles =
         }
 
         &:hover {
-          background-color: ${themeByVariant?.hover?.background ||
-          "transparent"};
-          color: ${themeByVariant?.hover?.color ||
-          (isDarkTheme ? primary.light : primary.main)};
+          background-color: ${background.contrast};
+          color: ${text.primary};
           border: ${themeByVariant?.hover?.border?.width || "1px"} solid
             ${themeByVariant?.hover?.border?.color || "transparent"};
         }
@@ -142,14 +142,22 @@ export const defaultIconButtonStyles =
             ${themeByVariant?.active?.border?.color || "transparent"};
         }
 
-        &:focus {
+        /*
+        &:focus,
+        &:focus-visible {
           box-shadow: ${isDarkTheme
-            ? "none"
-            : `0 0 3px ${themeByVariant?.hover?.background || primary.main}`};
+          ? "none"
+          : `0 0 3px ${themeByVariant?.hover?.background || primary.main}`};
           outline: ${isDarkTheme
-            ? `1px solid ${themeByVariant?.hover?.background || primary.light}`
-            : "none"};
+          ? `1px solid ${themeByVariant?.hover?.background || primary.light}`
+          : "none"};
         }
+
+        :focus:not(:focus-visible) {
+          box-shadow: none !important;
+          outline: none !important;
+        }
+        */
       `,
     };
 

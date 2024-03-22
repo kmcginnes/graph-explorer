@@ -29,3 +29,8 @@ a {
 .animate-spin {
   animation: spin 2s linear infinite;
 }
+
+*:focus:not(:focus-visible) {
+  box-shadow: none !important;
+  outline: none !important;
+}

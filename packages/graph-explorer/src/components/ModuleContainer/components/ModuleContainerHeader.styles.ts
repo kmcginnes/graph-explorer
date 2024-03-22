@@ -1,6 +1,5 @@
 import { css } from "@emotion/css";
 import type { ThemeStyleFn } from "../../../core";
-import { fade } from "../../../core";
 
 const defaultStyles =
   (pfx: string): ThemeStyleFn =>
@@ -57,15 +56,6 @@ const defaultStyles =
         display: flex;
         justify-content: flex-end;
         align-items: center;
-      }
-
-      > .${pfx}-actions-container button:hover {
-        color: ${theme.palette.primary.main};
-      }
-
-      > .${pfx}-actions-container button:focus {
-        color: ${theme.palette.primary.main};
-        background-color: ${fade(theme.palette.primary.main, 0.2)};
       }
     }
   `;

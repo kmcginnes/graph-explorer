@@ -17,12 +17,6 @@ const styles = () => css`
   width: 100%;
   height: 100%;
 
-  button {
-    color: #9a9a9a;
-    &:hover {
-      color: #128ee5;
-    }
-  }
   > div {
     display: flex;
     justify-content: center;
