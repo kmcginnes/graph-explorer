@@ -30,6 +30,8 @@ const useGraphStyles = () => {
         // Process the image data or SVG
         const backgroundImage = await renderNode(vtConfig);
 
+        // console.log(`styling node ${vt} with:`, { vtConfig, iconText });
+
         styles[`node[type="${vt}"]`] = {
           "background-image": backgroundImage,
           "background-color": vtConfig.color,

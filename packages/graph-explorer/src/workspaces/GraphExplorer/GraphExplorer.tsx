@@ -43,6 +43,8 @@ import NodeExpand from "../../modules/NodeExpand";
 import NodesStyling from "../../modules/NodesStyling/NodesStyling";
 import TopBarWithLogo from "../common/TopBarWithLogo";
 import defaultStyles from "./GraphExplorer.styles";
+import ReactFlowGraphViewer from "../../modules/GraphViewer/ReactFlowGraphViewer";
+import { ReactFlowProvider } from "reactflow";
 
 export type GraphViewProps = {
   classNamePrefix?: string;
@@ -200,6 +202,17 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
         <Workspace.TopBar.AdditionalControls>
           <IconButton
             tooltipText={
+              toggles.has("react-flow-graph-viewer")
+                ? "Hide React Flow Graph View"
+                : "Show React Flow Graph View"
+            }
+            tooltipPlacement={"bottom-center"}
+            variant={toggles.has("react-flow-graph-viewer") ? "filled" : "text"}
+            icon={<GraphIcon />}
+            onPress={toggleView("react-flow-graph-viewer")}
+          />
+          <IconButton
+            tooltipText={
               toggles.has("graph-viewer")
                 ? "Hide Graph View"
                 : "Show Graph View"
@@ -266,6 +279,22 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
               onNodeCustomize={setCustomizeNodeType}
               onEdgeCustomize={setCustomizeEdgeType}
             />
+          </div>
+        )}
+        {toggles.has("react-flow-graph-viewer") && (
+          <div
+            style={{
+              width: "100%",
+              flexGrow: 1,
+              position: "relative",
+            }}
+          >
+            <ReactFlowProvider>
+              <ReactFlowGraphViewer
+                onNodeCustomize={setCustomizeNodeType}
+                onEdgeCustomize={setCustomizeEdgeType}
+              />
+            </ReactFlowProvider>
           </div>
         )}
         {toggles.has("table-view") && (

@@ -61,5 +61,12 @@
       "undici@<5.28.3": ">=5.28.3"
     }
   },
+  "dependencies": {
+    "@dagrejs/dagre": "^1.1.1",
+    "d3-force": "^3.0.0",
+    "d3-quadtree": "^3.0.1",
+    "graph-explorer": "workspace:^",
+    "zustand": "^4.5.2"
+  },
   "type": "module"
 }

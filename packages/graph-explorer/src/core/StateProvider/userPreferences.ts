@@ -114,7 +114,11 @@ export const userStylingAtom = atom<UserPreferences["styling"]>({
 export const userLayoutAtom = atom<UserPreferences["layout"]>({
   key: "user-layout",
   default: {
-    activeToggles: new Set(["graph-viewer", "table-view"]),
+    activeToggles: new Set([
+      "graph-viewer",
+      "table-view",
+      "react-flow-graph-viewer",
+    ]),
     activeSidebarItem: null,
     detailsAutoOpenOnSelection: true,
     tableView: {
