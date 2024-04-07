@@ -54,6 +54,7 @@
     "file-saver": "^2.0.5",
     "flat": "^5.0.2",
     "framer-motion": "^2.9.5",
+    "jotai": "^2.7.2",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "memoize-one": "^5.2.1",
