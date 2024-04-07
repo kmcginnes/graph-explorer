@@ -1,5 +1,6 @@
 import { uniq } from "lodash";
-import { atom, selector } from "recoil";
+import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { sanitizeText } from "../../utils";
 import DEFAULT_ICON_URL from "../../utils/defaultIconUrl";
 import type {
@@ -8,7 +9,6 @@ import type {
   RawConfiguration,
   VertexTypeConfig,
 } from "../ConfigurationProvider";
-import localForageEffect from "./localForageEffect";
 import { schemaAtom } from "./schema";
 import {
   EdgePreferences,
@@ -16,26 +16,20 @@ import {
   VertexPreferences,
 } from "./userPreferences";
 
-export const isStoreLoadedAtom = atom<boolean>({
-  key: "store-loaded",
-  default: false,
-});
+export const isStoreLoadedAtom = atom(false);
 
-export const activeConfigurationAtom = atom<string | null>({
-  key: "active-configuration",
-  default: null,
-  effects: [localForageEffect()],
-});
+export const activeConfigurationAtom = atomWithStorage<string | null>(
+  "active-configuration",
+  null
+);
 
-export const configurationAtom = atom<Map<string, RawConfiguration>>({
-  key: "configuration",
-  default: new Map(),
-  effects: [localForageEffect()],
-});
+export const configurationAtom = atomWithStorage<Map<string, RawConfiguration>>(
+  "configuration",
+  new Map()
+);
 
-export const mergedConfigurationSelector = selector<RawConfiguration | null>({
-  key: "merged-configuration",
-  get: ({ get }) => {
+export const mergedConfigurationSelector = atom<RawConfiguration | null>(
+  get => {
     const activeConfig = get(activeConfigurationAtom);
     const config = get(configurationAtom);
     const currentConfig = activeConfig && config.get(activeConfig);
@@ -103,8 +97,8 @@ export const mergedConfigurationSelector = selector<RawConfiguration | null>({
         totalEdges: currentSchema?.totalEdges ?? 0,
       },
     };
-  },
-});
+  }
+);
 
 const mergeAttributes = (
   config?: VertexTypeConfig | EdgeTypeConfig,

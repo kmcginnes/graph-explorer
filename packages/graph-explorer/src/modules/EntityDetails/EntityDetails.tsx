@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useAtomValue } from "jotai";
 import type { ModuleContainerHeaderProps } from "../../components";
 import {
   AutoFitLeftIcon,
@@ -35,10 +35,10 @@ const EntityDetails = ({
   disableConnections,
   ...headerProps
 }: EntityDetailsProps) => {
-  const nodes = useRecoilValue(nodesAtom);
-  const edges = useRecoilValue(edgesAtom);
-  const selectedNodesIds = useRecoilValue(nodesSelectedIdsAtom);
-  const selectedEdgesIds = useRecoilValue(edgesSelectedIdsAtom);
+  const nodes = useAtomValue(nodesAtom);
+  const edges = useAtomValue(edgesAtom);
+  const selectedNodesIds = useAtomValue(nodesSelectedIdsAtom);
+  const selectedEdgesIds = useAtomValue(edgesSelectedIdsAtom);
   const [userLayout, setUserLayout] = useRecoilState(userLayoutAtom);
 
   const selectedNode = useMemo(() => {

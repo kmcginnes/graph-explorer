@@ -13,14 +13,14 @@ import useOpenCypher from "../../connector/openCypher/useOpenCypher";
 import useSPARQL from "../../connector/sparql/useSPARQL";
 import useGremlin from "../../connector/gremlin/useGremlin";
 import { ConnectionConfig } from "../ConfigurationProvider/types";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { mergedConfigurationSelector } from "../StateProvider/configuration";
 import { every, isEqual } from "lodash";
 
 export const ConnectorContext = createContext<ConnectorContextProps>({});
 
 const ConnectorProvider = ({ children }: PropsWithChildren<any>) => {
-  const config = useRecoilValue(mergedConfigurationSelector);
+  const config = useAtomValue(mergedConfigurationSelector);
 
   const [connector, setConnector] = useState<ConnectorContextProps>({
     explorer: undefined,

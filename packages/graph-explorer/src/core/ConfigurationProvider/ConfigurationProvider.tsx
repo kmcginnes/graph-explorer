@@ -1,7 +1,7 @@
 import uniqBy from "lodash/uniqBy";
 import type { PropsWithChildren } from "react";
 import { createContext, useCallback, useMemo } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import DEFAULT_ICON_URL from "../../utils/defaultIconUrl";
 import { mergedConfigurationSelector } from "../StateProvider/configuration";
 import type { ConfigurationContextProps } from "./types";
@@ -30,7 +30,7 @@ const getDefaultEdgeTypeConfig = (edgeType: string) => ({
 const ConfigurationProvider = ({
   children,
 }: PropsWithChildren<ConfigurationProviderProps>) => {
-  const configuration = useRecoilValue(mergedConfigurationSelector);
+  const configuration = useAtomValue(mergedConfigurationSelector);
 
   const getVertexTypeConfig: ConfigurationContextProps["getVertexTypeConfig"] =
     useCallback(

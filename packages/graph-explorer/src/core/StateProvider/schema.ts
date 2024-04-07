@@ -1,10 +1,9 @@
-import { atom } from "recoil";
+import { atomWithStorage } from "jotai/utils";
 import {
   EdgeTypeConfig,
   PrefixTypeConfig,
   VertexTypeConfig,
 } from "../ConfigurationProvider";
-import localForageEffect from "./localForageEffect";
 
 export type SchemaInference = {
   vertices: VertexTypeConfig[];
@@ -17,8 +16,7 @@ export type SchemaInference = {
   totalEdges?: number;
 };
 
-export const schemaAtom = atom<Map<string, SchemaInference>>({
-  key: "schema",
-  default: new Map(),
-  effects: [localForageEffect()],
-});
+export const schemaAtom = atomWithStorage<Map<string, SchemaInference>>(
+  "schema",
+  new Map()
+);

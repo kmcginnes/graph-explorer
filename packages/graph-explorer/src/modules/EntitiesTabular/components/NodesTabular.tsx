@@ -1,6 +1,6 @@
 import difference from "lodash/difference";
 import { forwardRef, useCallback, useMemo } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useAtomValue, useSetAtom } from "jotai";
 import type { Vertex, VertexData } from "../../../@types/entities";
 import { NonVisibleIcon, VisibleIcon } from "../../../components";
 import type {
@@ -32,14 +32,14 @@ type ToggleVertex = Vertex & { __is_visible: boolean };
 
 const NodesTabular = forwardRef<TabularInstance<any>, any>((props, ref) => {
   const t = useTranslations();
-  const nodes = useRecoilValue(nodesAtom);
-  const setNodesOut = useSetRecoilState(nodesOutOfFocusIdsAtom);
+  const nodes = useAtomValue(nodesAtom);
+  const setNodesOut = useSetAtom(nodesOutOfFocusIdsAtom);
   const config = useConfiguration();
   const [hiddenNodesIds, setHiddenNodesIds] =
     useRecoilState(nodesHiddenIdsAtom);
   const [selectedNodesIds, setSelectedNodesIds] =
     useRecoilState(nodesSelectedIdsAtom);
-  const setSelectedEdgesIds = useSetRecoilState(edgesSelectedIdsAtom);
+  const setSelectedEdgesIds = useSetAtom(edgesSelectedIdsAtom);
 
   const onToggleVisibility = useCallback(
     (item: ToggleVertex) => {

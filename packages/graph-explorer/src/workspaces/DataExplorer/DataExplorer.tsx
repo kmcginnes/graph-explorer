@@ -8,7 +8,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useSetAtom } from "jotai";
 import { Vertex } from "../../@types/entities";
 import {
   CheckIcon,
@@ -230,7 +230,7 @@ const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
     }
   );
 
-  const setUserStyling = useSetRecoilState(userStylingAtom);
+  const setUserStyling = useSetAtom(userStylingAtom);
   const onDisplayNameChange = useCallback(
     (field: "name" | "longName") => (value: string | string[]) => {
       if (!vertexType) {

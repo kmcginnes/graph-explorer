@@ -3,7 +3,7 @@ import debounce from "lodash/debounce";
 import { Resizable } from "re-resizable";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useAtomValue } from "jotai";
 import {
   Button,
   EdgeIcon,
@@ -67,8 +67,8 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
   const hasNamespaces = config?.connection?.queryEngine === "sparql";
   const [userLayout, setUserLayout] = useRecoilState(userLayoutAtom);
 
-  const nodesSelectedIds = useRecoilValue(nodesSelectedIdsAtom);
-  const edgesSelectedIds = useRecoilValue(edgesSelectedIdsAtom);
+  const nodesSelectedIds = useAtomValue(nodesSelectedIdsAtom);
+  const edgesSelectedIds = useAtomValue(edgesSelectedIdsAtom);
   const nodeOrEdgeSelected =
     nodesSelectedIds.size + edgesSelectedIds.size === 1;
   const filteredEntitiesCount = useRecoilValue(totalFilteredCount);

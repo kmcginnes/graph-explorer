@@ -2,7 +2,7 @@ import { FileButton, Modal } from "@mantine/core";
 import clone from "lodash/clone";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useRecoilCallback, useAtomValue } from "jotai";
 import {
   Button,
   IconButton,
@@ -62,7 +62,7 @@ const SingleNodeStyling = ({
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix(classNamePrefix);
 
-  const userStyling = useRecoilValue(userStylingAtom);
+  const userStyling = useAtomValue(userStylingAtom);
   const textTransform = useTextTransform();
   const vtConfig = config?.getVertexTypeConfig(vertexType);
   const vtPrefs = userStyling.vertices?.find(v => v.type === vertexType);

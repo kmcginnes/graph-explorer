@@ -2,7 +2,7 @@ import { Modal } from "@mantine/core";
 import clone from "lodash/clone";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useRecoilCallback, useAtomValue } from "jotai";
 import { Button, Input, Select, StylingIcon } from "../../components";
 import ColorInput from "../../components/ColorInput/ColorInput";
 import {
@@ -46,7 +46,7 @@ const SingleEdgeStyling = ({
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix(classNamePrefix);
 
-  const userStyling = useRecoilValue(userStylingAtom);
+  const userStyling = useAtomValue(userStylingAtom);
   const textTransform = useTextTransform();
   const etConfig = config?.getEdgeTypeConfig(edgeType);
   const etPrefs = userStyling.edges?.find(e => e.type === edgeType);

@@ -1,7 +1,7 @@
 import merge from "lodash/merge";
 import { PropsWithChildren, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtom, useAtomValue } from "jotai";
 import { LoadingSpinner, PanelEmptyState } from "../components";
 import Redirect from "../components/Redirect";
 import { RawConfiguration } from "./ConfigurationProvider";
@@ -36,12 +36,10 @@ const AppStatusLoader = ({
 }: PropsWithChildren<AppLoadingProps>) => {
   const location = useLocation();
   useLoadStore();
-  const isStoreLoaded = useRecoilValue(isStoreLoadedAtom);
-  const [activeConfig, setActiveConfig] = useRecoilState(
-    activeConfigurationAtom
-  );
-  const [configuration, setConfiguration] = useRecoilState(configurationAtom);
-  const schema = useRecoilValue(schemaAtom);
+  const isStoreLoaded = useAtomValue(isStoreLoadedAtom);
+  const [activeConfig, setActiveConfig] = useAtom(activeConfigurationAtom);
+  const [configuration, setConfiguration] = useAtom(configurationAtom);
+  const schema = useAtomValue(schemaAtom);
 
   useEffect(() => {
     if (!isStoreLoaded) {

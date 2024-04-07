@@ -1,6 +1,7 @@
 import { FileButton, Modal } from "@mantine/core";
 import { useCallback, useMemo } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { v4 } from "uuid";
 import {
   AddIcon,
@@ -40,8 +41,8 @@ const AvailableConnections = ({
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix("ft");
 
-  const activeConfig = useRecoilValue(activeConfigurationAtom);
-  const configuration = useRecoilValue(configurationAtom);
+  const activeConfig = useAtomValue(activeConfigurationAtom);
+  const configuration = useAtomValue(configurationAtom);
   const t = useTranslations();
 
   const resetState = useResetState();

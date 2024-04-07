@@ -1,5 +1,4 @@
-import { atom } from "recoil";
-import localForageEffect from "./localForageEffect";
+import { atomWithStorage } from "jotai/utils";
 
 export type ShapeStyle =
   | "rectangle"
@@ -105,21 +104,19 @@ export type UserPreferences = {
   };
 };
 
-export const userStylingAtom = atom<UserPreferences["styling"]>({
-  key: "user-styling",
-  default: {},
-  effects: [localForageEffect()],
-});
+export const userStylingAtom = atomWithStorage<UserPreferences["styling"]>(
+  "user-styling",
+  {}
+);
 
-export const userLayoutAtom = atom<UserPreferences["layout"]>({
-  key: "user-layout",
-  default: {
+export const userLayoutAtom = atomWithStorage<UserPreferences["layout"]>(
+  "user-layout",
+  {
     activeToggles: new Set(["graph-viewer", "table-view"]),
     activeSidebarItem: null,
     detailsAutoOpenOnSelection: true,
     tableView: {
       height: 300,
     },
-  },
-  effects: [localForageEffect()],
-});
+  }
+);

@@ -1,6 +1,6 @@
 import { cx } from "@emotion/css";
 import { RefObject, useCallback, useMemo } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetAtom } from "jotai";
 import {
   Card,
   EdgeIcon,
@@ -58,7 +58,7 @@ const ContextMenu = ({
     useRecoilState(nodesSelectedIdsAtom);
   const [edgesSelectedIds, setEdgesSelectedIds] =
     useRecoilState(edgesSelectedIdsAtom);
-  const setUserLayout = useSetRecoilState(userLayoutAtom);
+  const setUserLayout = useSetAtom(userLayoutAtom);
 
   const {
     onFitToCanvas,
