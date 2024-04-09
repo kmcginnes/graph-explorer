@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useRecoilState, useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import type { ModuleContainerHeaderProps } from "../../components";
 import {
   AutoFitLeftIcon,
@@ -39,7 +39,7 @@ const EntityDetails = ({
   const edges = useAtomValue(edgesAtom);
   const selectedNodesIds = useAtomValue(nodesSelectedIdsAtom);
   const selectedEdgesIds = useAtomValue(edgesSelectedIdsAtom);
-  const [userLayout, setUserLayout] = useRecoilState(userLayoutAtom);
+  const [userLayout, setUserLayout] = useAtom(userLayoutAtom);
 
   const selectedNode = useMemo(() => {
     return nodes.find(node => selectedNodesIds.has(node.data.id));

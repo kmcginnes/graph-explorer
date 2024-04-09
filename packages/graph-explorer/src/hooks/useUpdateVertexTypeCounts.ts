@@ -35,23 +35,26 @@ const useUpdateVertexTypeCounts = (vertexType?: string) => {
           return;
         }
 
-        updateSchemaState(config.id, prevSchema => {
-          const vertexSchema = prevSchema?.vertices.find(
-            vertex => vertex.type === vertexType
-          );
-          if (!vertexSchema) {
-            return { ...(prevSchema || {}) };
-          }
+        updateSchemaState({
+          id: config.id,
+          schema: prevSchema => {
+            const vertexSchema = prevSchema?.vertices.find(
+              vertex => vertex.type === vertexType
+            );
+            if (!vertexSchema) {
+              return { ...(prevSchema || {}) };
+            }
 
-          vertexSchema.total = response.total;
-          return {
-            vertices: [
-              ...(prevSchema?.vertices.filter(
-                vertex => vertex.type !== vertexType
-              ) || []),
-              vertexSchema,
-            ],
-          };
+            vertexSchema.total = response.total;
+            return {
+              vertices: [
+                ...(prevSchema?.vertices.filter(
+                  vertex => vertex.type !== vertexType
+                ) || []),
+                vertexSchema,
+              ],
+            };
+          },
         });
       },
     }

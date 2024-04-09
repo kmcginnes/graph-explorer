@@ -1,10 +1,6 @@
-import { useMemo } from "react";
-import {
-  SetterOrUpdater,
-  useRecoilCallback,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { useCallback, useMemo } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useAtomCallback } from "jotai/utils";
 import type { Edge, Vertex } from "../@types/entities";
 import useConfiguration from "../core/ConfigurationProvider/useConfiguration";
 import {
@@ -34,24 +30,28 @@ type UseEntitiesProps = {
 
 const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
   ProcessedEntities,
-  SetterOrUpdater<Entities>,
+  (valOrUpdater: ((entities: Entities) => Entities) | Entities) => void,
   UseEntitiesProps,
 ] => {
   const config = useConfiguration();
-  const filteredNodesIds = useRecoilValue(nodesFilteredIdsAtom);
-  const filteredEdgesIds = useRecoilValue(edgesFilteredIdsAtom);
-  const nodes = useRecoilValue(nodesSelector);
-  const edges = useRecoilValue(edgesSelector);
-  const recoilSetEntities = useSetRecoilState(entitiesSelector);
+  const filteredNodesIds = useAtomValue(nodesFilteredIdsAtom);
+  const filteredEdgesIds = useAtomValue(edgesFilteredIdsAtom);
+  const nodes = useAtomValue(nodesSelector);
+  const edges = useAtomValue(edgesSelector);
+  const setEntitiesSelector = useSetAtom(entitiesSelector);
 
   // Some nodes/edges are not defined in the schema or their types are hidden.
   // Here these types are filtered before to set the updated state.
   // We need to make a hook because these types are defined in the config that
   // works using a hook.
-  const setEntities: SetterOrUpdater<Entities> = useRecoilCallback(
-    ({ snapshot }) =>
-      async valOrUpdater => {
-        const entities = await snapshot.getPromise(entitiesSelector);
+  const setEntities = useAtomCallback(
+    useCallback(
+      (
+        get,
+        _set,
+        valOrUpdater: ((entities: Entities) => Entities) | Entities
+      ) => {
+        const entities = get(entitiesSelector);
         const nextEntities =
           typeof valOrUpdater === "function"
             ? valOrUpdater(entities)
@@ -104,7 +104,7 @@ const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
             ?.hidden;
         });
 
-        recoilSetEntities({
+        setEntitiesSelector({
           nodes: nodesWithoutHiddenCounts,
           edges: filteredEdges,
           preserveSelection: nextEntities.preserveSelection,
@@ -112,11 +112,12 @@ const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
           forceSet: nextEntities.forceSet,
         });
       },
-    [config?.schema, recoilSetEntities]
+      [config?.schema?.edges, config?.schema?.vertices, setEntitiesSelector]
+    )
   );
 
-  const vertexTypes = useRecoilValue(nodesTypesFilteredAtom);
-  const connectionTypes = useRecoilValue(edgesTypesFilteredAtom);
+  const vertexTypes = useAtomValue(nodesTypesFilteredAtom);
+  const connectionTypes = useAtomValue(edgesTypesFilteredAtom);
 
   const filteredEntitiesByGlobalFilters = useDeepMemo(() => {
     let filteredNodes = nodes;

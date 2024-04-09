@@ -52,7 +52,7 @@ const useSchemaSync = (onSyncChange?: (isSyncing: boolean) => void) => {
           }] Error while fetching schema: ${e.message}`
         );
       }
-      updateSchemaState(config.id);
+      updateSchemaState({ id: config.id });
       onSyncChange?.(false);
       return;
     }
@@ -75,7 +75,7 @@ const useSchemaSync = (onSyncChange?: (isSyncing: boolean) => void) => {
       );
     }
 
-    updateSchemaState(config.id, schema);
+    updateSchemaState({ id: config.id, schema });
     onSyncChange?.(false);
 
     notificationId.current && clearNotification(notificationId.current);

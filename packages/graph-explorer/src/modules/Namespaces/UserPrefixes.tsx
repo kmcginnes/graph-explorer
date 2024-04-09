@@ -1,6 +1,6 @@
 import { Modal } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
-import { useRecoilCallback } from "recoil";
+import { useAtomCallback } from "jotai/utils";
 import {
   AddIcon,
   AdvancedList,
@@ -37,10 +37,9 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
   const [search, setSearch] = useState("");
   const [opened, setOpened] = useState(false);
 
-  const onDeletePrefix = useRecoilCallback(
-    ({ set }) =>
-      (prefix: string) =>
-      () => {
+  const onDeletePrefix = useAtomCallback(
+    useCallback(
+      (_get, set, prefix: string) => () => {
         if (!config?.id) {
           return;
         }
@@ -61,7 +60,8 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
           return updatedSchemas;
         });
       },
-    [config?.id]
+      [config?.id]
+    )
   );
 
   const items = useMemo(() => {
@@ -105,9 +105,9 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
     []
   );
 
-  const onSave = useRecoilCallback(
-    ({ set }) =>
-      (prefix: string, uri: string) => {
+  const onSave = useAtomCallback(
+    useCallback(
+      (_get, set, options: { prefix: string; uri: string }) => {
         if (!config?.id) {
           return;
         }
@@ -120,13 +120,14 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
             ...(activeSchema || {}),
             vertices: activeSchema?.vertices || [],
             edges: activeSchema?.edges || [],
-            prefixes: [...(activeSchema?.prefixes || []), { prefix, uri }],
+            prefixes: [...(activeSchema?.prefixes || []), options],
           });
 
           return updatedSchemas;
         });
       },
-    [config?.id]
+      [config?.id]
+    )
   );
 
   const onSubmit = useCallback(() => {
@@ -135,7 +136,7 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
       return;
     }
 
-    onSave(form.prefix, form.uri);
+    onSave({ prefix: form.prefix, uri: form.uri });
     setForm({ prefix: "", uri: "" });
     setError(false);
     setOpened(false);

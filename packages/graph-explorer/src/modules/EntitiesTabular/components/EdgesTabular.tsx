@@ -1,6 +1,6 @@
 import difference from "lodash/difference";
 import { forwardRef, useCallback, useMemo } from "react";
-import { useRecoilState, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { Edge } from "../../../@types/entities";
 import { NonVisibleIcon, VisibleIcon } from "../../../components";
 import type {
@@ -31,11 +31,9 @@ const EdgesTabular = forwardRef<TabularInstance<any>, any>((props, ref) => {
   const t = useTranslations();
   const edges = useAtomValue(edgesAtom);
   const setEdgesOut = useSetAtom(edgesOutOfFocusIdsAtom);
-  const [hiddenEdgesIds, setHiddenEdgesIds] =
-    useRecoilState(edgesHiddenIdsAtom);
+  const [hiddenEdgesIds, setHiddenEdgesIds] = useAtom(edgesHiddenIdsAtom);
   const setSelectedNodesIds = useSetAtom(nodesSelectedIdsAtom);
-  const [selectedEdgesIds, setSelectedEdgesIds] =
-    useRecoilState(edgesSelectedIdsAtom);
+  const [selectedEdgesIds, setSelectedEdgesIds] = useAtom(edgesSelectedIdsAtom);
   const onToggleVisibility = useCallback(
     (item: ToggleEdge) => {
       recoilDiffSets(setHiddenEdgesIds, new Set([item.data.id]));

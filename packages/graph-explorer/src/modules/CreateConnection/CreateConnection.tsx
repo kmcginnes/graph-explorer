@@ -1,11 +1,10 @@
 import { Checkbox } from "@mantine/core";
 import { useCallback, useState } from "react";
-import { useRecoilCallback } from "recoil";
+import { useAtomCallback } from "jotai/utils";
 import { v4 } from "uuid";
 import { InfoIcon, Tooltip } from "../../components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import { useNotification } from "../../components/NotificationProvider";
 import Select from "../../components/Select";
 import {
   ConnectionConfig,
@@ -58,11 +57,10 @@ const CreateConnection = ({
 }: CreateConnectionProps) => {
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix("ft");
-  const { enqueueNotification } = useNotification();
 
-  const onSave = useRecoilCallback(
-    ({ set }) =>
-      async (data: Required<ConnectionForm>) => {
+  const onSave = useAtomCallback(
+    useCallback(
+      async (get, set, data: Required<ConnectionForm>) => {
         if (!configId) {
           const newConfigId = v4();
           const newConfig: RawConfiguration = {
@@ -131,7 +129,8 @@ const CreateConnection = ({
           });
         }
       },
-    [enqueueNotification, configId]
+      [configId, initialData?.url, initialData?.type]
+    )
   );
 
   const [form, setForm] = useState<ConnectionForm>({

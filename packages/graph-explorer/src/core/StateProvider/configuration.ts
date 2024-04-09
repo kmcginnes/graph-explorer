@@ -1,6 +1,5 @@
 import { uniq } from "lodash";
 import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import { sanitizeText } from "../../utils";
 import DEFAULT_ICON_URL from "../../utils/defaultIconUrl";
 import type {
@@ -15,17 +14,18 @@ import {
   userStylingAtom,
   VertexPreferences,
 } from "./userPreferences";
+import { atomWithLocalForage } from "./localForageEffect";
 
 export const isStoreLoadedAtom = atom(false);
 
-export const activeConfigurationAtom = atomWithStorage<string | null>(
+export const activeConfigurationAtom = atomWithLocalForage<string | null>(
   "active-configuration",
   null
 );
 
-export const configurationAtom = atomWithStorage<Map<string, RawConfiguration>>(
+export const configurationAtom = atomWithLocalForage(
   "configuration",
-  new Map()
+  new Map<string, RawConfiguration>()
 );
 
 export const mergedConfigurationSelector = atom<RawConfiguration | null>(
@@ -172,19 +172,13 @@ const mergeEdge = (
 };
 
 /** Same as `useConfig().vertexTypes */
-export const vertexTypesSelector = selector({
-  key: "config-vertex-types",
-  get: ({ get }) => {
-    const configuration = get(mergedConfigurationSelector);
-    return configuration?.schema?.vertices?.map(vt => vt.type) || [];
-  },
+export const vertexTypesSelector = atom(get => {
+  const configuration = get(mergedConfigurationSelector);
+  return configuration?.schema?.vertices?.map(vt => vt.type) || [];
 });
 
 /** Same as `useConfig().edgeTypes */
-export const edgeTypesSelector = selector({
-  key: "config-edge-types",
-  get: ({ get }) => {
-    const configuration = get(mergedConfigurationSelector);
-    return configuration?.schema?.edges?.map(vt => vt.type) || [];
-  },
+export const edgeTypesSelector = atom(get => {
+  const configuration = get(mergedConfigurationSelector);
+  return configuration?.schema?.edges?.map(vt => vt.type) || [];
 });

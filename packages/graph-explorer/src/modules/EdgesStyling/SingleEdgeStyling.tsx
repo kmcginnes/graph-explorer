@@ -2,7 +2,8 @@ import { Modal } from "@mantine/core";
 import clone from "lodash/clone";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilCallback, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
+import { useAtomCallback } from "jotai/utils";
 import { Button, Input, Select, StylingIcon } from "../../components";
 import ColorInput from "../../components/ColorInput/ColorInput";
 import {
@@ -70,9 +71,9 @@ const SingleEdgeStyling = ({
     return options;
   }, [t, textTransform, etConfig?.attributes]);
 
-  const onUserPrefsChange = useRecoilCallback(
-    ({ set }) =>
-      (prefs: Omit<EdgePreferences, "type">) => {
+  const onUserPrefsChange = useAtomCallback(
+    useCallback(
+      (_get, set, prefs: Omit<EdgePreferences, "type">) => {
         set(userStylingAtom, prev => {
           const edges = Array.from(prev.edges || []);
           const updateIndex = edges.findIndex(e => e.type === edgeType);
@@ -95,12 +96,13 @@ const SingleEdgeStyling = ({
           };
         });
       },
-    [edgeType]
+      [edgeType]
+    )
   );
 
-  const onUserPrefsReset = useRecoilCallback(
-    ({ set }) =>
-      () => {
+  const onUserPrefsReset = useAtomCallback(
+    useCallback(
+      (_get, set) => {
         set(userStylingAtom, prev => {
           return {
             ...prev,
@@ -108,12 +110,13 @@ const SingleEdgeStyling = ({
           };
         });
       },
-    [edgeType]
+      [edgeType]
+    )
   );
 
-  const onDisplayNameChange = useRecoilCallback(
-    ({ set }) =>
-      (value: string | string[]) => {
+  const onDisplayNameChange = useAtomCallback(
+    useCallback(
+      (_get, set, value: string | string[]) => {
         if (!edgeType) {
           return;
         }
@@ -138,7 +141,8 @@ const SingleEdgeStyling = ({
           };
         });
       },
-    [edgeType]
+      [edgeType]
+    )
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -42,6 +42,7 @@ const AppStatusLoader = ({
   const schema = useAtomValue(schemaAtom);
 
   useEffect(() => {
+    console.log("AppStatusLoader", { isStoreLoaded, activeConfig });
     if (!isStoreLoaded) {
       return;
     }

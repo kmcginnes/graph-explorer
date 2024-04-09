@@ -1,4 +1,4 @@
-import { SetterOrUpdater } from "recoil";
+type SetterOrUpdater<T> = (valOrUpdater: T | ((currVal: T) => T)) => void;
 
 const recoilDiffSets = <T>(
   stateSetter: SetterOrUpdater<Set<T>>,

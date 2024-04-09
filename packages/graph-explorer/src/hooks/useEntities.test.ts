@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
-import { RecoilRoot } from "recoil";
+import { Provider } from "jotai";
 import useEntities from "./useEntities";
 import { Vertex } from "../@types/entities";
 
@@ -41,7 +41,7 @@ describe("useEntities", () => {
         return { entities, setEntities };
       },
       {
-        wrapper: RecoilRoot,
+        wrapper: Provider,
       }
     );
 
@@ -151,7 +151,7 @@ describe("useEntities", () => {
         return { entities, setEntities };
       },
       {
-        wrapper: RecoilRoot,
+        wrapper: Provider,
       }
     );
 
@@ -262,7 +262,7 @@ describe("useEntities", () => {
 
     // Render the hook
     const { result } = renderHook(() => useEntitiesMock(), {
-      wrapper: RecoilRoot,
+      wrapper: Provider,
     });
 
     // Since we have mocked useEntitiesMock, it should return the originalEntities immediately

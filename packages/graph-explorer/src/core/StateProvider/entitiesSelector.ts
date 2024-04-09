@@ -2,8 +2,7 @@ import { uniq } from "lodash";
 import isEqual from "lodash/isEqual";
 import isEqualWith from "lodash/isEqualWith";
 import uniqBy from "lodash/uniqBy";
-import type { GetRecoilValue, RecoilState, SetRecoilState } from "recoil";
-import { selector } from "recoil";
+import { atom } from "jotai";
 import type { Edge, Vertex } from "../../@types/entities";
 import { edgesAtom, edgesSelectedIdsAtom, edgesSelector } from "./edges";
 import {
@@ -27,37 +26,16 @@ const isEntities = (value: any): value is Entities => {
   return !!value.nodes;
 };
 
-const removeFromSetIfDeleted = (
-  {
-    get,
-    set,
-  }: {
-    get: GetRecoilValue;
-    set: SetRecoilState;
-  },
-  deletedIds: Set<string>,
-  selector: RecoilState<Set<string>>
-) => {
-  const selectorIds = get(selector);
-  const copiedSelectorIds = new Set(selectorIds);
-  deletedIds.forEach(id => {
-    copiedSelectorIds.delete(id);
-  });
-  set(selector, copiedSelectorIds);
-  return copiedSelectorIds;
-};
-
 // This selector is the safer way to add entities to the graph
 // It computes stats (counts) every time that some entity is added
-const entitiesSelector = selector<Entities>({
-  key: "entities",
-  get: ({ get }) => {
+const entitiesSelector = atom(
+  get => {
     return {
       nodes: get(nodesAtom),
       edges: get(edgesAtom),
     };
   },
-  set: ({ get, set }, newEntities) => {
+  (get, set, newEntities: Entities) => {
     if (!isEntities(newEntities)) {
       return;
     }
@@ -164,16 +142,15 @@ const entitiesSelector = selector<Entities>({
 
     // When a node is removed, we should delete its id from other nodes-state sets
     if (deletedNodesIds.size > 0) {
-      [nodesSelectedIdsAtom, nodesHiddenIdsAtom].forEach(selector => {
-        removeFromSetIfDeleted(
-          {
-            get,
-            set,
-          },
-          deletedNodesIds,
-          selector
-        );
-      });
+      for (const atomOfNodes of [nodesSelectedIdsAtom, nodesHiddenIdsAtom]) {
+        // TODO: re-write as a filter instead of copied id arrays
+        const selectorIds = get(atomOfNodes);
+        const copiedSelectorIds = new Set(selectorIds);
+        deletedNodesIds.forEach(id => {
+          copiedSelectorIds.delete(id);
+        });
+        set(atomOfNodes, copiedSelectorIds);
+      }
     }
 
     // Get all edges ids affected by a node deletion
@@ -193,16 +170,13 @@ const entitiesSelector = selector<Entities>({
 
     // When a node is removed, we should remove its involved edge id from other edges-state sets
     if (affectedEdgesIds.size > 0) {
-      [edgesSelectedIdsAtom].forEach(selector =>
-        removeFromSetIfDeleted(
-          {
-            get,
-            set,
-          },
-          affectedEdgesIds,
-          selector
-        )
-      );
+      // TODO: re-write as a filter instead of copied id arrays
+      const selectorIds = get(edgesSelectedIdsAtom);
+      const copiedSelectorIds = new Set(selectorIds);
+      affectedEdgesIds.forEach(id => {
+        copiedSelectorIds.delete(id);
+      });
+      set(edgesSelectedIdsAtom, copiedSelectorIds);
     }
 
     // Avoid update the state if nodes are equal
@@ -261,7 +235,7 @@ const entitiesSelector = selector<Entities>({
       });
       set(edgesSelectedIdsAtom, selectedEdgesIds);
     }
-  },
-});
+  }
+);
 
 export default entitiesSelector;

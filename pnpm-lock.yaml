@@ -231,9 +231,6 @@ importers:
       react-virtuoso:
         specifier: ^2.19.1
         version: 2.19.1(react-dom@17.0.2)(react@17.0.2)
-      recoil:
-        specifier: ^0.7.7
-        version: 0.7.7(react-dom@17.0.2)(react@17.0.2)
       swiper:
         specifier: ^8.4.7
         version: 8.4.7
@@ -7690,10 +7687,6 @@ packages:
       lodash: 4.17.21
     dev: false
 
-  /hamt_plus@1.0.2:
-    resolution: {integrity: sha512-t2JXKaehnMb9paaYA7J0BX8QQAY8lwfQ9Gjf4pg/mk4krt+cmwmU652HOoWonf+7+EQV97ARPMhhVgU1ra2GhA==}
-    dev: false
-
   /has-bigints@1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
     dev: true
@@ -10125,23 +10118,6 @@ packages:
   /real-require@0.2.0:
     resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
     engines: {node: '>= 12.13.0'}
-    dev: false
-
-  /recoil@0.7.7(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-8Og5KPQW9LwC577Vc7Ug2P0vQshkv1y3zG3tSSkWMqkWSwHmE+by06L8JtnGocjW6gcCvfwB3YtrJG6/tWivNQ==}
-    peerDependencies:
-      react: '>=16.13.1'
-      react-dom: '*'
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      hamt_plus: 1.0.2
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
   /redent@3.0.0:

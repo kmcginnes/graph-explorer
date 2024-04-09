@@ -1,6 +1,6 @@
 import { cx } from "@emotion/css";
 import { MouseEvent, useCallback, useRef, useState } from "react";
-import { useRecoilState, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Vertex } from "../../@types/entities";
 import type { ModuleContainerHeaderProps } from "../../components";
 import {
@@ -145,12 +145,10 @@ const GraphViewer = ({
   const [entities] = useEntities();
   const { dropAreaRef, isOver, canDrop } = useNodeDrop();
 
-  const [nodesSelectedIds, setNodesSelectedIds] =
-    useRecoilState(nodesSelectedIdsAtom);
+  const [nodesSelectedIds, setNodesSelectedIds] = useAtom(nodesSelectedIdsAtom);
   const hiddenNodesIds = useAtomValue(nodesHiddenIdsAtom);
 
-  const [edgesSelectedIds, setEdgesSelectedIds] =
-    useRecoilState(edgesSelectedIdsAtom);
+  const [edgesSelectedIds, setEdgesSelectedIds] = useAtom(edgesSelectedIdsAtom);
   const hiddenEdgesIds = useAtomValue(edgesHiddenIdsAtom);
   const nodesOutIds = useAtomValue(nodesOutOfFocusIdsAtom);
   const edgesOutIds = useAtomValue(edgesOutOfFocusIdsAtom);

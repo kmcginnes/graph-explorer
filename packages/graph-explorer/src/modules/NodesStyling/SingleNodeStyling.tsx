@@ -2,7 +2,8 @@ import { FileButton, Modal } from "@mantine/core";
 import clone from "lodash/clone";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilCallback, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
+import { useAtomCallback } from "jotai/utils";
 import {
   Button,
   IconButton,
@@ -87,9 +88,9 @@ const SingleNodeStyling = ({
     return options;
   }, [t, textTransform, vtConfig?.attributes]);
 
-  const onUserPrefsChange = useRecoilCallback(
-    ({ set }) =>
-      (prefs: Omit<VertexPreferences, "type">) => {
+  const onUserPrefsChange = useAtomCallback(
+    useCallback(
+      (_get, set, prefs: Omit<VertexPreferences, "type">) => {
         set(userStylingAtom, prev => {
           const vertices = Array.from(prev.vertices || []);
           const updateIndex = vertices.findIndex(v => v.type === vertexType);
@@ -112,12 +113,13 @@ const SingleNodeStyling = ({
           };
         });
       },
-    [vertexType]
+      [vertexType]
+    )
   );
 
-  const onUserPrefsReset = useRecoilCallback(
-    ({ set }) =>
-      () => {
+  const onUserPrefsReset = useAtomCallback(
+    useCallback(
+      (_get, set) => {
         set(userStylingAtom, prev => {
           return {
             ...prev,
@@ -125,13 +127,13 @@ const SingleNodeStyling = ({
           };
         });
       },
-    [vertexType]
+      [vertexType]
+    )
   );
 
-  const onDisplayNameChange = useRecoilCallback(
-    ({ set }) =>
-      (field: "name" | "longName") =>
-      (value: string | string[]) => {
+  const onDisplayNameChange = useAtomCallback(
+    useCallback(
+      (_get, set, field: "name" | "longName") => (value: string | string[]) => {
         if (!vertexType) {
           return;
         }
@@ -163,7 +165,8 @@ const SingleNodeStyling = ({
           };
         });
       },
-    [vertexType]
+      [vertexType]
+    )
   );
 
   const { enqueueNotification } = useNotification();

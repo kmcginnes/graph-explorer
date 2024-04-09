@@ -1,7 +1,7 @@
 import { FileButton, Modal } from "@mantine/core";
 import { useCallback, useMemo } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
 import { useAtomValue } from "jotai";
+import { useAtomCallback } from "jotai/utils";
 import { v4 } from "uuid";
 import {
   AddIcon,
@@ -46,19 +46,20 @@ const AvailableConnections = ({
   const t = useTranslations();
 
   const resetState = useResetState();
-  const onActiveConfigChange = useRecoilCallback(
-    ({ set }) =>
-      (value: string | string[]) => {
+  const onActiveConfigChange = useAtomCallback(
+    useCallback(
+      (_get, set, value: string | string[]) => {
         set(activeConfigurationAtom, value as string);
         resetState();
       },
-    [resetState]
+      [resetState]
+    )
   );
 
   const { enqueueNotification } = useNotification();
-  const onConfigImport = useRecoilCallback(
-    ({ set }) =>
-      async (file: File) => {
+  const onConfigImport = useAtomCallback(
+    useCallback(
+      async (_get, set, file: File) => {
         const fileContent = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.readAsText(file);
@@ -113,7 +114,8 @@ const AvailableConnections = ({
           stackable: true,
         });
       },
-    [enqueueNotification, resetState]
+      [enqueueNotification, resetState]
+    )
   );
 
   const onActionClick = useCallback(

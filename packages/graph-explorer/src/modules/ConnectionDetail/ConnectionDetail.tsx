@@ -1,6 +1,6 @@
 import { Modal } from "@mantine/core";
 import { useCallback, useState } from "react";
-import { useRecoilCallback } from "recoil";
+import { useAtomCallback } from "jotai/utils";
 import {
   Chip,
   DatabaseIcon,
@@ -89,9 +89,9 @@ const ConnectionDetail = ({ isSync, onSyncChange }: ConnectionDetailProps) => {
     saveConfigurationToFile(config);
   }, [config]);
 
-  const onConfigDelete = useRecoilCallback(
-    ({ set }) =>
-      () => {
+  const onConfigDelete = useAtomCallback(
+    useCallback(
+      (get, set) => {
         if (!config?.id) {
           return;
         }
@@ -110,7 +110,8 @@ const ConnectionDetail = ({ isSync, onSyncChange }: ConnectionDetailProps) => {
           return updatedSchemas;
         });
       },
-    [config?.id]
+      [config?.id]
+    )
   );
 
   const onActionClick = useCallback(

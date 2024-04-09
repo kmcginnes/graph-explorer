@@ -11,7 +11,6 @@ const useLoadStore = () => {
   useAtomValue(configurationAtom);
   useAtomValue(userStylingAtom);
   useAtomValue(schemaAtom);
-
   useEffect(() => {
     const fn = (): NodeJS.Timeout | undefined => {
       // Add here all atoms that are needed to be loaded
@@ -24,12 +23,9 @@ const useLoadStore = () => {
         setIsLoaded(true);
         return;
       }
-
       return setTimeout(fn, 100);
     };
-
     const timeout = fn();
-
     return () => {
       if (timeout) {
         clearTimeout(timeout);
