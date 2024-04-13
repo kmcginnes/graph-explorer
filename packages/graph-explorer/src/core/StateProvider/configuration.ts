@@ -28,8 +28,8 @@ export const configurationAtom = atomWithLocalForage(
   new Map<string, RawConfiguration>()
 );
 
-export const mergedConfigurationSelector = atom<RawConfiguration | null>(
-  get => {
+export const mergedConfigurationSelector = atom(
+  (get): RawConfiguration | null => {
     const activeConfig = get(activeConfigurationAtom);
     const config = get(configurationAtom);
     const currentConfig = activeConfig && config.get(activeConfig);

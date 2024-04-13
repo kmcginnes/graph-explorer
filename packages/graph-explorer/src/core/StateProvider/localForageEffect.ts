@@ -1,5 +1,6 @@
 import * as localForage from "localforage";
-import { atomWithStorage, createJSONStorage, RESET } from "jotai/utils";
+import { atomWithStorage, createJSONStorage, unwrap } from "jotai/utils";
+import { atom } from "jotai";
 
 localForage.config({
   name: "ge",
@@ -19,9 +20,17 @@ export function atomWithLocalForage<Value>(key: string, initialValue: Value) {
       return await localForage.removeItem(key);
     },
   }));
-  return atomWithStorage<Value>(key, initialValue, storage, {
+  const asyncStorageAtom = atomWithStorage<Value>(key, initialValue, storage, {
     getOnInit: true,
   });
+
+  const promiseAtom = atom(
+    async get => await get(asyncStorageAtom),
+    async (_get, set, value: Value) => await set(asyncStorageAtom, value)
+  );
+
+  return unwrap(promiseAtom, prev => prev ?? initialValue);
+  // return asyncStorageAtom;
 }
 
 // The first time that the atom is loaded from the store,
