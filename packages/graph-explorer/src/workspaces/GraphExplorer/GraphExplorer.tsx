@@ -20,12 +20,7 @@ import {
   GraphIcon,
 } from "../../components/icons";
 import GridIcon from "../../components/icons/GridIcon";
-import Workspace from "../../components/Workspace";
-import {
-  useConfiguration,
-  useWithTheme,
-  withClassNamePrefix,
-} from "../../core";
+import { useConfiguration, withClassNamePrefix } from "../../core";
 import { edgesSelectedIdsAtom } from "../../core/StateProvider/edges";
 import { nodesSelectedIdsAtom } from "../../core/StateProvider/nodes";
 import { totalFilteredCount } from "../../core/StateProvider/filterCount";
@@ -41,8 +36,13 @@ import KeywordSearch from "../../modules/KeywordSearch/KeywordSearch";
 import Namespaces from "../../modules/Namespaces/Namespaces";
 import NodeExpand from "../../modules/NodeExpand";
 import NodesStyling from "../../modules/NodesStyling/NodesStyling";
-import TopBarWithLogo from "../common/TopBarWithLogo";
-import defaultStyles from "./GraphExplorer.styles";
+import {
+  NewContainer,
+  NewContentArea,
+  NewSidebarButton,
+  NewTopBar,
+  NewWorkspaceContainer,
+} from "../common/NewWorkspace";
 
 export type GraphViewProps = {
   classNamePrefix?: string;
@@ -60,7 +60,6 @@ const RESIZE_ENABLE_TOP = {
 };
 
 const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
-  const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix(classNamePrefix);
   const config = useConfiguration();
   const t = useTranslations();
@@ -178,45 +177,46 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
     debounceAutoOpenDetails(nodeOrEdgeSelected);
   }, [debounceAutoOpenDetails, nodeOrEdgeSelected]);
 
+  // NEW CODE
+  //////////////////////////////////////////////////////
+
+  const isSidebarOpen =
+    !hasNamespaces && userLayout.activeSidebarItem === "namespaces"
+      ? false
+      : userLayout.activeSidebarItem !== null;
+
   return (
-    <Workspace
-      className={cx(
-        styleWithTheme(defaultStyles(classNamePrefix)),
-        pfx("graph-explorer")
-      )}
-    >
-      <TopBarWithLogo>
-        <Workspace.TopBar.Title>
-          <div>
-            <div className={pfx("top-bar-title")}>Graph Explorer</div>
-            <div className={pfx("top-bar-subtitle")}>
-              Active connection: {config?.displayLabel || config?.id}
-            </div>
+    <NewWorkspaceContainer>
+      <NewTopBar>
+        <div>
+          <div className="font-bold">
+            Graph Explorer v{__GRAPH_EXP_VERSION__}
           </div>
-        </Workspace.TopBar.Title>
-        <Workspace.TopBar.Content>
+          <div>Active connection: {config?.displayLabel || config?.id}</div>
+        </div>
+        <div className="grow flex items-center justify-center">
           <KeywordSearch />
-        </Workspace.TopBar.Content>
-        <Workspace.TopBar.AdditionalControls>
-          <IconButton
+        </div>
+        <div className="flex flex-row gap-1 items-center">
+          <NewSidebarButton
             tooltipText={
               toggles.has("graph-viewer")
                 ? "Hide Graph View"
                 : "Show Graph View"
             }
             tooltipPlacement={"bottom-center"}
-            variant={toggles.has("graph-viewer") ? "filled" : "text"}
+            active={toggles.has("graph-viewer")}
             icon={<GraphIcon />}
             onPress={toggleView("graph-viewer")}
           />
-          <IconButton
+          <NewSidebarButton
             tooltipText={
               toggles.has("table-view") ? "Hide Table View" : "Show Table View"
             }
             tooltipPlacement={"bottom-center"}
-            variant={toggles.has("table-view") ? "filled" : "text"}
             icon={<GridIcon />}
             onPress={toggleView("table-view")}
+            active={toggles.has("table-view")}
           />
           <div className={pfx("v-divider")} />
           <Link to={"/connections"}>
@@ -228,144 +228,138 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
               Open Connections
             </Button>
           </Link>
-        </Workspace.TopBar.AdditionalControls>
-      </TopBarWithLogo>
-
-      <Workspace.Content>
-        {toggles.size === 0 && (
-          <div style={{ width: "100%", flexGrow: 1 }}>
-            <PanelEmptyState
-              icon={<EmptyWidgetIcon />}
-              title={"No active views"}
-              subtitle={
-                "Use toggles in the top-right corner to show/hide views"
-              }
-            />
-          </div>
-        )}
-        {toggles.size === 0 && (
-          <div style={{ width: "100%", flexGrow: 1 }}>
-            <PanelEmptyState
-              icon={<EmptyWidgetIcon />}
-              title={"No active views"}
-              subtitle={
-                "Use toggles in the top-right corner to show/hide views"
-              }
-            />
-          </div>
-        )}
-        {toggles.has("graph-viewer") && (
-          <div
-            style={{
-              width: "100%",
-              flexGrow: 1,
-              position: "relative",
-            }}
-          >
-            <GraphViewer
-              onNodeCustomize={setCustomizeNodeType}
-              onEdgeCustomize={setCustomizeEdgeType}
-            />
-          </div>
-        )}
-        {toggles.has("table-view") && (
-          <Resizable
-            enable={RESIZE_ENABLE_TOP}
-            size={{
-              width: "100%",
-              height: !toggles.has("graph-viewer")
-                ? "100%"
-                : userLayout.tableView?.height || 300,
-            }}
-            minHeight={300}
-            onResizeStop={onTableViewResizeStop}
-          >
-            <div style={{ width: "100%", height: "100%", flexGrow: 1 }}>
-              <EntitiesTabular />
+        </div>
+      </NewTopBar>
+      <NewContentArea className="flex flex-row gap-3">
+        <div className="grow flex flex-col h-full gap-3 min-w-0">
+          {toggles.size === 0 && (
+            <div style={{ width: "100%", flexGrow: 1 }}>
+              <PanelEmptyState
+                icon={<EmptyWidgetIcon />}
+                title={"No active views"}
+                subtitle={
+                  "Use toggles in the top-right corner to show/hide views"
+                }
+              />
             </div>
-          </Resizable>
-        )}
-      </Workspace.Content>
-
-      <Workspace.SideBar direction={"row"}>
-        <Workspace.SideBar.Button
-          tooltipText={"Details"}
-          icon={<DetailsIcon />}
-          onPress={toggleSidebar("details")}
-          active={userLayout.activeSidebarItem === "details"}
-        />
-        <Workspace.SideBar.Button
-          tooltipText={"Filters"}
-          icon={<FilterIcon />}
-          onPress={toggleSidebar("filters")}
-          badge={filteredEntitiesCount}
-          badgeVariant="undetermined"
-          badgePlacement="top-right"
-          active={userLayout.activeSidebarItem === "filters"}
-        />
-        <Workspace.SideBar.Button
-          tooltipText={"Expand"}
-          icon={<ExpandGraphIcon />}
-          onPress={toggleSidebar("expand")}
-          active={userLayout.activeSidebarItem === "expand"}
-        />
-        <Workspace.SideBar.Button
-          tooltipText={t("nodes-styling.title")}
-          icon={<GraphIcon />}
-          onPress={toggleSidebar("nodes-styling")}
-          active={userLayout.activeSidebarItem === "nodes-styling"}
-        />
-        <Workspace.SideBar.Button
-          tooltipText={t("edges-styling.title")}
-          icon={<EdgeIcon />}
-          onPress={toggleSidebar("edges-styling")}
-          active={userLayout.activeSidebarItem === "edges-styling"}
-        />
-        {hasNamespaces && (
-          <Workspace.SideBar.Button
-            tooltipText={"Namespaces"}
-            icon={<NamespaceIcon />}
-            onPress={toggleSidebar("namespaces")}
-            active={userLayout.activeSidebarItem === "namespaces"}
-          />
-        )}
-
-        <Workspace.SideBar.Content
-          isOpen={
-            !hasNamespaces && userLayout.activeSidebarItem === "namespaces"
-              ? false
-              : userLayout.activeSidebarItem !== null
-          }
-        >
-          {userLayout.activeSidebarItem === "details" && (
-            <EntityDetails onClose={closeSidebar} />
           )}
-          {userLayout.activeSidebarItem === "expand" && (
-            <NodeExpand onClose={closeSidebar} />
+          {toggles.size === 0 && (
+            <div style={{ width: "100%", flexGrow: 1 }}>
+              <PanelEmptyState
+                icon={<EmptyWidgetIcon />}
+                title={"No active views"}
+                subtitle={
+                  "Use toggles in the top-right corner to show/hide views"
+                }
+              />
+            </div>
           )}
-          {userLayout.activeSidebarItem === "filters" && (
-            <EntitiesFilter onClose={closeSidebar} />
+          {toggles.has("graph-viewer") && (
+            <NewContainer className="w-full grow relative">
+              <GraphViewer
+                onNodeCustomize={setCustomizeNodeType}
+                onEdgeCustomize={setCustomizeEdgeType}
+              />
+            </NewContainer>
           )}
-          {userLayout.activeSidebarItem === "nodes-styling" && (
-            <NodesStyling
-              onClose={closeSidebar}
-              customizeNodeType={customizeNodeType}
-              onNodeCustomize={setCustomizeNodeType}
+          {toggles.has("table-view") && (
+            <Resizable
+              enable={RESIZE_ENABLE_TOP}
+              size={{
+                width: "100%",
+                height: !toggles.has("graph-viewer")
+                  ? "100%"
+                  : userLayout.tableView?.height || 300,
+              }}
+              minHeight={300}
+              onResizeStop={onTableViewResizeStop}
+            >
+              <NewContainer className="w-full h-full grow">
+                <EntitiesTabular />
+              </NewContainer>
+            </Resizable>
+          )}
+        </div>
+        <NewContainer className="flex flex-row h-full flex-shrink-0">
+          <div
+            className={cx(
+              "flex flex-col gap-3 p-3",
+              isSidebarOpen && "border-e border-gray-200"
+            )}
+          >
+            <NewSidebarButton
+              tooltipText={"Details"}
+              icon={<DetailsIcon />}
+              onPress={toggleSidebar("details")}
+              active={userLayout.activeSidebarItem === "details"}
             />
-          )}
-          {userLayout.activeSidebarItem === "edges-styling" && (
-            <EdgesStyling
-              onClose={closeSidebar}
-              customizeEdgeType={customizeEdgeType}
-              onEdgeCustomize={setCustomizeEdgeType}
+            <NewSidebarButton
+              tooltipText={"Filters"}
+              icon={<FilterIcon />}
+              onPress={toggleSidebar("filters")}
+              badge={filteredEntitiesCount}
+              badgeVariant="undetermined"
+              badgePlacement="top-right"
+              active={userLayout.activeSidebarItem === "filters"}
             />
-          )}
-          {userLayout.activeSidebarItem === "namespaces" && (
-            <Namespaces onClose={closeSidebar} />
-          )}
-        </Workspace.SideBar.Content>
-      </Workspace.SideBar>
-    </Workspace>
+            <NewSidebarButton
+              tooltipText={"Expand"}
+              icon={<ExpandGraphIcon />}
+              onPress={toggleSidebar("expand")}
+              active={userLayout.activeSidebarItem === "expand"}
+            />
+            <NewSidebarButton
+              tooltipText={t("nodes-styling.title")}
+              icon={<GraphIcon />}
+              onPress={toggleSidebar("nodes-styling")}
+              active={userLayout.activeSidebarItem === "nodes-styling"}
+            />
+            <NewSidebarButton
+              tooltipText={t("edges-styling.title")}
+              icon={<EdgeIcon />}
+              onPress={toggleSidebar("edges-styling")}
+              active={userLayout.activeSidebarItem === "edges-styling"}
+            />
+            {hasNamespaces && (
+              <NewSidebarButton
+                tooltipText={"Namespaces"}
+                icon={<NamespaceIcon />}
+                onPress={toggleSidebar("namespaces")}
+                active={userLayout.activeSidebarItem === "namespaces"}
+              />
+            )}
+          </div>
+          <div className={cx("w-[24rem] min-w-0", !isSidebarOpen && "hidden")}>
+            {userLayout.activeSidebarItem === "details" && (
+              <EntityDetails onClose={closeSidebar} />
+            )}
+            {userLayout.activeSidebarItem === "expand" && (
+              <NodeExpand onClose={closeSidebar} />
+            )}
+            {userLayout.activeSidebarItem === "filters" && (
+              <EntitiesFilter onClose={closeSidebar} />
+            )}
+            {userLayout.activeSidebarItem === "nodes-styling" && (
+              <NodesStyling
+                onClose={closeSidebar}
+                customizeNodeType={customizeNodeType}
+                onNodeCustomize={setCustomizeNodeType}
+              />
+            )}
+            {userLayout.activeSidebarItem === "edges-styling" && (
+              <EdgesStyling
+                onClose={closeSidebar}
+                customizeEdgeType={customizeEdgeType}
+                onEdgeCustomize={setCustomizeEdgeType}
+              />
+            )}
+            {userLayout.activeSidebarItem === "namespaces" && (
+              <Namespaces onClose={closeSidebar} />
+            )}
+          </div>
+        </NewContainer>
+      </NewContentArea>
+    </NewWorkspaceContainer>
   );
 };
 

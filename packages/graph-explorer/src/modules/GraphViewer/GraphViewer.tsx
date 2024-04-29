@@ -268,9 +268,7 @@ const GraphViewer = ({
       <ModuleContainer>
         <ModuleContainerHeader
           title={
-            <div
-              style={{ display: "flex", width: "100%", alignItems: "center" }}
-            >
+            <div className="flex flex-row w-full items-center">
               <div style={{ whiteSpace: "nowrap" }}>{title}</div>
               <Select
                 className={pfx("entity-select")}

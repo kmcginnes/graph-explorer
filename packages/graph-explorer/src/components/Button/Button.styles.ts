@@ -43,7 +43,6 @@ export const baseStyles = (
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${getHeightBySize(theme, size)};
   font-size: ${getFontSizeBySize(size)};
   font-family: ${theme.typography.fontFamily || "sans-serif"};
   cursor: pointer;
@@ -82,7 +81,9 @@ export const defaultStyles =
         color: ${themeByVariant?.color || primary?.contrastText};
         border: ${themeByVariant?.border?.width || "1px"} solid
           ${themeByVariant?.border?.color || "transparent"};
-        border-radius: ${themeByVariant?.border?.radius || "5px"};
+        border-radius: ${themeByVariant?.border?.radius || "0.75rem"};
+        padding: 0.5rem;
+        font-weight: 500;
 
         &:disabled,
         &[disabled] {
@@ -127,6 +128,8 @@ export const defaultStyles =
         border: ${themeByVariant?.border?.width || "1px"} solid
           ${themeByVariant?.border?.color || "transparent"};
         border-radius: ${themeByVariant?.border?.radius || "5px"};
+        padding: 0.5rem;
+        font-weight: 500;
 
         &:disabled,
         &[disabled] {

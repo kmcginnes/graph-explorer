@@ -16,7 +16,6 @@ export type WorkspaceTopBarProps = {
   className?: string;
   classNamePrefix?: string;
   logo?: HideNavBarLogoProps["logo"];
-  logoVisible?: HideNavBarLogoProps["logo"];
   onLogoClick?: HideNavBarLogoProps["onClick"];
 };
 
@@ -33,7 +32,6 @@ const WorkspaceTopBar = ({
   classNamePrefix,
   children,
   logo,
-  logoVisible,
   onLogoClick,
 }: PropsWithChildren<WorkspaceTopBarProps>) => {
   const stylesWithTheme = useWithTheme();
@@ -64,11 +62,7 @@ const WorkspaceTopBar = ({
       )}
     >
       <div className={stylesWithTheme(styles.mainBarStyles)}>
-        <HideNavBarLogo
-          logo={logo}
-          isVisible={!!logoVisible}
-          onClick={onLogoClick}
-        />
+        <HideNavBarLogo logo={logo} onClick={onLogoClick} />
         {
           childrenByType[
             WorkspaceTopBarTitle.displayName || WorkspaceTopBarTitle.name

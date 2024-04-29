@@ -30,7 +30,8 @@ const ModuleContainerTabularHeader = ({
     <div
       className={cx(
         styleWithTheme(defaultStyles("ft")),
-        pfx("entities-tabular-header")
+        pfx("entities-tabular-header"),
+        "px-3 py-1"
       )}
     >
       <div className={pfx("title")}>

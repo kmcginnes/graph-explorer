@@ -6,7 +6,6 @@ import Workspace from "../../components/Workspace";
 const TopBarWithLogo = ({ children }: PropsWithChildren<any>) => {
   return (
     <Workspace.TopBar
-      logoVisible={true}
       logo={<GraphExplorerIcon width={"2em"} height={"2em"} />}
       className={css`
         .ft-navbar-logo-container {

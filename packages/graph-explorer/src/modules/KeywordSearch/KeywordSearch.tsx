@@ -255,7 +255,7 @@ const KeywordSearch = ({
       {!isFocused && (
         <div className={pfx("bar-container")}>
           <Input
-            className={pfx("search-input")}
+            className={cx(pfx("search-input"), "m-0")}
             aria-label={"Search box"}
             hideError={true}
             value={searchTerm}

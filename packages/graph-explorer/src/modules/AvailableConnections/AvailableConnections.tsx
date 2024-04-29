@@ -25,6 +25,7 @@ import useTranslations from "../../hooks/useTranslations";
 import isValidConfigurationFile from "../../utils/isValidConfigurationFile";
 import CreateConnection from "../CreateConnection";
 import defaultStyles from "./AvailableConnections.styles";
+import { cx } from "@emotion/css";
 
 export type ConnectionDetailProps = {
   isSync: boolean;
@@ -195,7 +196,7 @@ const AvailableConnections = ({
       />
 
       <AdvancedList
-        className={pfx("advanced-list")}
+        className={cx(pfx("advanced-list"), "p-3")}
         items={connectionItems}
         selectedItemsIds={[activeConfig || ""]}
       />

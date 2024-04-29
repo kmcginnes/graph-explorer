@@ -1,4 +1,3 @@
-import { cx } from "@emotion/css";
 import clone from "lodash/clone";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useQuery } from "react-query";
@@ -28,13 +27,8 @@ import {
 } from "../../components/Tabular";
 import ExternalPaginationControl from "../../components/Tabular/controls/ExternalPaginationControl";
 import Tabular from "../../components/Tabular/Tabular";
-import Workspace from "../../components/Workspace/Workspace";
 import type { KeywordSearchResponse } from "../../connector/useGEFetchTypes";
-import {
-  useConfiguration,
-  useWithTheme,
-  withClassNamePrefix,
-} from "../../core";
+import { useConfiguration, withClassNamePrefix } from "../../core";
 import useConnector from "../../core/ConnectorProvider/useConnector";
 import {
   userStylingAtom,
@@ -46,8 +40,11 @@ import usePrefixesUpdater from "../../hooks/usePrefixesUpdater";
 import useTextTransform from "../../hooks/useTextTransform";
 import useTranslations from "../../hooks/useTranslations";
 import useUpdateVertexTypeCounts from "../../hooks/useUpdateVertexTypeCounts";
-import TopBarWithLogo from "../common/TopBarWithLogo";
-import defaultStyles from "./DataExplorer.styles";
+import {
+  NewWorkspaceContainer,
+  NewTopBar,
+  NewContentArea,
+} from "../common/NewWorkspace";
 
 export type ConnectionsProps = {
   classNamePrefix?: string;
@@ -58,7 +55,6 @@ const DEFAULT_COLUMN = {
 };
 
 const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
-  const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix(classNamePrefix);
   const navigate = useNavigate();
   const { vertexType } = useParams<{ vertexType: string }>();
@@ -266,22 +262,15 @@ const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
   );
 
   return (
-    <Workspace
-      className={cx(
-        styleWithTheme(defaultStyles(classNamePrefix)),
-        pfx("data-explorer")
-      )}
-    >
-      <TopBarWithLogo>
-        <Workspace.TopBar.Title>
-          <div>
-            <div className={pfx("top-bar-title")}>Data Explorer</div>
-            <div className={pfx("top-bar-subtitle")}>
-              Active connection: {config?.displayLabel || config?.id}
-            </div>
+    <NewWorkspaceContainer>
+      <NewTopBar>
+        <div>
+          <div className="flex flex-col">
+            <div className="font-bold">Data Explorer</div>
+            <div>Active connection: {config?.displayLabel || config?.id}</div>
           </div>
-        </Workspace.TopBar.Title>
-        <Workspace.TopBar.AdditionalControls>
+        </div>
+        <div>
           <Link to={"/graph-explorer"}>
             <Button
               className={pfx("button")}
@@ -291,21 +280,21 @@ const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
               Open Graph Explorer
             </Button>
           </Link>
-        </Workspace.TopBar.AdditionalControls>
-      </TopBarWithLogo>
-      <Workspace.TopBar>
-        <Workspace.TopBar.Title>
+        </div>
+      </NewTopBar>
+      <NewTopBar>
+        <div>
           <Button
             icon={<ChevronLeftIcon />}
             onPress={() => navigate("/connections")}
           >
             Back to all Data
           </Button>
-        </Workspace.TopBar.Title>
-        <Workspace.TopBar.AdditionalControls>
-          <div className={pfx("header-children")}>
+        </div>
+        <div>
+          <div className="flex flex-row gap-2">
             <Select
-              className={pfx("header-select")}
+              className="w-[12rem]"
               value={vertexConfig?.displayNameAttribute || ""}
               onChange={onDisplayNameChange("name")}
               options={selectOptions}
@@ -315,7 +304,7 @@ const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
               labelPlacement={"inner"}
             />
             <Select
-              className={pfx("header-select")}
+              className="w-[12rem]"
               value={vertexConfig?.longDisplayNameAttribute || ""}
               onChange={onDisplayNameChange("longName")}
               options={selectOptions}
@@ -325,9 +314,9 @@ const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
               labelPlacement={"inner"}
             />
           </div>
-        </Workspace.TopBar.AdditionalControls>
-      </Workspace.TopBar>
-      <Workspace.Content>
+        </div>
+      </NewTopBar>
+      <NewContentArea>
         <ModuleContainer>
           <ModuleContainerHeader
             title={
@@ -362,8 +351,8 @@ const DataExplorer = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
             </TabularFooterControls>
           </Tabular>
         </ModuleContainer>
-      </Workspace.Content>
-    </Workspace>
+      </NewContentArea>
+    </NewWorkspaceContainer>
   );
 };
 

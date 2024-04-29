@@ -1,15 +1,9 @@
-import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import Button from "../../components/Button";
 import { ExplorerIcon } from "../../components/icons";
-import Workspace from "../../components/Workspace/Workspace";
-import {
-  useConfiguration,
-  useWithTheme,
-  withClassNamePrefix,
-} from "../../core";
+import { useConfiguration } from "../../core";
 import {
   activeConfigurationAtom,
   configurationAtom,
@@ -17,17 +11,14 @@ import {
 import useSchemaSync from "../../hooks/useSchemaSync";
 import AvailableConnections from "../../modules/AvailableConnections";
 import ConnectionDetail from "../../modules/ConnectionDetail";
-import TopBarWithLogo from "../common/TopBarWithLogo";
-import defaultStyles from "./Connections.styles";
+import {
+  NewContainer,
+  NewContentArea,
+  NewTopBar,
+  NewWorkspaceContainer,
+} from "../common/NewWorkspace";
 
-export type ConnectionsProps = {
-  classNamePrefix?: string;
-};
-
-const Connections = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
-  const styleWithTheme = useWithTheme();
-  const pfx = withClassNamePrefix(classNamePrefix);
-
+const Connections = () => {
   const config = useConfiguration();
   const activeConfig = useRecoilValue(activeConfigurationAtom);
   const configuration = useRecoilValue(configurationAtom);
@@ -46,22 +37,15 @@ const Connections = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
   }, [activeConfig, config?.schema?.triedToSync, updateSchema]);
 
   return (
-    <Workspace
-      className={cx(
-        styleWithTheme(defaultStyles(classNamePrefix)),
-        pfx("connections")
-      )}
-    >
-      <TopBarWithLogo>
-        <Workspace.TopBar.Title>
+    <NewWorkspaceContainer>
+      <NewTopBar>
+        <div>
           <div>
-            <div className={pfx("top-bar-title")}>Connections Details</div>
-            <div className={pfx("top-bar-subtitle")}>
-              Active connection: {config?.displayLabel || config?.id}
-            </div>
+            <div className="font-bold">Connections Details</div>
+            <div>Active connection: {config?.displayLabel || config?.id}</div>
           </div>
-        </Workspace.TopBar.Title>
-        <Workspace.TopBar.AdditionalControls>
+        </div>
+        <div>
           <Link
             to={
               !activeConfig || !config?.schema?.lastUpdate
@@ -71,38 +55,36 @@ const Connections = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
           >
             <Button
               isDisabled={!activeConfig || !config?.schema?.lastUpdate}
-              className={pfx("button")}
+              className="whitespace-nowrap"
               icon={<ExplorerIcon />}
               variant={"filled"}
             >
               Open Graph Explorer
             </Button>
           </Link>
-        </Workspace.TopBar.AdditionalControls>
-      </TopBarWithLogo>
-      <Workspace.Content>
-        <div
-          style={{
-            display: "flex",
-            height: "100%",
-            gap: 8,
-          }}
-        >
-          <div style={{ flexGrow: 1, minWidth: "50%" }}>
+        </div>
+      </NewTopBar>
+      <NewContentArea>
+        <div className="grid grid-cols-2 h-full gap-3">
+          <NewContainer>
             <AvailableConnections
               isSync={isSyncing}
               isModalOpen={isModalOpen}
               onModalChange={setModal}
             />
-          </div>
-          {activeConfig && (
-            <div style={{ flexGrow: 1, width: "50%", height: "100%" }}>
+          </NewContainer>
+          {activeConfig ? (
+            <NewContainer>
               <ConnectionDetail isSync={isSyncing} onSyncChange={setSyncing} />
-            </div>
+            </NewContainer>
+          ) : (
+            <NewContainer className="flex flex-col justify-center items-center text-xl text-gray-500">
+              No Connection Selected
+            </NewContainer>
           )}
         </div>
-      </Workspace.Content>
-    </Workspace>
+      </NewContentArea>
+    </NewWorkspaceContainer>
   );
 };
 

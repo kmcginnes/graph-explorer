@@ -5,10 +5,6 @@ const defaultStyles =
   (pfx: string) =>
   ({ theme }: ActiveThemeType<ProcessedTheme>) => css`
     &.${pfx}-connections {
-      .${pfx}-button {
-        white-space: nowrap;
-      }
-
       .${pfx}-top-bar-title {
         font-weight: bold;
       }

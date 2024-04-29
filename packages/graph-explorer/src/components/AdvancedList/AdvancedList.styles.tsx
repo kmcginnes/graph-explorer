@@ -12,11 +12,6 @@ const listStyles =
       flex-direction: column;
       width: 100%;
       height: 100%;
-      background-color: ${advancedList?.background || isDarkTheme
-        ? palette.background.secondary
-        : palette.background.contrast};
-
-      color: ${advancedList?.color || text.primary};
 
       .${pfx}-advanced-list-loading {
         width: 100%;
@@ -172,8 +167,6 @@ const listStyles =
           font-size: 14px;
           font-weight: 500;
           align-items: center;
-          background-color: ${advancedList?.category?.background ||
-          background.secondary};
           height: 24px;
           min-height: 24px;
         }
@@ -222,8 +215,8 @@ const listStyles =
   };
 
 const headerStyles =
-  (pfx: string, noSearchResults: boolean): ThemeStyleFn =>
-  ({ theme, isDarkTheme }) => css`
+  (pfx: string): ThemeStyleFn =>
+  () => css`
     flex: 1;
     height: 100%;
     .${pfx}-header-container {
@@ -233,9 +226,6 @@ const headerStyles =
       padding: 0 14px;
       font-weight: 500;
       align-items: center;
-      background-color: ${isDarkTheme
-        ? theme.palette.background.secondary
-        : theme.palette.background.default};
     }
 
     .${pfx}-title {
@@ -245,15 +235,12 @@ const headerStyles =
     > .${pfx}-content {
       overflow: auto;
       height: 100%;
-      background: ${noSearchResults
-        ? theme.palette.background.secondary
-        : theme.palette.background.default};
     }
   `;
 
 const footerStyles =
   (pfx: string): ThemeStyleFn =>
-  ({ theme, isDarkTheme }) => css`
+  ({ theme }) => css`
     border-top: solid 1px ${theme.palette.border};
 
     .${pfx}-header-container {
@@ -261,10 +248,6 @@ const footerStyles =
       padding: 0 14px;
       font-weight: 500;
       align-items: center;
-
-      background-color: ${isDarkTheme
-        ? theme.palette.background.secondary
-        : theme.palette.background.default};
     }
 
     .${pfx}-title {

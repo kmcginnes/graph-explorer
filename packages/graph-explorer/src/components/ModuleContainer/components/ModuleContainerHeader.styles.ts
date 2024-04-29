@@ -10,10 +10,7 @@ const defaultStyles =
       align-items: center;
       width: 100%;
       min-height: 42px;
-      padding: 0 ${theme.spacing["2x"]} 0 ${theme.spacing["3x"]};
       border-bottom: solid 1px ${theme.palette.border};
-      background-color: ${theme.palette.background.default};
-      color: ${theme.palette.text.primary};
 
       .${pfx}-back-action {
         margin-right: ${theme.spacing.base};

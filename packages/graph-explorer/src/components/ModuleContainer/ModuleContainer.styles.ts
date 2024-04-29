@@ -9,7 +9,6 @@ const defaultStyles =
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      background: ${theme.palette.background.secondary};
       color: ${theme.palette.text.secondary};
 
       > .${pfx}-content {
@@ -17,18 +16,6 @@ const defaultStyles =
         flex-direction: column;
         flex-grow: 1;
         overflow: hidden;
-      }
-
-      &.${pfx}-variant-default {
-        border-radius: 4px;
-        box-shadow: ${isDarkTheme ? "none" : theme.shadow.base};
-        border: ${isDarkTheme ? `solid 1px ${theme.palette.border}` : "none"};
-      }
-
-      &.${pfx}-variant-sidebar {
-        border-radius: 0;
-        box-shadow: none;
-        border: ${isDarkTheme ? `solid 1px ${theme.palette.border}` : "none"};
       }
 
       &.${pfx}-variant-widget {

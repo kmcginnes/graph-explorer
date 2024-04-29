@@ -6,7 +6,6 @@ const defaultStyles =
   ({ theme }) => css`
     display: contents;
     height: 100%;
-    background: ${theme.palette.background.default};
 
     .${pfx}-header-children {
       display: flex;
@@ -16,13 +15,12 @@ const defaultStyles =
     }
 
     .${pfx}-info-bar {
-      background: ${theme.palette.background.default};
       border-bottom: solid 1px ${theme.palette.divider};
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-start;
       gap: ${theme.spacing["6x"]};
-      padding: ${theme.spacing["4x"]};
+      padding: ${theme.spacing["2x"]};
 
       .${pfx}-item {
         display: flex;

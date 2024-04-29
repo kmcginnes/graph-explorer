@@ -119,7 +119,7 @@ const ConnectionData = ({ classNamePrefix = "ft" }: VertexDetailProps) => {
         searchPlaceholder={t("connection-detail.search-placeholder")}
         search={search}
         onSearch={setSearch}
-        className={pfx("advanced-list")}
+        className="p-3"
         items={verticesByTypeItems}
         emptyState={{
           noSearchResultsTitle: t("connection-detail.no-search-title"),

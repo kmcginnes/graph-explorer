@@ -150,6 +150,7 @@ const ModuleContainerHeader = (
       className={cx(
         styleWithTheme(defaultStyles(classNamePrefix)),
         pfx("module-container-header"),
+        "px-3 py-2",
         className
       )}
     >
