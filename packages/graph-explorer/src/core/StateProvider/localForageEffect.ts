@@ -1,5 +1,6 @@
 import * as localForage from "localforage";
 import { AtomEffect, DefaultValue } from "recoil";
+import { AsyncStorage } from "jotai/vanilla/utils/atomWithStorage";
 
 localForage.config({
   name: "ge",
@@ -38,5 +39,19 @@ const localForageEffect =
         : localForage.setItem(node.key, newValue);
     });
   };
+
+export function createLocalForageJotaiStorage<T>(): AsyncStorage<T> {
+  return {
+    getItem: async (key: string, initialValue: T) => {
+      return (await localForage.getItem<T>(key)) ?? initialValue;
+    },
+    setItem: async (key: string, newValue: T) => {
+      await localForage.setItem<T>(key, newValue);
+    },
+    removeItem: async (key: string) => {
+      await localForage.removeItem(key);
+    },
+  };
+}
 
 export default localForageEffect;
