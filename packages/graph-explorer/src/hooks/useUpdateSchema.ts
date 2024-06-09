@@ -1,19 +1,23 @@
-import { useRecoilCallback } from "recoil";
+import { useAtomCallback } from "jotai/utils";
 import type { SchemaResponse } from "../connector/useGEFetchTypes";
-import { schemaAtom } from "../core/StateProvider/schema";
+import { schemaStorage } from "../core/StateProvider/schema";
+import { useCallback } from "react";
 
 const useUpdateSchema = () => {
-  return useRecoilCallback(
-    ({ set }) =>
+  return useAtomCallback(
+    useCallback(
       (
+        get,
+        set,
         id: string,
         schema?:
           | Partial<SchemaResponse>
           | ((prevSchema?: SchemaResponse) => Partial<SchemaResponse>)
       ) => {
-        set(schemaAtom, prevSchemaMap => {
-          const updatedSchema = new Map(prevSchemaMap);
-          const prevSchema = prevSchemaMap.get(id);
+        set(schemaStorage, async prevSchemaMap => {
+          const resolvedPrevSchemaMap = await prevSchemaMap;
+          const updatedSchema = new Map(resolvedPrevSchemaMap);
+          const prevSchema = resolvedPrevSchemaMap.get(id);
 
           const currentSchema =
             typeof schema === "function" ? schema(prevSchema) : schema;
@@ -49,7 +53,8 @@ const useUpdateSchema = () => {
           return updatedSchema;
         });
       },
-    []
+      []
+    )
   );
 };
 

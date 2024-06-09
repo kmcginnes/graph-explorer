@@ -2,8 +2,7 @@ import { uniq } from "lodash";
 import isEqual from "lodash/isEqual";
 import isEqualWith from "lodash/isEqualWith";
 import uniqBy from "lodash/uniqBy";
-import type { GetRecoilValue, RecoilState, SetRecoilState } from "recoil";
-import { selector } from "recoil";
+import { Getter, Setter, WritableAtom, atom } from "jotai";
 import type { Edge, Vertex } from "../../@types/entities";
 import { edgesAtom, edgesSelectedIdsAtom, edgesSelector } from "./edges";
 import {
@@ -32,32 +31,31 @@ const removeFromSetIfDeleted = (
     get,
     set,
   }: {
-    get: GetRecoilValue;
-    set: SetRecoilState;
+    get: Getter;
+    set: Setter;
   },
   deletedIds: Set<string>,
-  selector: RecoilState<Set<string>>
+  atom: WritableAtom<Set<string>, [Set<string>], unknown>
 ) => {
-  const selectorIds = get(selector);
+  const selectorIds = get(atom);
   const copiedSelectorIds = new Set(selectorIds);
   deletedIds.forEach(id => {
     copiedSelectorIds.delete(id);
   });
-  set(selector, copiedSelectorIds);
+  set(atom, copiedSelectorIds);
   return copiedSelectorIds;
 };
 
-// This selector is the safer way to add entities to the graph
+// This atom is the safer way to add entities to the graph
 // It computes stats (counts) every time that some entity is added
-const entitiesSelector = selector<Entities>({
-  key: "entities",
-  get: ({ get }) => {
+const entitiesSelector = atom(
+  get => {
     return {
       nodes: get(nodesAtom),
       edges: get(edgesAtom),
     };
   },
-  set: ({ get, set }, newEntities) => {
+  (get, set, newEntities: Entities) => {
     if (!isEntities(newEntities)) {
       return;
     }
@@ -164,14 +162,14 @@ const entitiesSelector = selector<Entities>({
 
     // When a node is removed, we should delete its id from other nodes-state sets
     if (deletedNodesIds.size > 0) {
-      [nodesSelectedIdsAtom, nodesHiddenIdsAtom].forEach(selector => {
+      [nodesSelectedIdsAtom, nodesHiddenIdsAtom].forEach(atom => {
         removeFromSetIfDeleted(
           {
             get,
             set,
           },
           deletedNodesIds,
-          selector
+          atom
         );
       });
     }
@@ -193,14 +191,14 @@ const entitiesSelector = selector<Entities>({
 
     // When a node is removed, we should remove its involved edge id from other edges-state sets
     if (affectedEdgesIds.size > 0) {
-      [edgesSelectedIdsAtom].forEach(selector =>
+      [edgesSelectedIdsAtom].forEach(atom =>
         removeFromSetIfDeleted(
           {
             get,
             set,
           },
           affectedEdgesIds,
-          selector
+          atom
         )
       );
     }
@@ -261,7 +259,7 @@ const entitiesSelector = selector<Entities>({
       });
       set(edgesSelectedIdsAtom, selectedEdgesIds);
     }
-  },
-});
+  }
+);
 
 export default entitiesSelector;

@@ -1,6 +1,6 @@
 import { cx } from "@emotion/css";
 import { RefObject, useCallback, useMemo } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useAtom, useSetAtom } from "jotai";
 import {
   Card,
   EdgeIcon,
@@ -22,7 +22,7 @@ import {
 import { useWithTheme, withClassNamePrefix } from "../../../core";
 import { edgesSelectedIdsAtom } from "../../../core/StateProvider/edges";
 import { nodesSelectedIdsAtom } from "../../../core/StateProvider/nodes";
-import { userLayoutAtom } from "../../../core/StateProvider/userPreferences";
+import { userLayoutStorage } from "../../../core/StateProvider/userPreferences";
 import useDisplayNames from "../../../hooks/useDisplayNames";
 import useEntities from "../../../hooks/useEntities";
 import useTranslations from "../../../hooks/useTranslations";
@@ -54,11 +54,9 @@ const ContextMenu = ({
   const pfx = withClassNamePrefix(classNamePrefix);
   const t = useTranslations();
   const [entities, setEntities] = useEntities();
-  const [nodesSelectedIds, setNodesSelectedIds] =
-    useRecoilState(nodesSelectedIdsAtom);
-  const [edgesSelectedIds, setEdgesSelectedIds] =
-    useRecoilState(edgesSelectedIdsAtom);
-  const setUserLayout = useSetRecoilState(userLayoutAtom);
+  const [nodesSelectedIds, setNodesSelectedIds] = useAtom(nodesSelectedIdsAtom);
+  const [edgesSelectedIds, setEdgesSelectedIds] = useAtom(edgesSelectedIdsAtom);
+  const setUserLayout = useSetAtom(userLayoutStorage);
 
   const {
     onFitToCanvas,

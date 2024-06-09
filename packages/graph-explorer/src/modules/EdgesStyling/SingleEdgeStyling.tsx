@@ -2,7 +2,7 @@ import { Modal } from "@mantine/core";
 import clone from "lodash/clone";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { Button, Input, Select, StylingIcon } from "../../components";
 import ColorInput from "../../components/ColorInput/ColorInput";
 import {
@@ -15,6 +15,7 @@ import {
   EdgePreferences,
   LineStyle,
   userStylingAtom,
+  userStylingStorage,
 } from "../../core/StateProvider/userPreferences";
 import useTextTransform from "../../hooks/useTextTransform";
 import useTranslations from "../../hooks/useTranslations";
@@ -25,6 +26,7 @@ import {
 import { LINE_STYLE_OPTIONS } from "./lineStyling";
 import defaultStyles from "./SingleEdgeStyling.style";
 import modalDefaultStyles from "./SingleEdgeStylingModal.style";
+import { useAtomCallback } from "jotai/utils";
 
 export type SingleEdgeStylingProps = {
   classNamePrefix?: string;
@@ -46,7 +48,7 @@ const SingleEdgeStyling = ({
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix(classNamePrefix);
 
-  const userStyling = useRecoilValue(userStylingAtom);
+  const userStyling = useAtomValue(userStylingAtom);
   const textTransform = useTextTransform();
   const etConfig = config?.getEdgeTypeConfig(edgeType);
   const etPrefs = userStyling.edges?.find(e => e.type === edgeType);
@@ -70,16 +72,17 @@ const SingleEdgeStyling = ({
     return options;
   }, [t, textTransform, etConfig?.attributes]);
 
-  const onUserPrefsChange = useRecoilCallback(
-    ({ set }) =>
-      (prefs: Omit<EdgePreferences, "type">) => {
-        set(userStylingAtom, prev => {
-          const edges = Array.from(prev.edges || []);
+  const onUserPrefsChange = useAtomCallback(
+    useCallback(
+      (get, set, prefs: Omit<EdgePreferences, "type">) => {
+        set(userStylingStorage, async prev => {
+          const resolvedPrev = await prev;
+          const edges = Array.from(resolvedPrev.edges || []);
           const updateIndex = edges.findIndex(e => e.type === edgeType);
 
           if (updateIndex === -1) {
             return {
-              ...prev,
+              ...resolvedPrev,
               edges: [...edges, { ...prefs, type: edgeType }],
             };
           }
@@ -90,46 +93,52 @@ const SingleEdgeStyling = ({
             type: edgeType,
           };
           return {
-            ...prev,
+            ...resolvedPrev,
             edges,
           };
         });
       },
-    [edgeType]
+      [edgeType]
+    )
   );
 
-  const onUserPrefsReset = useRecoilCallback(
-    ({ set }) =>
-      () => {
-        set(userStylingAtom, prev => {
+  const onUserPrefsReset = useAtomCallback(
+    useCallback(
+      (get, set) => {
+        set(userStylingStorage, async prev => {
+          const resolvedPrev = await prev;
           return {
             ...prev,
-            edges: prev.edges?.filter(e => e.type !== edgeType),
+            edges: resolvedPrev.edges?.filter(e => e.type !== edgeType),
           };
         });
       },
-    [edgeType]
+      [edgeType]
+    )
   );
 
-  const onDisplayNameChange = useRecoilCallback(
-    ({ set }) =>
-      (value: string | string[]) => {
+  const onDisplayNameChange = useAtomCallback(
+    useCallback(
+      (get, set, value: string | string[]) => {
         if (!edgeType) {
           return;
         }
 
-        set(userStylingAtom, prevStyling => {
+        set(userStylingStorage, async prevStyling => {
+          const resolvedPrevStyling = await prevStyling;
           const etItem = clone(
-            prevStyling.edges?.find(e => e.type === edgeType) ||
+            resolvedPrevStyling.edges?.find(e => e.type === edgeType) ||
               ({} as EdgePreferences)
           );
 
           etItem.displayNameAttribute = value as string;
 
           return {
-            ...prevStyling,
+            ...resolvedPrevStyling,
             edges: [
-              ...(prevStyling.edges || []).filter(e => e.type !== edgeType),
+              ...(resolvedPrevStyling.edges || []).filter(
+                e => e.type !== edgeType
+              ),
               {
                 ...(etItem || {}),
                 type: edgeType,
@@ -138,7 +147,8 @@ const SingleEdgeStyling = ({
           };
         });
       },
-    [edgeType]
+      [edgeType]
+    )
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

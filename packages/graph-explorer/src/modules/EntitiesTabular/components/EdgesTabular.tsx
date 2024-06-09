@@ -1,6 +1,6 @@
 import difference from "lodash/difference";
 import { forwardRef, useCallback, useMemo } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { Edge } from "../../../@types/entities";
 import { NonVisibleIcon, VisibleIcon } from "../../../components";
 import type {
@@ -23,22 +23,28 @@ import { nodesSelectedIdsAtom } from "../../../core/StateProvider/nodes";
 import { useDeepMemo } from "../../../hooks";
 import useTextTransform from "../../../hooks/useTextTransform";
 import useTranslations from "../../../hooks/useTranslations";
-import { recoilDiffSets } from "../../../utils/recoilState";
 
 type ToggleEdge = Edge & { __is_visible: boolean };
 
 const EdgesTabular = forwardRef<TabularInstance<any>, any>((props, ref) => {
   const t = useTranslations();
-  const edges = useRecoilValue(edgesAtom);
-  const setEdgesOut = useSetRecoilState(edgesOutOfFocusIdsAtom);
-  const [hiddenEdgesIds, setHiddenEdgesIds] =
-    useRecoilState(edgesHiddenIdsAtom);
-  const setSelectedNodesIds = useSetRecoilState(nodesSelectedIdsAtom);
-  const [selectedEdgesIds, setSelectedEdgesIds] =
-    useRecoilState(edgesSelectedIdsAtom);
+  const edges = useAtomValue(edgesAtom);
+  const setEdgesOut = useSetAtom(edgesOutOfFocusIdsAtom);
+  const [hiddenEdgesIds, setHiddenEdgesIds] = useAtom(edgesHiddenIdsAtom);
+  const setSelectedNodesIds = useSetAtom(nodesSelectedIdsAtom);
+  const [selectedEdgesIds, setSelectedEdgesIds] = useAtom(edgesSelectedIdsAtom);
   const onToggleVisibility = useCallback(
     (item: ToggleEdge) => {
-      recoilDiffSets(setHiddenEdgesIds, new Set([item.data.id]));
+      const edgeId = item.data.id;
+      setHiddenEdgesIds(prev => {
+        const copied = new Set(prev);
+        if (copied.has(edgeId)) {
+          copied.delete(edgeId);
+        } else {
+          copied.add(edgeId);
+        }
+        return copied;
+      });
     },
     [setHiddenEdgesIds]
   );

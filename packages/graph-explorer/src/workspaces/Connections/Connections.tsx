@@ -1,7 +1,7 @@
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import Button from "../../components/Button";
 import { ExplorerIcon } from "../../components/icons";
 import Workspace from "../../components/Workspace/Workspace";
@@ -12,7 +12,7 @@ import {
 } from "../../core";
 import {
   activeConfigurationAtom,
-  configurationAtom,
+  configurationStorage,
 } from "../../core/StateProvider/configuration";
 import useSchemaSync from "../../hooks/useSchemaSync";
 import AvailableConnections from "../../modules/AvailableConnections";
@@ -29,10 +29,16 @@ const Connections = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
   const pfx = withClassNamePrefix(classNamePrefix);
 
   const config = useConfiguration();
-  const activeConfig = useRecoilValue(activeConfigurationAtom);
-  const configuration = useRecoilValue(configurationAtom);
+  const activeConfig = useAtomValue(activeConfigurationAtom);
+  const configuration = useAtomValue(configurationStorage);
   const [isModalOpen, setModal] = useState(configuration.size === 0);
   const [isSyncing, setSyncing] = useState(false);
+
+  console.log("Rendering Connections", {
+    activeConfig,
+    configuration,
+    isModalOpen,
+  });
 
   // Everytime that the active connection changes,
   // if it was not synchronized yet, try to sync it

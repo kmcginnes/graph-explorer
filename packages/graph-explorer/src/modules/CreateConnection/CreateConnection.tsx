@@ -1,6 +1,6 @@
 import { Checkbox } from "@mantine/core";
 import { useCallback, useState } from "react";
-import { useRecoilCallback } from "recoil";
+import { useAtomCallback } from "jotai/utils";
 import { v4 } from "uuid";
 import { InfoTooltip } from "../../components";
 import Button from "../../components/Button";
@@ -14,10 +14,10 @@ import {
   withClassNamePrefix,
 } from "../../core";
 import {
-  activeConfigurationAtom,
-  configurationAtom,
+  activeConfigurationStorage,
+  configurationStorage,
 } from "../../core/StateProvider/configuration";
-import { schemaAtom } from "../../core/StateProvider/schema";
+import { schemaStorage } from "../../core/StateProvider/schema";
 import useResetState from "../../core/StateProvider/useResetState";
 import { formatDate } from "../../utils";
 import defaultStyles from "./CreateConnection.styles";
@@ -93,9 +93,9 @@ const CreateConnection = ({
       }
     : undefined;
 
-  const onSave = useRecoilCallback(
-    ({ set }) =>
-      async (data: Required<ConnectionForm>) => {
+  const onSave = useAtomCallback(
+    useCallback(
+      (get, set, data: Required<ConnectionForm>) => {
         if (!configId) {
           const newConfigId = v4();
           const newConfig: RawConfiguration = {
@@ -103,17 +103,19 @@ const CreateConnection = ({
             displayLabel: data.name,
             connection: mapToConnection(data),
           };
-          set(configurationAtom, prevConfigMap => {
-            const updatedConfig = new Map(prevConfigMap);
+          set(configurationStorage, async prevConfigMap => {
+            const resolved = await prevConfigMap;
+            const updatedConfig = new Map(resolved);
             updatedConfig.set(newConfigId, newConfig);
             return updatedConfig;
           });
-          set(activeConfigurationAtom, newConfigId);
+          set(activeConfigurationStorage, newConfigId);
           return;
         }
 
-        set(configurationAtom, prevConfigMap => {
-          const updatedConfig = new Map(prevConfigMap);
+        set(configurationStorage, async prevConfigMap => {
+          const resolvedPrevConfigMap = await prevConfigMap;
+          const updatedConfig = new Map(resolvedPrevConfigMap);
           const currentConfig = updatedConfig.get(configId);
 
           updatedConfig.set(configId, {
@@ -129,8 +131,9 @@ const CreateConnection = ({
         const typeChange = initialData?.queryEngine !== data.queryEngine;
 
         if (urlChange || typeChange) {
-          set(schemaAtom, prevSchemaMap => {
-            const updatedSchema = new Map(prevSchemaMap);
+          set(schemaStorage, async prevSchemaMap => {
+            const resolvedPrevSchemaMap = await prevSchemaMap;
+            const updatedSchema = new Map(resolvedPrevSchemaMap);
             const currentSchema = updatedSchema.get(configId);
             updatedSchema.set(configId, {
               vertices: currentSchema?.vertices || [],
@@ -146,7 +149,8 @@ const CreateConnection = ({
           });
         }
       },
-    [configId, initialData?.url, initialData?.queryEngine]
+      [configId, initialData?.url, initialData?.queryEngine]
+    )
   );
 
   const [form, setForm] = useState<ConnectionForm>({

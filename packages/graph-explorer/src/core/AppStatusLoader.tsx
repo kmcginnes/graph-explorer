@@ -1,17 +1,17 @@
 import merge from "lodash/merge";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtomValue, useSetAtom } from "jotai";
 import { LoadingSpinner, PanelEmptyState } from "../components";
 import Redirect from "../components/Redirect";
 import { RawConfiguration, fetchConfiguration } from "./ConfigurationProvider";
 import {
   activeConfigurationAtom,
+  activeConfigurationStorage,
   configurationAtom,
-  isStoreLoadedAtom,
+  configurationStorage,
 } from "./StateProvider/configuration";
 import { schemaAtom } from "./StateProvider/schema";
-import useLoadStore from "./StateProvider/useLoadStore";
 import { CONNECTIONS_OP } from "../modules/CreateConnection/CreateConnection";
 
 export type AppLoadingProps = {
@@ -29,24 +29,35 @@ const STATUS = {
   },
 };
 
-const AppStatusLoader = ({
-  config,
-  children,
-}: PropsWithChildren<AppLoadingProps>) => {
-  const location = useLocation();
-  useLoadStore();
-  const isStoreLoaded = useRecoilValue(isStoreLoadedAtom);
-  const [activeConfig, setActiveConfig] = useRecoilState(
-    activeConfigurationAtom
+function Loading() {
+  console.log("Rendering loading");
+  return (
+    <PanelEmptyState
+      title={STATUS.STORE.title}
+      subtitle={STATUS.STORE.subtitle}
+      icon={<LoadingSpinner />}
+    />
   );
-  const [configuration, setConfiguration] = useRecoilState(configurationAtom);
-  const schema = useRecoilValue(schemaAtom);
+}
+
+function AppStatusLoader(props: PropsWithChildren<AppLoadingProps>) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Content {...props} />
+    </Suspense>
+  );
+}
+
+const Content = ({ config, children }: PropsWithChildren<AppLoadingProps>) => {
+  const location = useLocation();
+  const activeConfig = useAtomValue(activeConfigurationAtom);
+  const setActiveConfigStorage = useSetAtom(activeConfigurationStorage);
+  const configuration = useAtomValue(configurationAtom);
+  const setConfigurationStorage = useSetAtom(configurationStorage);
+  const schema = useAtomValue(schemaAtom);
 
   useEffect(() => {
-    if (!isStoreLoaded) {
-      return;
-    }
-
+    // If we already have a config then bail out
     if (activeConfig && configuration.get(activeConfig)) {
       return;
     }
@@ -64,8 +75,8 @@ const AppStatusLoader = ({
         }
         newConfig.__fileBase = true;
         let activeConfigId = config.id;
-        setConfiguration(prevConfigMap => {
-          const updatedConfig = new Map(prevConfigMap);
+        setConfigurationStorage(async prevConfigMap => {
+          const updatedConfig = new Map(await prevConfigMap);
           if (newConfig.connection?.queryEngine) {
             updatedConfig.set(config.id, newConfig);
           }
@@ -87,7 +98,7 @@ const AppStatusLoader = ({
           }
           return updatedConfig;
         });
-        setActiveConfig(activeConfigId);
+        setActiveConfigStorage(activeConfigId);
       })();
 
       return;
@@ -96,27 +107,15 @@ const AppStatusLoader = ({
     // If the config file is stored,
     // only activate the configuration
     if (!!config && configuration.get(config.id)) {
-      setActiveConfig(config.id);
+      setActiveConfigStorage(config.id);
     }
   }, [
     activeConfig,
     config,
     configuration,
-    isStoreLoaded,
-    setActiveConfig,
-    setConfiguration,
+    setActiveConfigStorage,
+    setConfigurationStorage,
   ]);
-
-  // Wait until state is recovered from the indexed DB
-  if (!isStoreLoaded) {
-    return (
-      <PanelEmptyState
-        title={STATUS.STORE.title}
-        subtitle={STATUS.STORE.subtitle}
-        icon={<LoadingSpinner />}
-      />
-    );
-  }
 
   // Loading from config file if exists
   if (configuration.size === 0 && !!config) {

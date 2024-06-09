@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useConfiguration } from "../core";
 import { explorerSelector } from "../core/connector";
 import useUpdateSchema from "./useUpdateSchema";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { nodeCountByNodeTypeQuery } from "../connector/queries";
 
 export default function useUpdateVertexTypeCounts(vertexType: string) {
   const config = useConfiguration();
   const configId = config?.id;
-  const explorer = useRecoilValue(explorerSelector);
+  const explorer = useAtomValue(explorerSelector);
 
   const query = useQuery(nodeCountByNodeTypeQuery(vertexType, explorer));
 

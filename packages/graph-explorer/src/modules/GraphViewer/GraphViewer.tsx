@@ -1,6 +1,6 @@
 import { cx } from "@emotion/css";
 import { MouseEvent, useCallback, useRef, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtom, useAtomValue } from "jotai";
 import { Vertex } from "../../@types/entities";
 import type { ActionItem, ModuleContainerHeaderProps } from "../../components";
 import {
@@ -141,15 +141,13 @@ export default function GraphViewer({
   const [entities, setEntities] = useEntities();
   const { dropAreaRef, isOver, canDrop } = useNodeDrop();
 
-  const [nodesSelectedIds, setNodesSelectedIds] =
-    useRecoilState(nodesSelectedIdsAtom);
-  const hiddenNodesIds = useRecoilValue(nodesHiddenIdsAtom);
+  const [nodesSelectedIds, setNodesSelectedIds] = useAtom(nodesSelectedIdsAtom);
+  const hiddenNodesIds = useAtomValue(nodesHiddenIdsAtom);
 
-  const [edgesSelectedIds, setEdgesSelectedIds] =
-    useRecoilState(edgesSelectedIdsAtom);
-  const hiddenEdgesIds = useRecoilValue(edgesHiddenIdsAtom);
-  const nodesOutIds = useRecoilValue(nodesOutOfFocusIdsAtom);
-  const edgesOutIds = useRecoilValue(edgesOutOfFocusIdsAtom);
+  const [edgesSelectedIds, setEdgesSelectedIds] = useAtom(edgesSelectedIdsAtom);
+  const hiddenEdgesIds = useAtomValue(edgesHiddenIdsAtom);
+  const nodesOutIds = useAtomValue(nodesOutOfFocusIdsAtom);
+  const edgesOutIds = useAtomValue(edgesOutOfFocusIdsAtom);
 
   const onSelectedNodesIdsChange = useCallback(
     (selectedIds: string[] | Set<string>) => {

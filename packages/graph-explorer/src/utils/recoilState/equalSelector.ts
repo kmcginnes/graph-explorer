@@ -1,45 +1,47 @@
-import { ReadOnlySelectorOptions, RecoilValueReadOnly, selector } from "recoil";
+// TODO: Figure out if equalSelector logic was necessary
 
-// Inspired by: https://github.com/facebookexperimental/Recoil/issues/1416#issuecomment-1044953271
+// import { ReadOnlySelectorOptions, RecoilValueReadOnly, atom } from "jotai";
 
-interface EqualReadOnlySelectorOptions<T> extends ReadOnlySelectorOptions<T> {
-  /**
-   * Comparer function to determine if values are equal.
-   * @param latest The new value.
-   * @param prior The old value.
-   * @returns True if the values are equal.
-   */
-  equals: (latest: T, prior: T) => boolean;
-}
+// // Inspired by: https://github.com/facebookexperimental/Recoil/issues/1416#issuecomment-1044953271
 
-/**
- * Recoil selector that uses an equality check with prior value
- * before returning. If the new value is the same as the prior
- * value, the prior value is returned. Recoil will not publish
- * a change to subscribers in this case.
- */
-export function equalSelector<T>(
-  options: EqualReadOnlySelectorOptions<T>
-): RecoilValueReadOnly<T> {
-  const inner = selector({
-    key: `${options.key}_inner`,
-    get: options.get,
-  });
+// interface EqualReadOnlySelectorOptions<T> extends ReadOnlySelectorOptions<T> {
+//   /**
+//    * Comparer function to determine if values are equal.
+//    * @param latest The new value.
+//    * @param prior The old value.
+//    * @returns True if the values are equal.
+//    */
+//   equals: (latest: T, prior: T) => boolean;
+// }
 
-  let prior: T | undefined;
+// /**
+//  * Recoil atom that uses an equality check with prior value
+//  * before returning. If the new value is the same as the prior
+//  * value, the prior value is returned. Recoil will not publish
+//  * a change to subscribers in this case.
+//  */
+// export function equalSelector<T>(
+//   options: EqualReadOnlySelectorOptions<T>
+// ): RecoilValueReadOnly<T> {
+//   const inner = atom({
+//     key: `${options.key}_inner`,
+//     get: options.get,
+//   });
 
-  return selector({
-    key: options.key,
-    get: ({ get }) => {
-      const latest = get(inner);
-      if (
-        prior != null &&
-        (latest === prior || options.equals(latest, prior))
-      ) {
-        return prior;
-      }
-      prior = latest;
-      return latest as T;
-    },
-  });
-}
+//   let prior: T | undefined;
+
+//   return atom({
+//     key: options.key,
+//     get: ({ get }) => {
+//       const latest = get(inner);
+//       if (
+//         prior != null &&
+//         (latest === prior || options.equals(latest, prior))
+//       ) {
+//         return prior;
+//       }
+//       prior = latest;
+//       return latest as T;
+//     },
+//   });
+// }

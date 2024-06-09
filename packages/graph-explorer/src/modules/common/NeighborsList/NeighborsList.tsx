@@ -11,7 +11,7 @@ import { useWithTheme, withClassNamePrefix } from "../../../core";
 import useNeighborsOptions from "../../../hooks/useNeighborsOptions";
 import defaultStyles from "./NeighborsList.styles";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { activeConnectionSelector } from "../../../core/connector";
 
 export type NeighborsListProps = {
@@ -101,7 +101,7 @@ function ExpandToggleButton({
   const hasMore = itemCount > MAX_NEIGHBOR_TYPE_ROWS;
   const extraCount = hasMore ? itemCount - MAX_NEIGHBOR_TYPE_ROWS : 0;
 
-  const connection = useRecoilValue(activeConnectionSelector);
+  const connection = useAtomValue(activeConnectionSelector);
   const nodeTypeLabel =
     connection?.queryEngine === "sparql" ? "classes" : "labels";
 

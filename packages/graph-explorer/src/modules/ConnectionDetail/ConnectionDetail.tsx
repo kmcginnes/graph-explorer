@@ -1,6 +1,6 @@
 import { Modal } from "@mantine/core";
 import { useCallback, useState } from "react";
-import { useRecoilCallback } from "recoil";
+import { useAtomCallback } from "jotai/utils";
 import {
   ActionItem,
   Chip,
@@ -19,10 +19,10 @@ import {
   withClassNamePrefix,
 } from "../../core";
 import {
-  activeConfigurationAtom,
-  configurationAtom,
+  activeConfigurationStorage,
+  configurationStorage,
 } from "../../core/StateProvider/configuration";
-import { schemaAtom } from "../../core/StateProvider/schema";
+import { schemaStorage } from "../../core/StateProvider/schema";
 import useSchemaSync from "../../hooks/useSchemaSync";
 import useTranslations from "../../hooks/useTranslations";
 import { formatDate } from "../../utils";
@@ -93,28 +93,29 @@ const ConnectionDetail = ({ isSync, onSyncChange }: ConnectionDetailProps) => {
     saveConfigurationToFile(config);
   }, [config]);
 
-  const onConfigDelete = useRecoilCallback(
-    ({ set }) =>
-      () => {
+  const onConfigDelete = useAtomCallback(
+    useCallback(
+      (get, set) => {
         if (!config?.id) {
           return;
         }
 
-        set(activeConfigurationAtom, null);
+        set(activeConfigurationStorage, null);
 
-        set(configurationAtom, prevConfigs => {
-          const updatedConfigs = new Map(prevConfigs);
+        set(configurationStorage, async prevConfigs => {
+          const updatedConfigs = new Map(await prevConfigs);
           updatedConfigs.delete(config.id);
           return updatedConfigs;
         });
 
-        set(schemaAtom, prevSchemas => {
-          const updatedSchemas = new Map(prevSchemas);
+        set(schemaStorage, async prevSchemas => {
+          const updatedSchemas = new Map(await prevSchemas);
           updatedSchemas.delete(config.id);
           return updatedSchemas;
         });
       },
-    [config?.id]
+      [config?.id]
+    )
   );
 
   const onActionClick = useCallback(

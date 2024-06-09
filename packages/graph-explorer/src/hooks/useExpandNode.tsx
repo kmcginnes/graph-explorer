@@ -12,7 +12,7 @@ import type {
 } from "../connector/useGEFetchTypes";
 import { activeConnectionSelector, explorerSelector } from "../core/connector";
 import useEntities from "./useEntities";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { useMutation } from "@tanstack/react-query";
 import useDisplayNames from "./useDisplayNames";
 import { Vertex } from "../@types/entities";
@@ -49,7 +49,7 @@ export function ExpandNodeProvider(props: PropsWithChildren) {
   // Wires up node count query in response to new nodes in the graph
   useUpdateAllNodeCounts();
 
-  const explorer = useRecoilValue(explorerSelector);
+  const explorer = useAtomValue(explorerSelector);
   const [_, setEntities] = useEntities();
   const { enqueueNotification, clearNotification } = useNotification();
   const getDisplayNames = useDisplayNames();
@@ -111,7 +111,7 @@ export function ExpandNodeProvider(props: PropsWithChildren) {
     return () => clearNotification(notificationId);
   }, [clearNotification, enqueueNotification, mutation.isPending]);
 
-  const connection = useRecoilValue(activeConnectionSelector);
+  const connection = useAtomValue(activeConnectionSelector);
   const expandNode = useCallback(
     (vertex: Vertex, filters?: ExpandNodeFilters) => {
       const request: ExpandNodeRequest = {

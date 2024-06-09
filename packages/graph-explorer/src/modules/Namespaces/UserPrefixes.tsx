@@ -1,6 +1,5 @@
 import { Modal } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
-import { useRecoilCallback } from "recoil";
 import {
   AddIcon,
   AdvancedList,
@@ -17,9 +16,10 @@ import {
   useWithTheme,
   withClassNamePrefix,
 } from "../../core";
-import { schemaAtom } from "../../core/StateProvider/schema";
+import { schemaStorage } from "../../core/StateProvider/schema";
 import defaultStyles from "./NsType.styles";
 import modalDefaultStyles from "./NsTypeModal.styles";
+import { useAtomCallback } from "jotai/utils";
 
 export type UserPrefixesProps = {
   classNamePrefix?: string;
@@ -37,16 +37,16 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
   const [search, setSearch] = useState("");
   const [opened, setOpened] = useState(false);
 
-  const onDeletePrefix = useRecoilCallback(
-    ({ set }) =>
-      (prefix: string) =>
-      () => {
+  const onDeletePrefix = useAtomCallback(
+    useCallback(
+      (get, set, prefix: string) => () => {
         if (!config?.id) {
           return;
         }
 
-        set(schemaAtom, prevSchemas => {
-          const updatedSchemas = new Map(prevSchemas);
+        set(schemaStorage, async prevSchemas => {
+          const resolvedPrevSchemas = await prevSchemas;
+          const updatedSchemas = new Map(resolvedPrevSchemas);
           const activeSchema = updatedSchemas.get(config.id);
 
           updatedSchemas.set(config.id, {
@@ -61,7 +61,8 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
           return updatedSchemas;
         });
       },
-    [config?.id]
+      [config?.id]
+    )
   );
 
   const items = useMemo(() => {
@@ -105,15 +106,16 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
     []
   );
 
-  const onSave = useRecoilCallback(
-    ({ set }) =>
-      (prefix: string, uri: string) => {
+  const onSave = useAtomCallback(
+    useCallback(
+      (get, set, prefix: string, uri: string) => {
         if (!config?.id) {
           return;
         }
 
-        set(schemaAtom, prevSchemas => {
-          const updatedSchemas = new Map(prevSchemas);
+        set(schemaStorage, async prevSchemas => {
+          const resolvedPrevSchemas = await prevSchemas;
+          const updatedSchemas = new Map(resolvedPrevSchemas);
           const activeSchema = updatedSchemas.get(config.id);
 
           updatedSchemas.set(config.id, {
@@ -126,7 +128,8 @@ const UserPrefixes = ({ classNamePrefix = "ft" }: UserPrefixesProps) => {
           return updatedSchemas;
         });
       },
-    [config?.id]
+      [config?.id]
+    )
   );
 
   const onSubmit = useCallback(() => {

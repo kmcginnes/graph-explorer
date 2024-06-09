@@ -1,24 +1,20 @@
-import { atom, selector } from "recoil";
+import { atom } from "jotai";
 import type { Edge } from "../../@types/entities";
 import { sanitizeText } from "../../utils";
 import { activeConfigurationAtom } from "./configuration";
-import isDefaultValue from "./isDefaultValue";
-import { schemaAtom } from "./schema";
+import { schemaAtom, schemaStorage } from "./schema";
+import { RESET, atomWithReset } from "jotai/utils";
 
 export type Edges = Array<Edge>;
 
-export const edgesAtom = atom<Edges>({
-  key: "edges",
-  default: [],
-});
+export const edgesAtom = atomWithReset<Edges>([]);
 
-export const edgesSelector = selector<Edges>({
-  key: "edges-selector",
-  get: ({ get }) => {
+export const edgesSelector = atom(
+  get => {
     return get(edgesAtom);
   },
-  set: ({ get, set }, newValue) => {
-    if (isDefaultValue(newValue)) {
+  (get, set, newValue: Edges | typeof RESET) => {
+    if (newValue === RESET) {
       set(edgesAtom, newValue);
       return;
     }
@@ -49,8 +45,9 @@ export const edgesSelector = selector<Edges>({
     const schemas = get(schemaAtom);
     const activeSchema = schemas.get(activeConfig);
 
-    set(schemaAtom, prevSchemas => {
-      const updatedSchemas = new Map(prevSchemas);
+    set(schemaStorage, async prevSchemas => {
+      const resolvedPrevSchemas = await prevSchemas;
+      const updatedSchemas = new Map(resolvedPrevSchemas);
 
       const updatedEdges = newValue.reduce((schema, edge) => {
         // Find the edge type definition in the schema
@@ -97,30 +94,11 @@ export const edgesSelector = selector<Edges>({
 
       return updatedSchemas;
     });
-  },
-});
+  }
+);
 
-export const edgesSelectedIdsAtom = atom<Set<string>>({
-  key: "edges-selected-ids",
-  default: new Set(),
-});
-
-export const edgesHiddenIdsAtom = atom<Set<string>>({
-  key: "edges-hidden-ids",
-  default: new Set(),
-});
-
-export const edgesOutOfFocusIdsAtom = atom<Set<string>>({
-  key: "edges-out-of-focus-ids",
-  default: new Set(),
-});
-
-export const edgesFilteredIdsAtom = atom<Set<string>>({
-  key: "edges-filtered-ids",
-  default: new Set(),
-});
-
-export const edgesTypesFilteredAtom = atom<Set<string>>({
-  key: "edges-types-filtered",
-  default: new Set(),
-});
+export const edgesSelectedIdsAtom = atomWithReset(new Set<string>());
+export const edgesHiddenIdsAtom = atomWithReset(new Set<string>());
+export const edgesOutOfFocusIdsAtom = atomWithReset(new Set<string>());
+export const edgesFilteredIdsAtom = atomWithReset(new Set<string>());
+export const edgesTypesFilteredAtom = atomWithReset(new Set<string>());

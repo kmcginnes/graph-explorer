@@ -1,6 +1,6 @@
 import difference from "lodash/difference";
 import { forwardRef, useCallback, useMemo } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { Vertex, VertexData } from "../../../@types/entities";
 import { NonVisibleIcon, VisibleIcon } from "../../../components";
 import type {
@@ -26,24 +26,30 @@ import { useDeepMemo } from "../../../hooks";
 import useDisplayNames from "../../../hooks/useDisplayNames";
 import useTextTransform from "../../../hooks/useTextTransform";
 import useTranslations from "../../../hooks/useTranslations";
-import { recoilDiffSets } from "../../../utils/recoilState";
 
 type ToggleVertex = Vertex & { __is_visible: boolean };
 
 const NodesTabular = forwardRef<TabularInstance<any>, any>((props, ref) => {
   const t = useTranslations();
-  const nodes = useRecoilValue(nodesAtom);
-  const setNodesOut = useSetRecoilState(nodesOutOfFocusIdsAtom);
+  const nodes = useAtomValue(nodesAtom);
+  const setNodesOut = useSetAtom(nodesOutOfFocusIdsAtom);
   const config = useConfiguration();
-  const [hiddenNodesIds, setHiddenNodesIds] =
-    useRecoilState(nodesHiddenIdsAtom);
-  const [selectedNodesIds, setSelectedNodesIds] =
-    useRecoilState(nodesSelectedIdsAtom);
-  const setSelectedEdgesIds = useSetRecoilState(edgesSelectedIdsAtom);
+  const [hiddenNodesIds, setHiddenNodesIds] = useAtom(nodesHiddenIdsAtom);
+  const [selectedNodesIds, setSelectedNodesIds] = useAtom(nodesSelectedIdsAtom);
+  const setSelectedEdgesIds = useSetAtom(edgesSelectedIdsAtom);
 
   const onToggleVisibility = useCallback(
     (item: ToggleVertex) => {
-      recoilDiffSets(setHiddenNodesIds, new Set([item.data.id]));
+      const nodeId = item.data.id;
+      setHiddenNodesIds(prev => {
+        const copied = new Set(prev);
+        if (copied.has(nodeId)) {
+          copied.delete(nodeId);
+        } else {
+          copied.add(nodeId);
+        }
+        return copied;
+      });
     },
     [setHiddenNodesIds]
   );

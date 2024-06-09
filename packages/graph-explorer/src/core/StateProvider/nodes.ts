@@ -1,22 +1,16 @@
-import { atom, selector } from "recoil";
+import { atom } from "jotai";
 import type { Vertex } from "../../@types/entities";
 import { sanitizeText } from "../../utils";
 import { activeConfigurationAtom } from "./configuration";
-import isDefaultValue from "./isDefaultValue";
-import { schemaAtom, SchemaInference } from "./schema";
+import { schemaAtom, SchemaInference, schemaStorage } from "./schema";
+import { atomWithReset, RESET } from "jotai/utils";
 
-export const nodesAtom = atom<Array<Vertex>>({
-  key: "nodes",
-  default: [],
-});
+export const nodesAtom = atomWithReset<Array<Vertex>>([]);
 
-export const nodesSelector = selector<Array<Vertex>>({
-  key: "nodes-selector",
-  get: ({ get }) => {
-    return get(nodesAtom);
-  },
-  set: ({ get, set }, newValue) => {
-    if (isDefaultValue(newValue)) {
+export const nodesSelector = atom(
+  get => get(nodesAtom),
+  (get, set, newValue: Vertex[] | typeof RESET) => {
+    if (newValue === RESET) {
       set(nodesAtom, newValue);
       return;
     }
@@ -46,8 +40,9 @@ export const nodesSelector = selector<Array<Vertex>>({
     const schemas = get(schemaAtom);
     const activeSchema = schemas.get(activeConfig);
 
-    set(schemaAtom, prevSchemas => {
-      const updatedSchemas = new Map(prevSchemas);
+    set(schemaStorage, async prevSchemas => {
+      const resolvedPrevSchemas = await prevSchemas;
+      const updatedSchemas = new Map(resolvedPrevSchemas);
 
       updatedSchemas.set(activeConfig, {
         ...(activeSchema || {}),
@@ -94,30 +89,11 @@ export const nodesSelector = selector<Array<Vertex>>({
 
       return updatedSchemas;
     });
-  },
-});
+  }
+);
 
-export const nodesSelectedIdsAtom = atom<Set<string>>({
-  key: "nodes-selected-ids",
-  default: new Set(),
-});
-
-export const nodesHiddenIdsAtom = atom<Set<string>>({
-  key: "nodes-hidden-ids",
-  default: new Set(),
-});
-
-export const nodesOutOfFocusIdsAtom = atom<Set<string>>({
-  key: "nodes-out-of-focus-ids",
-  default: new Set(),
-});
-
-export const nodesFilteredIdsAtom = atom<Set<string>>({
-  key: "nodes-filtered-ids",
-  default: new Set(),
-});
-
-export const nodesTypesFilteredAtom = atom<Set<string>>({
-  key: "nodes-types-filtered",
-  default: new Set(),
-});
+export const nodesSelectedIdsAtom = atomWithReset(new Set<string>());
+export const nodesHiddenIdsAtom = atomWithReset(new Set<string>());
+export const nodesOutOfFocusIdsAtom = atomWithReset(new Set<string>());
+export const nodesFilteredIdsAtom = atomWithReset(new Set<string>());
+export const nodesTypesFilteredAtom = atomWithReset(new Set<string>());

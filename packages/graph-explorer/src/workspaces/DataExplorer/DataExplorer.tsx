@@ -8,7 +8,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useAtomValue, useSetAtom } from "jotai";
 import { Vertex } from "../../@types/entities";
 import {
   CheckIcon,
@@ -37,7 +37,7 @@ import {
 } from "../../core";
 import { explorerSelector } from "../../core/connector";
 import {
-  userStylingAtom,
+  userStylingStorage,
   VertexPreferences,
 } from "../../core/StateProvider/userPreferences";
 import { useEntities } from "../../hooks";
@@ -80,7 +80,7 @@ function DataExplorerContent({
 
   const config = useConfiguration();
   const t = useTranslations();
-  const explorer = useRecoilValue(explorerSelector);
+  const explorer = useAtomValue(explorerSelector);
   const fetchNode = useFetchNode();
   const [entities] = useEntities({ disableFilters: true });
 
@@ -230,13 +230,15 @@ function DataExplorerContent({
     updatePrefixes(data.vertices.map((v: { data: { id: any } }) => v.data.id));
   }, [data, updatePrefixes]);
 
-  const setUserStyling = useSetRecoilState(userStylingAtom);
+  const setUserStyling = useSetAtom(userStylingStorage);
   const onDisplayNameChange = useCallback(
     (field: "name" | "longName") => (value: string | string[]) => {
-      setUserStyling(prevStyling => {
+      setUserStyling(async prevStyling => {
+        const resolvedPrevStyling = await prevStyling;
         const vtItem =
-          clone(prevStyling.vertices?.find(v => v.type === vertexType)) ||
-          ({} as VertexPreferences);
+          clone(
+            resolvedPrevStyling.vertices?.find(v => v.type === vertexType)
+          ) || ({} as VertexPreferences);
 
         if (field === "name") {
           vtItem.displayNameAttribute = value as string;
@@ -247,9 +249,11 @@ function DataExplorerContent({
         }
 
         return {
-          ...prevStyling,
+          ...resolvedPrevStyling,
           vertices: [
-            ...(prevStyling.vertices || []).filter(v => v.type !== vertexType),
+            ...(resolvedPrevStyling.vertices || []).filter(
+              v => v.type !== vertexType
+            ),
             {
               ...(vtItem || {}),
               type: vertexType,

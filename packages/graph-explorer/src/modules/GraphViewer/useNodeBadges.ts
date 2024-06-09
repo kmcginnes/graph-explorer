@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { BadgeRenderer } from "../../components/Graph/hooks/useRenderBadges";
 import { useConfiguration } from "../../core";
 import { nodesAtom } from "../../core/StateProvider/nodes";
@@ -10,7 +10,7 @@ const useNodeBadges = () => {
   const config = useConfiguration();
   const textTransform = useTextTransform();
   const getDisplayNames = useDisplayNames();
-  const nodes = useRecoilValue(nodesAtom);
+  const nodes = useAtomValue(nodesAtom);
 
   const nodesCurrentNames = useMemo(() => {
     return nodes.reduce(

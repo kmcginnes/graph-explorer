@@ -1,6 +1,6 @@
 import { FileButton, Modal } from "@mantine/core";
 import { useCallback, useMemo } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { v4 } from "uuid";
 import {
   AddIcon,
@@ -17,14 +17,17 @@ import Switch from "../../components/Switch";
 import { useWithTheme, withClassNamePrefix } from "../../core";
 import {
   activeConfigurationAtom,
+  activeConfigurationStorage,
   configurationAtom,
+  configurationStorage,
 } from "../../core/StateProvider/configuration";
-import { schemaAtom } from "../../core/StateProvider/schema";
+import { schemaStorage } from "../../core/StateProvider/schema";
 import useResetState from "../../core/StateProvider/useResetState";
 import useTranslations from "../../hooks/useTranslations";
 import isValidConfigurationFile from "../../utils/isValidConfigurationFile";
 import CreateConnection from "../CreateConnection";
 import defaultStyles from "./AvailableConnections.styles";
+import { useAtomCallback } from "jotai/utils";
 
 export type ConnectionDetailProps = {
   isSync: boolean;
@@ -40,24 +43,25 @@ const AvailableConnections = ({
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix("ft");
 
-  const activeConfig = useRecoilValue(activeConfigurationAtom);
-  const configuration = useRecoilValue(configurationAtom);
+  const activeConfig = useAtomValue(activeConfigurationAtom);
+  const configuration = useAtomValue(configurationAtom);
   const t = useTranslations();
 
   const resetState = useResetState();
-  const onActiveConfigChange = useRecoilCallback(
-    ({ set }) =>
-      (value: string | string[]) => {
-        set(activeConfigurationAtom, value as string);
+  const onActiveConfigChange = useAtomCallback(
+    useCallback(
+      (get, set, value: string | string[]) => {
+        set(activeConfigurationStorage, value as string);
         resetState();
       },
-    [resetState]
+      [resetState]
+    )
   );
 
   const { enqueueNotification } = useNotification();
-  const onConfigImport = useRecoilCallback(
-    ({ set }) =>
-      async (file: File) => {
+  const onConfigImport = useAtomCallback(
+    useCallback(
+      async (get, set, file: File) => {
         const fileContent = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.readAsText(file);
@@ -78,8 +82,8 @@ const AvailableConnections = ({
 
         // Create new id to avoid collisions
         const newId = v4();
-        set(configurationAtom, prevConfig => {
-          const updatedConfig = new Map(prevConfig);
+        set(configurationStorage, async prevConfig => {
+          const updatedConfig = new Map(await prevConfig);
           updatedConfig.set(newId, {
             id: newId,
             displayLabel: fileContent.displayLabel,
@@ -87,8 +91,8 @@ const AvailableConnections = ({
           });
           return updatedConfig;
         });
-        set(schemaAtom, prevSchema => {
-          const updatedSchema = new Map(prevSchema);
+        set(schemaStorage, async prevSchema => {
+          const updatedSchema = new Map(await prevSchema);
           updatedSchema.set(newId, {
             vertices: fileContent.schema?.vertices || [],
             edges: fileContent.schema?.edges || [],
@@ -102,7 +106,7 @@ const AvailableConnections = ({
           });
           return updatedSchema;
         });
-        set(activeConfigurationAtom, newId);
+        set(activeConfigurationStorage, newId);
 
         resetState();
         enqueueNotification({
@@ -112,7 +116,8 @@ const AvailableConnections = ({
           stackable: true,
         });
       },
-    [enqueueNotification, resetState]
+      [enqueueNotification, resetState]
+    )
   );
 
   const onActionClick = useCallback(
