@@ -1,17 +1,15 @@
 import merge from "lodash/merge";
 import { PropsWithChildren, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtom, useAtomValue } from "jotai";
 import { LoadingSpinner, PanelEmptyState } from "../components";
 import Redirect from "../components/Redirect";
 import { RawConfiguration, fetchConfiguration } from "./ConfigurationProvider";
 import {
   activeConfigurationAtom,
   configurationAtom,
-  isStoreLoadedAtom,
 } from "./StateProvider/configuration";
 import { schemaAtom } from "./StateProvider/schema";
-import useLoadStore from "./StateProvider/useLoadStore";
 import { CONNECTIONS_OP } from "../modules/CreateConnection/CreateConnection";
 
 export type AppLoadingProps = {
@@ -34,18 +32,16 @@ const AppStatusLoader = ({
   children,
 }: PropsWithChildren<AppLoadingProps>) => {
   const location = useLocation();
-  useLoadStore();
-  const isStoreLoaded = useRecoilValue(isStoreLoadedAtom);
-  const [activeConfig, setActiveConfig] = useRecoilState(
-    activeConfigurationAtom
-  );
-  const [configuration, setConfiguration] = useRecoilState(configurationAtom);
-  const schema = useRecoilValue(schemaAtom);
+  // useLoadStore();
+  // const isStoreLoaded = useAtomValue(isStoreLoadedAtom);
+  const [activeConfig, setActiveConfig] = useAtom(activeConfigurationAtom);
+  const [configuration, setConfiguration] = useAtom(configurationAtom);
+  const schema = useAtomValue(schemaAtom);
 
   useEffect(() => {
-    if (!isStoreLoaded) {
-      return;
-    }
+    // if (!isStoreLoaded) {
+    //   return;
+    // }
 
     if (activeConfig && configuration.get(activeConfig)) {
       return;
@@ -64,8 +60,8 @@ const AppStatusLoader = ({
         }
         newConfig.__fileBase = true;
         let activeConfigId = config.id;
-        setConfiguration(prevConfigMap => {
-          const updatedConfig = new Map(prevConfigMap);
+        setConfiguration(async prevConfigMap => {
+          const updatedConfig = new Map(await prevConfigMap);
           if (newConfig.connection?.queryEngine) {
             updatedConfig.set(config.id, newConfig);
           }
@@ -102,21 +98,21 @@ const AppStatusLoader = ({
     activeConfig,
     config,
     configuration,
-    isStoreLoaded,
+    // isStoreLoaded,
     setActiveConfig,
     setConfiguration,
   ]);
 
   // Wait until state is recovered from the indexed DB
-  if (!isStoreLoaded) {
-    return (
-      <PanelEmptyState
-        title={STATUS.STORE.title}
-        subtitle={STATUS.STORE.subtitle}
-        icon={<LoadingSpinner />}
-      />
-    );
-  }
+  // if (!isStoreLoaded) {
+  //   return (
+  //     <PanelEmptyState
+  //       title={STATUS.STORE.title}
+  //       subtitle={STATUS.STORE.subtitle}
+  //       icon={<LoadingSpinner />}
+  //     />
+  //   );
+  // }
 
   // Loading from config file if exists
   if (configuration.size === 0 && !!config) {

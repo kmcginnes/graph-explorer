@@ -1,5 +1,5 @@
 import * as localForage from "localforage";
-import { AtomEffect, DefaultValue } from "recoil";
+import { atomWithStorage } from "jotai/utils";
 import { AsyncStorage } from "jotai/vanilla/utils/atomWithStorage";
 
 localForage.config({
@@ -13,32 +13,32 @@ localForage.config({
 // that can load the atom state before it is recovered from the store
 export const loadedAtoms: Set<string> = new Set();
 
-const localForageEffect =
-  <T>(): AtomEffect<T> =>
-  ({ setSelf, onSet, trigger, node }) => {
-    // If there's a persisted value - set it on load
-    const loadPersisted = async () => {
-      const savedValue = await localForage.getItem(node.key);
+// const localForageEffect =
+//   <T>(): AtomEffect<T> =>
+//   ({ setSelf, onSet, trigger, node }) => {
+//     // If there's a persisted value - set it on load
+//     const loadPersisted = async () => {
+//       const savedValue = await localForage.getItem(node.key);
 
-      if (savedValue != null) {
-        setSelf(savedValue as T | DefaultValue);
-        return;
-      }
-    };
+//       if (savedValue != null) {
+//         setSelf(savedValue as T | DefaultValue);
+//         return;
+//       }
+//     };
 
-    if (trigger === "get") {
-      loadPersisted().then(() => {
-        loadedAtoms.add(node.key);
-      });
-    }
+//     if (trigger === "get") {
+//       loadPersisted().then(() => {
+//         loadedAtoms.add(node.key);
+//       });
+//     }
 
-    // Subscribe to state changes and persist them to localForage
-    onSet((newValue: T, _: T | DefaultValue, isReset: boolean) => {
-      isReset
-        ? localForage.removeItem(node.key)
-        : localForage.setItem(node.key, newValue);
-    });
-  };
+//     // Subscribe to state changes and persist them to localForage
+//     onSet((newValue: T, _: T | DefaultValue, isReset: boolean) => {
+//       isReset
+//         ? localForage.removeItem(node.key)
+//         : localForage.setItem(node.key, newValue);
+//     });
+//   };
 
 export function createLocalForageJotaiStorage<T>(): AsyncStorage<T> {
   return {
@@ -54,4 +54,6 @@ export function createLocalForageJotaiStorage<T>(): AsyncStorage<T> {
   };
 }
 
-export default localForageEffect;
+export function atomWithLocalForageStorage<T>(key: string, initialValue: T) {
+  return atomWithStorage<T>(key, initialValue, createLocalForageJotaiStorage());
+}

@@ -1,11 +1,9 @@
-import { every, isEqual } from "lodash";
 import LoggerConnector from "../connector/LoggerConnector";
 import { createGremlinExplorer } from "../connector/gremlin/gremlinExplorer";
 import { createOpenCypherExplorer } from "../connector/openCypher/openCypherExplorer";
 import { createSparqlExplorer } from "../connector/sparql/sparqlExplorer";
 import { mergedConfigurationSelector } from "./StateProvider/configuration";
-import { selector } from "recoil";
-import { equalSelector } from "../utils/recoilState";
+import { atom } from "jotai";
 import { env } from "../utils";
 import { ConnectionConfig } from "./ConfigurationProvider";
 
@@ -13,80 +11,50 @@ import { ConnectionConfig } from "./ConfigurationProvider";
  * Active connection where the value will only change when one of the
  * properties we care about are changed.
  */
-export const activeConnectionSelector = equalSelector({
-  key: "activeConnection",
-  get: ({ get }) => {
-    const config = get(mergedConfigurationSelector);
-    return config?.connection;
-  },
-  equals: (latest, prior) => {
-    if (Object.is(latest, prior)) {
-      return true;
-    }
-    if (latest == null || prior == null) {
-      return false;
-    }
-    const attrs = [
-      "url",
-      "queryEngine",
-      "proxyConnection",
-      "graphDbUrl",
-      "awsAuthEnabled",
-      "awsRegion",
-      "fetchTimeoutMs",
-      "nodeExpansionLimit",
-    ] as (keyof ConnectionConfig)[];
-    return every(attrs, attr => isEqual(latest[attr] as string, prior[attr]));
-  },
+// TODO: Figure out if equalSelector logic was necessary
+export const activeConnectionSelector = atom(async get => {
+  const config = await get(mergedConfigurationSelector);
+  return config?.connection;
 });
 
 /**
  * Active connection URL
  */
-const activeConnectionUrlSelector = equalSelector({
-  key: "activeConnectionUrl",
-  get: ({ get }) => {
-    const config = get(mergedConfigurationSelector);
-    return config?.connection?.url;
-  },
-  equals: (latest, prior) => latest === prior,
+// TODO: Figure out if equalSelector logic was necessary
+const activeConnectionUrlSelector = atom(async get => {
+  const config = await get(mergedConfigurationSelector);
+  return config?.connection?.url;
 });
 
 /**
  * Explorer based on the active connection.
  */
-export const explorerSelector = selector({
-  key: "explorer",
-  get: ({ get }) => {
-    const connection = get(activeConnectionSelector);
+export const explorerSelector = atom(async get => {
+  const connection = await get(activeConnectionSelector);
 
-    if (!connection) {
-      return null;
-    }
-    switch (connection.queryEngine) {
-      case "openCypher":
-        return createOpenCypherExplorer(connection);
-      case "sparql":
-        return createSparqlExplorer(connection, new Map());
-      default:
-        return createGremlinExplorer(connection);
-    }
-  },
+  if (!connection) {
+    return null;
+  }
+  switch (connection.queryEngine) {
+    case "openCypher":
+      return createOpenCypherExplorer(connection);
+    case "sparql":
+      return createSparqlExplorer(connection, new Map());
+    default:
+      return createGremlinExplorer(connection);
+  }
 });
 
 /**
  * Logger based on the active connection proxy URL.
  */
-export const loggerSelector = selector({
-  key: "logger",
-  get: ({ get }) => {
-    const url = get(activeConnectionUrlSelector);
-    if (!url) {
-      return null;
-    }
+export const loggerSelector = atom(async get => {
+  const url = await get(activeConnectionUrlSelector);
+  if (!url) {
+    return null;
+  }
 
-    return new LoggerConnector(url, {
-      enable: env.PROD,
-    });
-  },
+  return new LoggerConnector(url, {
+    enable: env.PROD,
+  });
 });

@@ -6,12 +6,12 @@ import { explorerSelector, loggerSelector } from "../core/connector";
 import usePrefixesUpdater from "./usePrefixesUpdater";
 import useUpdateSchema from "./useUpdateSchema";
 import { createDisplayError } from "../utils/createDisplayError";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 
 const useSchemaSync = (onSyncChange?: (isSyncing: boolean) => void) => {
   const config = useConfiguration();
-  const explorer = useRecoilValue(explorerSelector);
-  const logger = useRecoilValue(loggerSelector);
+  const explorer = useAtomValue(explorerSelector);
+  const logger = useAtomValue(loggerSelector);
 
   const updatePrefixes = usePrefixesUpdater();
   const { enqueueNotification, clearNotification } = useNotification();

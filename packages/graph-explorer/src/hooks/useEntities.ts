@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { SetterOrUpdater, useRecoilCallback, useRecoilValue } from "recoil";
+import { useCallback, useMemo } from "react";
+import { useAtomValue } from "jotai";
 import type { Edge, Vertex } from "../@types/entities";
 import {
   edgesFilteredIdsAtom,
@@ -17,30 +17,32 @@ import {
 
 import useDeepMemo from "./useDeepMemo";
 import { assembledConfigSelector } from "../core/ConfigurationProvider/useConfiguration";
+import { useAtomCallback } from "jotai/utils";
 
 type ProcessedEntities = {
   nodes: Vertex[];
   edges: Edge[];
 };
+type SetterOrUpdater<T> = ((prev: T) => T) | T;
 
 const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
   ProcessedEntities,
-  SetterOrUpdater<Entities>,
+  (updater: SetterOrUpdater<Entities>) => Promise<void>,
 ] => {
-  const filteredNodesIds = useRecoilValue(nodesFilteredIdsAtom);
-  const filteredEdgesIds = useRecoilValue(edgesFilteredIdsAtom);
-  const nodes = useRecoilValue(nodesSelector);
-  const edges = useRecoilValue(edgesSelector);
+  const filteredNodesIds = useAtomValue(nodesFilteredIdsAtom);
+  const filteredEdgesIds = useAtomValue(edgesFilteredIdsAtom);
+  const nodes = useAtomValue(nodesSelector);
+  const edges = useAtomValue(edgesSelector);
 
   // Some nodes/edges are not defined in the schema or their types are hidden.
   // Here these types are filtered before to set the updated state.
   // We need to make a hook because these types are defined in the config that
   // works using a hook.
-  const setEntities: SetterOrUpdater<Entities> = useRecoilCallback(
-    ({ snapshot, set }) =>
-      async valOrUpdater => {
-        const config = await snapshot.getPromise(assembledConfigSelector);
-        const entities = await snapshot.getPromise(entitiesSelector);
+  const setEntities = useAtomCallback(
+    useCallback(
+      async (get, set, valOrUpdater: SetterOrUpdater<Entities>) => {
+        const config = await get(assembledConfigSelector);
+        const entities = await get(entitiesSelector);
         const nextEntities =
           typeof valOrUpdater === "function"
             ? valOrUpdater(entities)
@@ -101,11 +103,12 @@ const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
           forceSet: nextEntities.forceSet,
         });
       },
-    [] // Ensures this callback is memoized and not recreated on each render
+      [] // Ensures this callback is memoized and not recreated on each render
+    )
   );
 
-  const vertexTypes = useRecoilValue(nodesTypesFilteredAtom);
-  const connectionTypes = useRecoilValue(edgesTypesFilteredAtom);
+  const vertexTypes = useAtomValue(nodesTypesFilteredAtom);
+  const connectionTypes = useAtomValue(edgesTypesFilteredAtom);
 
   const filteredEntitiesByGlobalFilters = useDeepMemo(() => {
     let filteredNodes = nodes;

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import type { ModuleContainerHeaderProps } from "../../components";
 import { ModuleContainer, ModuleContainerHeader } from "../../components";
 import GraphIcon from "../../components/icons/GraphIcon";
@@ -21,9 +21,9 @@ export type NodeExpandProps = Omit<
 
 const NodeExpand = ({ title = "Expand", ...headerProps }: NodeExpandProps) => {
   const t = useTranslations();
-  const nodes = useRecoilValue(nodesAtom);
-  const nodesSelectedIds = useRecoilValue(nodesSelectedIdsAtom);
-  const edgesSelectedIds = useRecoilValue(edgesSelectedIdsAtom);
+  const nodes = useAtomValue(nodesAtom);
+  const nodesSelectedIds = useAtomValue(nodesSelectedIdsAtom);
+  const edgesSelectedIds = useAtomValue(edgesSelectedIdsAtom);
 
   const selectedNode = useMemo(() => {
     return nodes.find(node => nodesSelectedIds.has(node.data.id));

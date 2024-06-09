@@ -1,4 +1,4 @@
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import useEntities from "./useEntities";
 import { Vertex } from "../@types/entities";
 import {
@@ -387,7 +387,7 @@ async function setupAndPerformSetEntities(
   const { result } = renderHookWithRecoilRoot(
     () => {
       const [entities, setEntities] = useEntities();
-      const schemas = useRecoilValue(schemaAtom);
+      const schemas = useAtomValue(schemaAtom);
       const schema = schemas.get(configId)!;
 
       return {

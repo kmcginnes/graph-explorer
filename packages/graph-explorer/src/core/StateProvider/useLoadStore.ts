@@ -1,16 +1,16 @@
 import { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useAtomValue, useSetAtom } from "jotai";
 import { configurationAtom, isStoreLoadedAtom } from "./configuration";
 import { loadedAtoms } from "./localForageEffect";
 import { schemaAtom } from "./schema";
 import { userStylingAtom } from "./userPreferences";
 
 const useLoadStore = () => {
-  const setIsLoaded = useSetRecoilState(isStoreLoadedAtom);
+  const setIsLoaded = useSetAtom(isStoreLoadedAtom);
   // Force read at least one time to recover the state from the IndexedDB
-  useRecoilValue(configurationAtom);
-  useRecoilValue(userStylingAtom);
-  useRecoilValue(schemaAtom);
+  useAtomValue(configurationAtom);
+  useAtomValue(userStylingAtom);
+  useAtomValue(schemaAtom);
 
   useEffect(() => {
     const fn = (): NodeJS.Timeout | undefined => {

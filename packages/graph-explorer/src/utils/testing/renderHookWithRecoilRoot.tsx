@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { RecoilRootProps, RecoilRoot, MutableSnapshot } from "recoil";
+import { RecoilRootProps, RecoilRoot, MutableSnapshot } from "jotai";
 
 export default function renderHookWithRecoilRoot<TResult>(
   callback: (props: RecoilRootProps) => TResult,

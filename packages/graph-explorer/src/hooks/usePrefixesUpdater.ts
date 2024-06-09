@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useSetRecoilState } from "recoil";
+import { useSetAtom } from "jotai";
 import { useNotification } from "../components/NotificationProvider";
 import { useConfiguration } from "../core";
 import { schemaAtom } from "../core/StateProvider/schema";
@@ -7,7 +7,7 @@ import generatePrefixes from "../utils/generatePrefixes";
 
 const usePrefixesUpdater = () => {
   const config = useConfiguration();
-  const setSchema = useSetRecoilState(schemaAtom);
+  const setSchema = useSetAtom(schemaAtom);
   const { enqueueNotification } = useNotification();
 
   return useCallback(
@@ -21,12 +21,13 @@ const usePrefixesUpdater = () => {
         return;
       }
 
-      setSchema(prevSchemaMap => {
+      setSchema(async prevSchemaMap => {
+        const resolvedPrevSchemaMap = await prevSchemaMap;
         if (!config?.id) {
-          return prevSchemaMap;
+          return resolvedPrevSchemaMap;
         }
 
-        const updatedSchema = new Map(prevSchemaMap);
+        const updatedSchema = new Map(resolvedPrevSchemaMap);
         const schema = updatedSchema.get(config.id);
         updatedSchema.set(config.id, {
           // Update prefixes does not affect to sync last update date

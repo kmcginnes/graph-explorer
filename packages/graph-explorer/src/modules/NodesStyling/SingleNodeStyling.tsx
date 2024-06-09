@@ -2,7 +2,8 @@ import { FileButton, Modal } from "@mantine/core";
 import clone from "lodash/clone";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
+import { useAtomCallback } from "jotai/utils";
 import {
   Button,
   IconButton,
@@ -62,7 +63,7 @@ const SingleNodeStyling = ({
   const styleWithTheme = useWithTheme();
   const pfx = withClassNamePrefix(classNamePrefix);
 
-  const userStyling = useRecoilValue(userStylingAtom);
+  const userStyling = useAtomValue(userStylingAtom);
   const textTransform = useTextTransform();
   const vtConfig = config?.getVertexTypeConfig(vertexType);
   const vtPrefs = userStyling.vertices?.find(v => v.type === vertexType);
@@ -87,16 +88,17 @@ const SingleNodeStyling = ({
     return options;
   }, [t, textTransform, vtConfig?.attributes]);
 
-  const onUserPrefsChange = useRecoilCallback(
-    ({ set }) =>
-      (prefs: Omit<VertexPreferences, "type">) => {
-        set(userStylingAtom, prev => {
-          const vertices = Array.from(prev.vertices || []);
+  const onUserPrefsChange = useAtomCallback(
+    useCallback(
+      (_, set, prefs: Omit<VertexPreferences, "type">) => {
+        set(userStylingAtom, async prev => {
+          const resolvedPrev = await prev;
+          const vertices = Array.from(resolvedPrev.vertices || []);
           const updateIndex = vertices.findIndex(v => v.type === vertexType);
 
           if (updateIndex === -1) {
             return {
-              ...prev,
+              ...resolvedPrev,
               vertices: [...vertices, { ...prefs, type: vertexType }],
             };
           }
@@ -107,39 +109,43 @@ const SingleNodeStyling = ({
             type: vertexType,
           };
           return {
-            ...prev,
+            ...resolvedPrev,
             vertices,
           };
         });
       },
-    [vertexType]
+      [vertexType]
+    )
   );
 
-  const onUserPrefsReset = useRecoilCallback(
-    ({ set }) =>
-      () => {
-        set(userStylingAtom, prev => {
+  const onUserPrefsReset = useAtomCallback(
+    useCallback(
+      (get, set) => {
+        set(userStylingAtom, async prev => {
+          const resolvedPrev = await prev;
           return {
-            ...prev,
-            vertices: prev.vertices?.filter(e => e.type !== vertexType),
+            ...resolvedPrev,
+            vertices: resolvedPrev.vertices?.filter(e => e.type !== vertexType),
           };
         });
       },
-    [vertexType]
+      [vertexType]
+    )
   );
 
-  const onDisplayNameChange = useRecoilCallback(
-    ({ set }) =>
-      (field: "name" | "longName") =>
-      (value: string | string[]) => {
+  const onDisplayNameChange = useAtomCallback(
+    useCallback(
+      (get, set, field: "name" | "longName") => (value: string | string[]) => {
         if (!vertexType) {
           return;
         }
 
-        set(userStylingAtom, prevStyling => {
+        set(userStylingAtom, async prevStyling => {
+          const resolvedPrevStyling = await prevStyling;
           const vtItem =
-            clone(prevStyling.vertices?.find(v => v.type === vertexType)) ||
-            ({} as VertexPreferences);
+            clone(
+              resolvedPrevStyling.vertices?.find(v => v.type === vertexType)
+            ) || ({} as VertexPreferences);
 
           if (field === "name") {
             vtItem.displayNameAttribute = value as string;
@@ -150,9 +156,9 @@ const SingleNodeStyling = ({
           }
 
           return {
-            ...prevStyling,
+            ...resolvedPrevStyling,
             vertices: [
-              ...(prevStyling.vertices || []).filter(
+              ...(resolvedPrevStyling.vertices || []).filter(
                 v => v.type !== vertexType
               ),
               {
@@ -163,7 +169,8 @@ const SingleNodeStyling = ({
           };
         });
       },
-    [vertexType]
+      [vertexType]
+    )
   );
 
   const { enqueueNotification } = useNotification();

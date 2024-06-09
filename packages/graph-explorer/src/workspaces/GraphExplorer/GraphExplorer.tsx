@@ -3,7 +3,7 @@ import debounce from "lodash/debounce";
 import { Resizable } from "re-resizable";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtom, useAtomValue } from "jotai";
 import {
   Button,
   EdgeIcon,
@@ -65,13 +65,13 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
   const config = useConfiguration();
   const t = useTranslations();
   const hasNamespaces = config?.connection?.queryEngine === "sparql";
-  const [userLayout, setUserLayout] = useRecoilState(userLayoutAtom);
+  const [userLayout, setUserLayout] = useAtom(userLayoutAtom);
 
-  const nodesSelectedIds = useRecoilValue(nodesSelectedIdsAtom);
-  const edgesSelectedIds = useRecoilValue(edgesSelectedIdsAtom);
+  const nodesSelectedIds = useAtomValue(nodesSelectedIdsAtom);
+  const edgesSelectedIds = useAtomValue(edgesSelectedIdsAtom);
   const nodeOrEdgeSelected =
     nodesSelectedIds.size + edgesSelectedIds.size === 1;
-  const filteredEntitiesCount = useRecoilValue(totalFilteredCount);
+  const filteredEntitiesCount = useAtomValue(totalFilteredCount);
 
   const closeSidebar = useCallback(() => {
     setUserLayout(prev => ({
@@ -82,16 +82,17 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
 
   const toggleSidebar = useCallback(
     (item: string) => () => {
-      setUserLayout(prev => {
-        if (prev.activeSidebarItem === item) {
+      setUserLayout(async prev => {
+        const resolved = await prev;
+        if (resolved.activeSidebarItem === item) {
           return {
-            ...prev,
+            ...resolved,
             activeSidebarItem: null,
           };
         }
 
         return {
-          ...prev,
+          ...resolved,
           activeSidebarItem: item,
         };
       });
@@ -101,8 +102,9 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
 
   const toggleView = useCallback(
     (item: string) => () => {
-      setUserLayout(prev => {
-        const toggles = new Set(prev.activeToggles);
+      setUserLayout(async prev => {
+        const resolved = await prev;
+        const toggles = new Set(resolved.activeToggles);
         if (toggles.has(item)) {
           toggles.delete(item);
         } else {
@@ -110,7 +112,7 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
         }
 
         return {
-          ...prev,
+          ...resolved,
           activeToggles: toggles,
         };
       });
@@ -120,12 +122,13 @@ const GraphExplorer = ({ classNamePrefix = "ft" }: GraphViewProps) => {
 
   const onTableViewResizeStop = useCallback(
     (_e: unknown, _dir: unknown, _ref: unknown, delta: { height: number }) => {
-      setUserLayout(prev => {
+      setUserLayout(async prev => {
+        const resolved = await prev;
         return {
-          ...prev,
+          ...resolved,
           tableView: {
-            ...(prev.tableView || {}),
-            height: (prev.tableView?.height ?? 300) + delta.height,
+            ...(resolved.tableView || {}),
+            height: (resolved.tableView?.height ?? 300) + delta.height,
           },
         };
       });

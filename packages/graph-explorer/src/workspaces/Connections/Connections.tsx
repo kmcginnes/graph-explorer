@@ -1,7 +1,7 @@
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import Button from "../../components/Button";
 import { ExplorerIcon } from "../../components/icons";
 import Workspace from "../../components/Workspace/Workspace";
@@ -29,8 +29,8 @@ const Connections = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
   const pfx = withClassNamePrefix(classNamePrefix);
 
   const config = useConfiguration();
-  const activeConfig = useRecoilValue(activeConfigurationAtom);
-  const configuration = useRecoilValue(configurationAtom);
+  const activeConfig = useAtomValue(activeConfigurationAtom);
+  const configuration = useAtomValue(configurationAtom);
   const [isModalOpen, setModal] = useState(configuration.size === 0);
   const [isSyncing, setSyncing] = useState(false);
 

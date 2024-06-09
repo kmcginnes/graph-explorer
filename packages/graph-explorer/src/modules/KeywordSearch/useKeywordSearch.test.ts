@@ -6,7 +6,7 @@ import {
   activeConfigurationAtom,
   configurationAtom,
 } from "../../core/StateProvider/configuration";
-import { MutableSnapshot } from "recoil";
+import { MutableSnapshot } from "jotai";
 
 jest.mock("./useKeywordSearchQuery", () => ({
   useKeywordSearchQuery: jest.fn().mockReturnValue({

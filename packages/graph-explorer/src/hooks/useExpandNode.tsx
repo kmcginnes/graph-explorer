@@ -12,7 +12,7 @@ import type {
 } from "../connector/useGEFetchTypes";
 import { activeConnectionSelector, explorerSelector } from "../core/connector";
 import useEntities from "./useEntities";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import { neighborsCountQuery } from "../connector/queries";
 import useDisplayNames from "./useDisplayNames";
@@ -49,7 +49,7 @@ export function ExpandNodeProvider(props: PropsWithChildren) {
   // Wires up node count query in response to new nodes in the graph
   useUpdateNodeCounts();
 
-  const explorer = useRecoilValue(explorerSelector);
+  const explorer = useAtomValue(explorerSelector);
   const [_, setEntities] = useEntities();
   const { enqueueNotification, clearNotification } = useNotification();
   const getDisplayNames = useDisplayNames();
@@ -111,7 +111,7 @@ export function ExpandNodeProvider(props: PropsWithChildren) {
     return () => clearNotification(notificationId);
   }, [clearNotification, enqueueNotification, mutation.isPending]);
 
-  const connection = useRecoilValue(activeConnectionSelector);
+  const connection = useAtomValue(activeConnectionSelector);
   const expandNode = useCallback(
     (vertex: Vertex, filters?: ExpandNodeFilters) => {
       const request: ExpandNodeRequest = {
@@ -160,8 +160,8 @@ export function ExpandNodeProvider(props: PropsWithChildren) {
  */
 function useUpdateNodeCounts() {
   const [entities, setEntities] = useEntities();
-  const connection = useRecoilValue(activeConnectionSelector);
-  const explorer = useRecoilValue(explorerSelector);
+  const connection = useAtomValue(activeConnectionSelector);
+  const explorer = useAtomValue(explorerSelector);
   const { enqueueNotification, clearNotification } = useNotification();
 
   const nodeIds = [...new Set(entities.nodes.map(n => n.data.id))];

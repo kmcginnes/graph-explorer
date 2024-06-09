@@ -1,4 +1,4 @@
-import { MutableSnapshot } from "recoil";
+import { MutableSnapshot } from "jotai";
 import {
   activeConfigurationAtom,
   configurationAtom,

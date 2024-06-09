@@ -1,10 +1,9 @@
-import { atom } from "recoil";
 import {
   EdgeTypeConfig,
   PrefixTypeConfig,
   VertexTypeConfig,
 } from "../ConfigurationProvider";
-import localForageEffect from "./localForageEffect";
+import { atomWithLocalForageStorage } from "./localForageEffect";
 
 export type SchemaInference = {
   vertices: VertexTypeConfig[];
@@ -17,8 +16,6 @@ export type SchemaInference = {
   totalEdges?: number;
 };
 
-export const schemaAtom = atom<Map<string, SchemaInference>>({
-  key: "schema",
-  default: new Map(),
-  effects: [localForageEffect()],
-});
+export const schemaAtom = atomWithLocalForageStorage<
+  Map<string, SchemaInference>
+>("schema", new Map());

@@ -4,7 +4,7 @@ import { explorerSelector } from "../../core/connector";
 import usePrefixesUpdater from "../../hooks/usePrefixesUpdater";
 import { useCallback, useEffect } from "react";
 import { createDisplayError } from "../../utils/createDisplayError";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 
 export type SearchQueryRequest = {
   debouncedSearchTerm: string;
@@ -21,7 +21,7 @@ export function useKeywordSearchQuery({
   exactMatch,
   isOpen,
 }: SearchQueryRequest) {
-  const explorer = useRecoilValue(explorerSelector);
+  const explorer = useAtomValue(explorerSelector);
   const updatePrefixes = usePrefixesUpdater();
   const { enqueueNotification } = useNotification();
   const queryClient = useQueryClient();

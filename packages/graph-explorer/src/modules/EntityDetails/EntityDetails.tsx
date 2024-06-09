@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useAtom, useAtomValue } from "jotai";
 import type { ModuleContainerHeaderProps } from "../../components";
 import {
   AutoFitLeftIcon,
@@ -35,11 +35,11 @@ const EntityDetails = ({
   disableConnections,
   ...headerProps
 }: EntityDetailsProps) => {
-  const nodes = useRecoilValue(nodesAtom);
-  const edges = useRecoilValue(edgesAtom);
-  const selectedNodesIds = useRecoilValue(nodesSelectedIdsAtom);
-  const selectedEdgesIds = useRecoilValue(edgesSelectedIdsAtom);
-  const [userLayout, setUserLayout] = useRecoilState(userLayoutAtom);
+  const nodes = useAtomValue(nodesAtom);
+  const edges = useAtomValue(edgesAtom);
+  const selectedNodesIds = useAtomValue(nodesSelectedIdsAtom);
+  const selectedEdgesIds = useAtomValue(edgesSelectedIdsAtom);
+  const [userLayout, setUserLayout] = useAtom(userLayoutAtom);
 
   const selectedNode = useMemo(() => {
     return nodes.find(node => selectedNodesIds.has(node.data.id));
@@ -66,10 +66,13 @@ const EntityDetails = ({
   const onAction = useCallback(
     (value: string) => {
       if (value === "auto_open") {
-        return setUserLayout(prev => ({
-          ...prev,
-          detailsAutoOpenOnSelection: !prev.detailsAutoOpenOnSelection,
-        }));
+        return setUserLayout(async prev => {
+          const resolved = await prev;
+          return {
+            ...resolved,
+            detailsAutoOpenOnSelection: !resolved.detailsAutoOpenOnSelection,
+          };
+        });
       }
     },
     [setUserLayout]
