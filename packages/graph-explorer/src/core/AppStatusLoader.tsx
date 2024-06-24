@@ -1,5 +1,5 @@
 import merge from "lodash/merge";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
 import { LoadingSpinner, PanelEmptyState } from "../components";
@@ -27,22 +27,32 @@ const STATUS = {
   },
 };
 
-const AppStatusLoader = ({
-  config,
-  children,
-}: PropsWithChildren<AppLoadingProps>) => {
+function Loading() {
+  console.log("Rendering loading");
+  return (
+    <PanelEmptyState
+      title={STATUS.STORE.title}
+      subtitle={STATUS.STORE.subtitle}
+      icon={<LoadingSpinner />}
+    />
+  );
+}
+
+function AppStatusLoader(props: PropsWithChildren<AppLoadingProps>) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Content {...props} />
+    </Suspense>
+  );
+}
+
+const Content = ({ config, children }: PropsWithChildren<AppLoadingProps>) => {
   const location = useLocation();
-  // useLoadStore();
-  // const isStoreLoaded = useAtomValue(isStoreLoadedAtom);
   const [activeConfig, setActiveConfig] = useAtom(activeConfigurationAtom);
   const [configuration, setConfiguration] = useAtom(configurationAtom);
   const schema = useAtomValue(schemaAtom);
 
   useEffect(() => {
-    // if (!isStoreLoaded) {
-    //   return;
-    // }
-
     if (activeConfig && configuration.get(activeConfig)) {
       return;
     }
@@ -102,17 +112,6 @@ const AppStatusLoader = ({
     setActiveConfig,
     setConfiguration,
   ]);
-
-  // Wait until state is recovered from the indexed DB
-  // if (!isStoreLoaded) {
-  //   return (
-  //     <PanelEmptyState
-  //       title={STATUS.STORE.title}
-  //       subtitle={STATUS.STORE.subtitle}
-  //       icon={<LoadingSpinner />}
-  //     />
-  //   );
-  // }
 
   // Loading from config file if exists
   if (configuration.size === 0 && !!config) {

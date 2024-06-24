@@ -34,6 +34,12 @@ const Connections = ({ classNamePrefix = "ft" }: ConnectionsProps) => {
   const [isModalOpen, setModal] = useState(configuration.size === 0);
   const [isSyncing, setSyncing] = useState(false);
 
+  console.log("Rendering Connections", {
+    activeConfig,
+    configuration,
+    isModalOpen,
+  });
+
   // Everytime that the active connection changes,
   // if it was not synchronized yet, try to sync it
   const updateSchema = useSchemaSync(setSyncing);

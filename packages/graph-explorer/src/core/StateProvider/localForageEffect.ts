@@ -55,5 +55,10 @@ export function createLocalForageJotaiStorage<T>(): AsyncStorage<T> {
 }
 
 export function atomWithLocalForageStorage<T>(key: string, initialValue: T) {
-  return atomWithStorage<T>(key, initialValue, createLocalForageJotaiStorage());
+  return atomWithStorage<T>(
+    key,
+    initialValue,
+    createLocalForageJotaiStorage(),
+    { getOnInit: true }
+  );
 }
