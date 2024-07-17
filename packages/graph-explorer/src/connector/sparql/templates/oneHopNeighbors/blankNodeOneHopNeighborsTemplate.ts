@@ -16,7 +16,7 @@ export default function blankNodeOneHopNeighborsTemplate(subQuery: string) {
 				SELECT DISTINCT ?bNode ?subject ?pToSubject ?pFromSubject {
 					{ ?bNode ?pToSubject ?subject }
 					UNION
-					{ ?subject ?subjectClass ?bNode }
+					{ ?subject ?pFromSubject ?bNode }
 					{ ${subQuery} }
 				}
 			}
