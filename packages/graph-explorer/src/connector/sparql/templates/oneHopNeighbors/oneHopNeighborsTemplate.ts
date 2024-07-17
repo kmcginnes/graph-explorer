@@ -18,36 +18,34 @@ import dedent from "dedent";
  * offset = 0
  *
  * SELECT ?subject ?pred ?value ?subjectClass ?pToSubject ?pFromSubject {
- *   ?subject a     ?subjectClass;
- *            ?pred ?value {
- *     SELECT DISTINCT ?subject ?pToSubject ?pFromSubject {
- *       BIND(<http://www.example.com/soccer/resource#EPL> AS ?argument)
- *       VALUES ?subjectClass {
- *         <http://www.example.com/soccer/ontology/Team>
- *       }
- *       {
- *         ?argument ?pToSubject ?subject.
- *         ?subject a            ?subjectClass;
- *                  ?sPred       ?sValue .
- *         FILTER (
- *           (?sPred=<http://www.example.com/soccer/ontology/teamName> && regex(str(?sValue), "Arsenal", "i")) ||
- *           (?sPred=<http://www.example.com/soccer/ontology/nickname> && regex(str(?sValue), "Gunners", "i"))
- *         )
- *       }
- *       UNION
- *       {
- *         ?subject ?pFromSubject ?argument;
- *                  a             ?subjectClass;
- *                  ?sPred        ?sValue .
- *        FILTER (
- *           (?sPred=<http://www.example.com/soccer/ontology/teamName> && regex(str(?sValue), "Arsenal", "i")) ||
- *           (?sPred=<http://www.example.com/soccer/ontology/nickname> && regex(str(?sValue), "Gunners", "i"))
- *         )
- *       }
- *     }
- *     LIMIT 2
- *     OFFSET 0
+ * WHERE {
+ *   BIND(<http://www.example.com/soccer/resource#EPL> AS ?argument)
+ *   VALUES ?subjectClass {
+ *     <http://www.example.com/soccer/ontology/Team>
  *   }
+ *
+ *   {
+ *     ?argument ?pToSubject ?subject.
+ *     ?subject a ?subjectClass ;
+ *             ?pred ?value .
+ *     OPTIONAL { ?subject ?sPred ?sValue }
+ *     FILTER (
+ *       (?sPred=<http://www.example.com/soccer/ontology/teamName> && regex(str(?sValue), "Arsenal", "i")) ||
+ *       (?sPred=<http://www.example.com/soccer/ontology/nickname> && regex(str(?sValue), "Gunners", "i"))
+ *     )
+ *   }
+ *   UNION
+ *   {
+ *     ?subject ?pFromSubject ?argument .
+ *     ?subject a ?subjectClass ;
+ *             ?pred ?value .
+ *     OPTIONAL { ?subject ?sPred ?sValue }
+ *     FILTER (
+ *       (?sPred=<http://www.example.com/soccer/ontology/teamName> && regex(str(?sValue), "Arsenal", "i")) ||
+ *       (?sPred=<http://www.example.com/soccer/ontology/nickname> && regex(str(?sValue), "Gunners", "i"))
+ *     )
+ *   }
+ *
  *   FILTER(isLiteral(?value))
  * }
  */
@@ -60,29 +58,33 @@ export default function oneHopNeighborsTemplate({
 }: SPARQLNeighborsRequest): string {
   return dedent`
     # Fetch all neighbors and their predicates, values, and classes
-    SELECT ?subject ?pred ?value ?subjectClass ?pToSubject ?pFromSubject {
-      ?subject a     ?subjectClass;
-               ?pred ?value {
-        SELECT DISTINCT ?subject ?pToSubject ?pFromSubject {
-          BIND(<${resourceURI}> AS ?argument)
-          ${getSubjectClasses(subjectClasses)}
-          {
-            ?argument ?pToSubject ?subject.
-            ?subject a         ?subjectClass;
-                     ?sPred    ?sValue .
-            ${getFilters(filterCriteria)}
-          }
-          UNION
-          {
-            ?subject ?pFromSubject ?argument;
-                     a         ?subjectClass;
-                     ?sPred    ?sValue .
-           ${getFilters(filterCriteria)}
-          }
+    SELECT ?subject ?pred ?value ?subjectClass
+    WHERE {
+        {
+            SELECT DISTINCT ?subject ?subjectClass
+            WHERE {
+              BIND(<${resourceURI}> AS ?argument)
+              ${getSubjectClasses(subjectClasses)}
+              {
+                ?argument ?p ?subject .
+                ?subject a ?subjectClass .
+                ?subject ?sPred ?sValue .
+                ${getFilters(filterCriteria)}
+              }
+              UNION
+              {
+                ?subject ?p ?argument .
+                ?subject a ?subjectClass .
+                ?subject ?sPred ?sValue .
+                ${getFilters(filterCriteria)}
+              }
+            }
+            ORDER BY ?subject
+            ${getLimit(limit, offset)}
         }
-        ${getLimit(limit, offset)}
-      }
-      FILTER(isLiteral(?value))
+        ?subject ?pred ?value .
+        FILTER(isLiteral(?value))
     }
+    ORDER BY ?subject
   `;
 }
