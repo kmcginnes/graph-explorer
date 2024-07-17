@@ -12,9 +12,9 @@ import mapRawResultToVertex from "../mappers/mapRawResultToVertex";
 import blankNodeOneHopNeighborsTemplate from "../templates/oneHopNeighbors/blankNodeOneHopNeighborsTemplate";
 import blankNodeSubjectPredicatesTemplate from "../templates/subjectPredicates/blankNodeSubjectPredicatesTemplate";
 import {
+  BlankNodeItem,
   RawResult,
   RawValue,
-  SPARQLBlankNodeNeighborsRequest,
   SPARQLBlankNodeNeighborsResponse,
   SparqlFetch,
 } from "../types";
@@ -94,12 +94,53 @@ export function mapOneHop(data: RawBlankNodeNeighborsResponse) {
   });
 }
 
+function findBlankNodeTemplate(bNode: BlankNodeItem) {
+  const attributeKeys = Object.keys(bNode.vertex.data.attributes);
+
+  if (attributeKeys.length <= 0) {
+    return null;
+  }
+
+  const matchTemplates: string[] = [];
+  const filterTemplates: string[] = [];
+  let attributeIndex = 1;
+
+  for (const key of attributeKeys) {
+    const value = bNode.vertex.data.attributes[key];
+    const attributeValueKey = `?attributeValue${attributeIndex}`;
+    matchTemplates.push(`<${key}> ${attributeValueKey} ;`);
+    filterTemplates.push(
+      `FILTER (regex(str(${attributeValueKey}), "${value}", "i"))`
+    );
+    attributeIndex += 1;
+  }
+  return `
+    SELECT DISTINCT ?bNode
+    WHERE {
+      ?bNode a <${bNode.vertex.data.type}> ;
+             ${matchTemplates.join("\n             ")}
+      ${filterTemplates.join("\n      ")}
+    }
+  `;
+}
+
 export default async function fetchBlankNodeNeighbors(
   sparqlFetch: SparqlFetch,
-  req: SPARQLBlankNodeNeighborsRequest
+  bNode: BlankNodeItem
 ): Promise<SPARQLBlankNodeNeighborsResponse> {
-  logger.log("[SPARQL Explorer] Fetching blank node one hop neighbors", req);
-  const neighborsTemplate = blankNodeOneHopNeighborsTemplate(req.subQuery);
+  const req = {
+    resourceURI: bNode.vertex.data.id,
+    resourceClass: bNode.vertex.data.type,
+    subQuery: bNode.subQueryTemplate,
+  };
+  logger.log("[SPARQL Explorer] Fetching blank node one hop neighbors", {
+    req,
+    bNode,
+  });
+  const findBlankNodeSubQuery = findBlankNodeTemplate(bNode);
+  const neighborsTemplate = blankNodeOneHopNeighborsTemplate(
+    findBlankNodeSubQuery ?? req.subQuery
+  );
   const neighbors = await sparqlFetch<
     RawBlankNodeNeighborsResponse | ErrorResponse
   >(neighborsTemplate);

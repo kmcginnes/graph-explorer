@@ -232,11 +232,7 @@ export function createSparqlExplorer(
       if (bNode && !bNode.neighbors) {
         const response = await fetchBlankNodeNeighbors(
           _sparqlFetch(connection, options),
-          {
-            resourceURI: bNode.vertex.data.id,
-            resourceClass: bNode.vertex.data.type,
-            subQuery: bNode.subQueryTemplate,
-          }
+          bNode
         );
 
         blankNodes.set(req.vertexId, {
