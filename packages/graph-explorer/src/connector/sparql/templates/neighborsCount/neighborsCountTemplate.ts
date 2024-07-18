@@ -25,16 +25,21 @@ export default function neighborsCountTemplate({
 }: SPARQLNeighborsCountRequest) {
   return dedent`
     # Count neighbors by class which are related with the given subject URI
-    SELECT ?class (COUNT(?class) AS ?count) {
-      ?subject a ?class {
-        SELECT DISTINCT ?subject ?class {
-          ?subject a ?class .
-          { ?subject ?p <${resourceURI}> }
-          UNION
-          { <${resourceURI}> ?p ?subject }
+    SELECT ?class (COUNT(DISTINCT ?subject) as ?count)
+    WHERE {
+      SELECT ?subject (MIN(?class) as ?class) WHERE {
+        {
+            ?subject ?p <${resourceURI}> .
+            ?subject a ?class .
         }
-        ${limit > 0 ? `LIMIT ${limit}` : ""}
+        UNION
+        {
+            <${resourceURI}> ?p ?subject .
+            ?subject a ?class .
+        }
       }
+      GROUP BY ?subject
+      ${limit > 0 ? `LIMIT ${limit}` : ""}
     }
     GROUP BY ?class
   `;
