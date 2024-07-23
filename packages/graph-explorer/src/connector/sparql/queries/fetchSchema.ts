@@ -10,7 +10,7 @@ type RawClassesWCountsResponse = {
   results: {
     bindings: Array<{
       class: RawValue;
-      instancesCount: RawValue;
+      instancesCount?: RawValue;
     }>;
   };
 };
@@ -30,7 +30,7 @@ type RawPredicatesWCountsResponse = {
         type: string;
         value: string;
       };
-      count: {
+      count?: {
         datatype: "http://www.w3.org/2001/XMLSchema#integer";
         type: "literal";
         value: string;
@@ -120,7 +120,7 @@ const fetchClassesSchema = async (sparqlFetch: SparqlFetch) => {
   classesCounts.results.bindings.forEach(classResult => {
     classes.push(classResult.class.value);
     countsByClass[classResult.class.value] = Number(
-      classResult.instancesCount.value
+      classResult.instancesCount?.value ?? 0
     );
   });
 
@@ -136,8 +136,10 @@ const fetchPredicatesWithCounts = async (
 
   const values = data.results.bindings;
   const labelsWithCounts: Record<string, number> = {};
-  for (let i = 0; i < values.length; i += 1) {
-    labelsWithCounts[values[i].predicate.value] = Number(values[i].count.value);
+  for (const value of values) {
+    labelsWithCounts[value.predicate.value] = value.count
+      ? Number(value.count.value)
+      : 0;
   }
 
   return labelsWithCounts;

@@ -184,8 +184,8 @@ export function createSparqlExplorer(
   return {
     connection: connection,
     async fetchSchema(options) {
-      const summary = await fetchSummary(connection, options);
-      return fetchSchema(_sparqlFetch(connection, options), summary);
+      // const summary = await fetchSummary(connection, options);
+      return fetchSchema(_sparqlFetch(connection, options), undefined);
     },
     async fetchVertexCountsByType(req, options) {
       return fetchClassCounts(_sparqlFetch(connection, options), req);
