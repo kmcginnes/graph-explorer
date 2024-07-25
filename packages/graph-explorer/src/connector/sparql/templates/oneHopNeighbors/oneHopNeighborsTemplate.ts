@@ -59,30 +59,106 @@ export default function oneHopNeighborsTemplate({
   offset = 0,
 }: SPARQLNeighborsRequest): string {
   return dedent`
-    # Fetch all neighbors and their predicates, values, and classes
-    SELECT ?subject ?pred ?value ?subjectClass ?pToSubject ?pFromSubject {
-      ?subject a     ?subjectClass;
-               ?pred ?value {
-        SELECT DISTINCT ?subject ?pToSubject ?pFromSubject {
-          BIND(<${resourceURI}> AS ?argument)
+    SELECT DISTINCT ?subject ?p ?value
+    WHERE {
+      {
+        # This sub-query will give us all unique neighbors within the given limit
+        SELECT DISTINCT ?neighbor
+        WHERE {
+          BIND(<${resourceURI}> AS ?source)
           ${getSubjectClasses(subjectClasses)}
           {
-            ?argument ?pToSubject ?subject.
-            ?subject a         ?subjectClass;
-                     ?sPred    ?sValue .
+            # Incoming neighbors
+            ?neighbor ?pToSource ?source . 
+            ?neighbor ?pClass    ?class .
+            ?neighbor ?pValue    ?sValue .
+            FILTER(isLiteral(?sValue))
             ${getFilters(filterCriteria)}
           }
           UNION
-          {
-            ?subject ?pFromSubject ?argument;
-                     a         ?subjectClass;
-                     ?sPred    ?sValue .
-           ${getFilters(filterCriteria)}
+          { 
+            # Outgoing neighbors
+            ?source   ?pFromSource ?neighbor . 
+            ?neighbor ?pClass      ?class .
+            ?neighbor ?pValue      ?sValue .
+            FILTER(isLiteral(?sValue))
+            ${getFilters(filterCriteria)}
           }
         }
+        ORDER BY ?neighbor
         ${getLimit(limit, offset)}
       }
-      FILTER(isLiteral(?value))
+      
+      # Using the ?neighbor gathered above we can start getting 
+      # the information we are really interested in
+      #
+      # - predicate to source from neighbor
+      # - predicate from source to neighbor
+      # - neighbor class
+      # - neighbor values
+      
+      {    
+        # Incoming connection predicate
+        BIND(<${resourceURI}> AS ?source)
+        ?neighbor ?pToSource ?source
+        BIND(?neighbor as ?subject)
+        BIND(?pToSource as ?p)
+        BIND(?source as ?value)
+      }
+      UNION
+      {
+        # Outgoing connection predicate
+        BIND(<${resourceURI}> AS ?source)
+        ?source ?pFromSource ?neighbor
+        BIND(?neighbor as ?value)
+        BIND(?pFromSource as ?p)
+        BIND(?source as ?subject)
+      }
+      UNION
+      {
+        # Class
+        ?neighbor ?pClass ?class .
+        ?neighbor a ?class . 
+        BIND(?neighbor as ?subject)
+        BIND(?pClass as ?p)
+        BIND(?class as ?value)
+      }
+      UNION
+      {
+        # Values
+        ?neighbor ?p ?value
+        FILTER (isLiteral(?value))
+        BIND(?neighbor as ?subject)
+      }
     }
+    ORDER BY ?subject
   `;
+
+  // return dedent`
+  //   # Fetch all neighbors and their predicates, values, and classes
+  //   SELECT ?subject ?pred ?value ?subjectClass ?pToSubject ?pFromSubject {
+  //     ?subject a     ?subjectClass;
+  //              ?pred ?value {
+  //       SELECT DISTINCT ?subject ?pToSubject ?pFromSubject {
+  //         BIND(<${resourceURI}> AS ?argument)
+  //         ${getSubjectClasses(subjectClasses)}
+  //         {
+  //           ?argument ?pToSubject ?subject.
+  //           ?subject a         ?subjectClass;
+  //                    ?sPred    ?sValue .
+  //           ${getFilters(filterCriteria)}
+  //         }
+  //         UNION
+  //         {
+  //           ?subject ?pFromSubject ?argument;
+  //                    a         ?subjectClass;
+  //                    ?sPred    ?sValue .
+  //          ${getFilters(filterCriteria)}
+  //         }
+  //       }
+  //       ${getLimit(limit, offset)}
+  //     }
+  //     FILTER(isLiteral(?value))
+  //   }
+  // `;
 }
