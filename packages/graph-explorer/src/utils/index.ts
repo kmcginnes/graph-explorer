@@ -11,3 +11,4 @@ export { default as batchPromisesSerially } from "./batchPromisesSerially";
 export { default as logger } from "./logger";
 export * from "./set";
 export * from "./env";
+export * from "./swimmer";

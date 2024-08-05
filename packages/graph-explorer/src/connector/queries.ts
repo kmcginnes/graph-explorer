@@ -9,6 +9,7 @@ import {
   VertexId,
   typeofVertexId,
 } from "./useGEFetchTypes";
+import { createPool } from "../utils";
 
 /**
  * Performs a search with the provided parameters.
@@ -60,6 +61,10 @@ export type NeighborCountsQueryResponse = {
   counts: Record<string, number>;
 };
 
+const pool = createPool<NeighborCountsQueryResponse | undefined>({
+  concurrency: 10,
+});
+
 /**
  * Retrieves the number of neighbors for a given node and their types.
  * @param id The node id for which to fetch the neighbors count.
@@ -75,21 +80,23 @@ export const neighborsCountQuery = (
     queryKey: ["neighborsCount", id, limit, explorer],
     enabled: Boolean(explorer),
     queryFn: async (): Promise<NeighborCountsQueryResponse | undefined> => {
-      const result = await explorer?.fetchNeighborsCount({
-        vertexId: id.toString(),
-        idType: typeofVertexId(id),
-        limit,
+      return await pool.add(async () => {
+        const result = await explorer?.fetchNeighborsCount({
+          vertexId: id.toString(),
+          idType: typeofVertexId(id),
+          limit,
+        });
+
+        if (!result) {
+          return;
+        }
+
+        return {
+          nodeId: id,
+          totalCount: result.totalCount,
+          counts: result.counts,
+        };
       });
-
-      if (!result) {
-        return;
-      }
-
-      return {
-        nodeId: id,
-        totalCount: result.totalCount,
-        counts: result.counts,
-      };
     },
   });
 
