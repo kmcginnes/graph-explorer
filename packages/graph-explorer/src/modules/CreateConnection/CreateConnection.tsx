@@ -27,9 +27,7 @@ import {
 
 type ConnectionForm = {
   name?: string;
-  url?: string;
   queryEngine?: "gremlin" | "sparql" | "openCypher";
-  proxyConnection?: boolean;
   graphDbUrl?: string;
   awsAuthEnabled?: boolean;
   serviceType?: "neptune-db" | "neptune-graph";
@@ -56,9 +54,7 @@ export type CreateConnectionProps = {
 
 function mapToConnection(data: Required<ConnectionForm>): ConnectionConfig {
   return {
-    url: data.url,
     queryEngine: data.queryEngine,
-    proxyConnection: data.proxyConnection,
     graphDbUrl: data.graphDbUrl,
     awsAuthEnabled: data.awsAuthEnabled,
     serviceType: data.serviceType,
@@ -78,7 +74,7 @@ const CreateConnection = ({
 
   const configId = existingConfig?.id;
   const disabledFields: (keyof ConnectionForm)[] = existingConfig?.__fileBase
-    ? ["queryEngine", "url", "serviceType"]
+    ? ["queryEngine", "graphDbUrl", "serviceType"]
     : [];
   const initialData: ConnectionForm | undefined = existingConfig
     ? {
@@ -123,7 +119,7 @@ const CreateConnection = ({
           return updatedConfig;
         });
 
-        const urlChange = initialData?.url !== data.url;
+        const urlChange = initialData?.graphDbUrl !== data.graphDbUrl;
         const typeChange = initialData?.queryEngine !== data.queryEngine;
 
         if (urlChange || typeChange) {

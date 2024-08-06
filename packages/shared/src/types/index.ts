@@ -1,18 +1,9 @@
 export type ConnectionConfig = {
   /**
-   * Base URL to access to the database through HTTPs endpoints
-   */
-  url: string;
-  /**
    * Choose between gremlin or sparQL engines.
    * By default, it uses gremlin
    */
   queryEngine?: "gremlin" | "sparql" | "openCypher";
-  /**
-   * If the service is Neptune,
-   * all requests should be sent through the nodejs proxy-server.
-   */
-  proxyConnection?: boolean;
   /**
    * If it is Neptune, the URL of the database.
    */
