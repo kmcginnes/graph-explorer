@@ -166,7 +166,12 @@ export function createRandomEntityAttribute(): {
   };
 }
 
-function pickRandomElement<T>(array: T[]): T {
+/**
+ * Picks a random element from the given array of elements.
+ * @param array Elements from which to choose a random element.
+ * @returns A single random element in the given array.
+ */
+export function pickRandomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
