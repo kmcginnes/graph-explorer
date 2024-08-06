@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
     },
-    base: env.GRAPH_EXP_ENV_ROOT_FOLDER,
+    base: "/explorer",
     envPrefix: "GRAPH_EXP",
     define: {
       __GRAPH_EXP_VERSION__: JSON.stringify(process.env.npm_package_version),

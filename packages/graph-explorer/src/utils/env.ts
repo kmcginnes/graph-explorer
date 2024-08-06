@@ -5,3 +5,5 @@ export const env = {
   BASE_URL: import.meta.env.BASE_URL,
   GRAPH_EXP_FEEDBACK_URL: import.meta.env.GRAPH_EXP_FEEDBACK_URL,
 };
+
+console.log("Environment values:", import.meta.env);
