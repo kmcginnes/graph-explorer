@@ -15,6 +15,7 @@ import {
   userStylingAtom,
   VertexPreferences,
 } from "./userPreferences";
+import migrateConfiguration from "./migrateConfiguration";
 
 export const isStoreLoadedAtom = atom<boolean>({
   key: "store-loaded",
@@ -30,7 +31,7 @@ export const activeConfigurationAtom = atom<string | null>({
 export const configurationAtom = atom<Map<string, RawConfiguration>>({
   key: "configuration",
   default: new Map(),
-  effects: [localForageEffect()],
+  effects: [localForageEffect(migrateConfiguration)],
 });
 
 export const mergedConfigurationSelector = selector<RawConfiguration | null>({
@@ -84,7 +85,6 @@ export const mergedConfigurationSelector = selector<RawConfiguration | null>({
       connection: {
         ...(currentConfig.connection || {}),
         // Remove trailing slash
-        url: currentConfig.connection?.url?.replace(/\/$/, "") || "",
         queryEngine: currentConfig.connection?.queryEngine || "gremlin",
         graphDbUrl:
           currentConfig.connection?.graphDbUrl?.replace(/\/$/, "") || "",

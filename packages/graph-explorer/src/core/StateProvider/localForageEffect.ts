@@ -13,15 +13,20 @@ localForage.config({
 // that can load the atom state before it is recovered from the store
 export const loadedAtoms: Set<string> = new Set();
 
-const localForageEffect =
-  <T>(): AtomEffect<T> =>
-  ({ setSelf, onSet, trigger, node }) => {
+export type Migration<T> = (stored: unknown) => T;
+
+export default function localForageEffect<T>(
+  migration?: Migration<T>
+): AtomEffect<T> {
+  return ({ setSelf, onSet, trigger, node }) => {
     // If there's a persisted value - set it on load
     const loadPersisted = async () => {
       const savedValue = await localForage.getItem(node.key);
 
-      if (savedValue != null) {
-        setSelf(savedValue as T | DefaultValue);
+      const migratedValue = migration ? migration(savedValue) : savedValue;
+
+      if (migratedValue != null) {
+        setSelf(migratedValue as T | DefaultValue);
         return;
       }
     };
@@ -39,6 +44,7 @@ const localForageEffect =
         : localForage.setItem(node.key, newValue);
     });
   };
+}
 
 // Reference docs:
 // https://recoiljs.org/docs/guides/atom-effects#asynchronous-storage
@@ -77,5 +83,3 @@ export function asyncLocalForageEffect<T>(key: string): AtomEffect<T> {
     });
   };
 }
-
-export default localForageEffect;
