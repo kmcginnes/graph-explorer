@@ -15,6 +15,8 @@ import { saveLocalForageToFile } from "@/core/StateProvider/localDb";
 import localforage from "localforage";
 import LoadConfigButton from "./LoadConfigButton";
 import { APP_NAME } from "@/utils/constants";
+import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@/connector/trpc";
 
 export default function SettingsGeneral() {
   const [isStateLoggingEnabled, setIsStateLoggingEnabled] = useRecoilState(
@@ -23,9 +25,18 @@ export default function SettingsGeneral() {
   const [isDebugOptionsEnabled, setIsDebugOptionsEnabled] =
     useRecoilState(showDebugActionsAtom);
 
+  const trpcQuery = useQuery({
+    queryKey: ["trpc"],
+    queryFn: () => trpc.foo.query(),
+  });
+
   return (
     <>
       <PageHeading>General Settings</PageHeading>
+
+      <Paragraph>
+        TRPC: {trpcQuery.data ? trpcQuery.data : "Loading..."}
+      </Paragraph>
 
       <SettingsSectionContainer>
         <SettingsSection className="items-start">

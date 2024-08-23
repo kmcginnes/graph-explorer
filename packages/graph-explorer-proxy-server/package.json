@@ -15,6 +15,7 @@
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.621.0",
     "@graph-explorer/shared": "workspace:*",
+    "@trpc/server": "11.0.0-rc.485",
     "aws4": "^1.13.0",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",

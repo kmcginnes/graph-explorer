@@ -24,6 +24,12 @@ export default defineConfig(({ mode }) => {
   return {
     server: {
       host: true,
+      proxy: {
+        "/trpc": {
+          target: "http://localhost",
+          changeOrigin: true,
+        },
+      },
     },
     base: env.GRAPH_EXP_ENV_ROOT_FOLDER,
     envPrefix: "GRAPH_EXP",

@@ -13,6 +13,43 @@ import { IncomingHttpHeaders } from "http";
 import { logger as proxyLogger, requestLoggingMiddleware } from "./logging.js";
 import { clientRoot, proxyServerRoot } from "./paths.js";
 import { errorHandlingMiddleware, handleError } from "./error-handler.js";
+import { createExpressMiddleware, publicProcedure, router } from "./trpc.js";
+import { z } from "zod";
+
+const appRouter = router({
+  log: publicProcedure
+    .input(
+      z.object({
+        level: z.enum(["error", "warn", "info", "debug", "trace"]),
+        message: z.string(),
+      })
+    )
+    .mutation(opts => {
+      const level = opts.input.level;
+      const message = opts.input.message;
+
+      if (level === "error") {
+        proxyLogger.error(message);
+      } else if (level === "warn") {
+        proxyLogger.warn(message);
+      } else if (level === "info") {
+        proxyLogger.info(message);
+      } else if (level === "debug") {
+        proxyLogger.debug(message);
+      } else if (level === "trace") {
+        proxyLogger.trace(message);
+      } else {
+        throw new Error("Tried to log to an unknown level.");
+      }
+      return {
+        message: "Log received.",
+      };
+    }),
+});
+
+// Export type router type signature,
+// NOT the router itself.
+export type AppRouter = typeof appRouter;
 
 const app = express();
 
@@ -151,9 +188,12 @@ async function fetchData(
 }
 
 app.use(compression()); // Use compression middleware
+
 app.use(cors());
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
 app.use(
   "/defaultConnection",
   express.static(path.join(clientRoot, "defaultConnection.json"))
@@ -482,6 +522,8 @@ app.post("/logger", (req, res, next) => {
     next(error);
   }
 });
+
+app.use("/trpc", createExpressMiddleware(appRouter));
 
 // Error handler middleware to log errors and send appropriate response.
 app.use(errorHandlingMiddleware());
