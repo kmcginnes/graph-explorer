@@ -1,9 +1,4 @@
 import { every, isEqual } from "lodash";
-import {
-  ClientLoggerConnector,
-  LoggerConnector,
-  ServerLoggerConnector,
-} from "@/connector/LoggerConnector";
 import { createGremlinExplorer } from "@/connector/gremlin/gremlinExplorer";
 import { createOpenCypherExplorer } from "@/connector/openCypher/openCypherExplorer";
 import { createSparqlExplorer } from "@/connector/sparql/sparqlExplorer";
@@ -62,22 +57,5 @@ export const explorerSelector = selector({
       default:
         return createGremlinExplorer(connection);
     }
-  },
-});
-
-/**
- * Logger based on the active connection proxy URL.
- */
-export const loggerSelector = selector<LoggerConnector>({
-  key: "logger",
-  get: ({ get }) => {
-    const connection = get(activeConnectionSelector);
-
-    // Check for a url and that we are using the proxy server
-    if (!connection || !connection.url || connection.proxyConnection === true) {
-      return new ClientLoggerConnector();
-    }
-
-    return new ServerLoggerConnector(connection.url);
   },
 });

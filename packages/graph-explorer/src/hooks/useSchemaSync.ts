@@ -2,16 +2,17 @@ import { useCallback, useRef } from "react";
 import { useNotification } from "@/components/NotificationProvider";
 import type { SchemaResponse } from "@/connector/useGEFetchTypes";
 import { useConfiguration } from "@/core/ConfigurationProvider";
-import { explorerSelector, loggerSelector } from "@/core/connector";
+import { explorerSelector } from "@/core/connector";
 import usePrefixesUpdater from "./usePrefixesUpdater";
 import useUpdateSchema from "./useUpdateSchema";
 import { createDisplayError } from "@/utils/createDisplayError";
 import { useRecoilValue } from "recoil";
+import { serverLoggerConnector } from "@/connector/LoggerConnector";
 
 const useSchemaSync = (onSyncChange?: (isSyncing: boolean) => void) => {
   const config = useConfiguration();
   const explorer = useRecoilValue(explorerSelector);
-  const logger = useRecoilValue(loggerSelector);
+  const logger = serverLoggerConnector;
 
   const updatePrefixes = usePrefixesUpdater();
   const { enqueueNotification, clearNotification } = useNotification();
