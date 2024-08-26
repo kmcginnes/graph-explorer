@@ -1,0 +1,7 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/graph-explorer" },
+    { "path": "packages/graph-explorer-proxy-server" }
+  ]
+}

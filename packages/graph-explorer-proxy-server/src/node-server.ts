@@ -46,10 +46,11 @@ async function getIAMHeaders(options: string | aws4.Request) {
       "IAM is enabled but credentials cannot be found on the credential provider chain."
     );
   }
+
   const headers = aws4.sign(options, {
     accessKeyId: creds.accessKeyId,
     secretAccessKey: creds.secretAccessKey,
-    sessionToken: creds.sessionToken,
+    ...(creds.sessionToken && { sessionToken: creds.sessionToken }),
   });
 
   return headers;
@@ -245,7 +246,7 @@ app.post("/sparql", (req, res, next) => {
     body,
   };
 
-  fetchData(
+  return fetchData(
     res,
     next,
     rawUrl,
@@ -322,7 +323,7 @@ app.post("/gremlin", (req, res, next) => {
     body: JSON.stringify(body),
   };
 
-  fetchData(
+  return fetchData(
     res,
     next,
     rawUrl,
@@ -359,7 +360,7 @@ app.post("/openCypher", (req, res, next) => {
     ? (headers["service-type"] ?? DEFAULT_SERVICE_TYPE)
     : "";
 
-  fetchData(
+  return fetchData(
     res,
     next,
     rawUrl,
