@@ -1,3 +1,19 @@
+import { z } from "zod";
+
+export const DefaultConnectionSchema = z.object({
+  url: z.string().url(),
+  queryEngine: z.enum(["gremlin", "sparql", "openCypher"]).optional(),
+  proxyConnection: z.boolean().optional(),
+  graphDbUrl: z.string().url().optional(),
+  awsAuthEnabled: z.boolean().optional(),
+  serviceType: z.enum(["neptune-db", "neptune-graph"]).optional(),
+  awsRegion: z.string().optional(),
+  fetchTimeoutMs: z.number().gt(0).optional(),
+  nodeExpansionLimit: z.number().gt(0).optional(),
+});
+
+// type Foo = z.infer<typeof DefaultConnectionSchema>;
+
 export type ConnectionConfig = {
   /**
    * Base URL to access to the database through HTTPs endpoints
