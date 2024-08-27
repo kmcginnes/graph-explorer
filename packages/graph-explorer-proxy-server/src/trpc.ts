@@ -1,0 +1,33 @@
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { initTRPC } from "@trpc/server";
+import { AppRouter } from "./app-router.js";
+import { handleError } from "./error-handler.js";
+
+// created for each request
+const createContext = (
+  _options: trpcExpress.CreateExpressContextOptions
+) => ({}); // no context
+type Context = Awaited<ReturnType<typeof createContext>>;
+
+/**
+ * Initialization of tRPC backend
+ * Should be done only once per backend!
+ */
+const t = initTRPC.context<Context>().create();
+
+/**
+ * Export reusable router and procedure helpers
+ * that can be used throughout the router
+ */
+export const router = t.router;
+export const publicProcedure = t.procedure;
+
+export function createExpressMiddleware(appRouter: AppRouter) {
+  return trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+    onError: ({ error }) => {
+      handleError(error);
+    },
+  });
+}

@@ -1,7 +1,6 @@
 import { vi } from "vitest";
 import { SchemaResponse } from "@/connector/useGEFetchTypes";
 import fetchSchema from "./fetchSchema";
-import { ClientLoggerConnector } from "@/connector/LoggerConnector";
 
 describe("OpenCypher > fetchSchema", () => {
   it("Should return a schema", async () => {
@@ -16,10 +15,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
 
     const expected: SchemaResponse = {
       edges: [
@@ -145,10 +141,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.vertices.length).toBe(0);
   });
 
@@ -174,10 +167,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.vertices.length).toBe(0);
   });
 
@@ -203,10 +193,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.vertices.length).toBe(0);
   });
 
@@ -224,10 +211,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema).toBeDefined();
   });
 
@@ -242,10 +226,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.edges.length).toBe(0);
   });
 
@@ -271,10 +252,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.edges.length).toBe(0);
   });
 
@@ -300,10 +278,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.edges.length).toBe(0);
   });
 
@@ -329,10 +304,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema.edges.length).toBe(0);
   });
 
@@ -365,10 +337,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema).toBeDefined();
   });
 
@@ -385,10 +354,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema).toBeDefined();
   });
 
@@ -413,10 +379,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    const schema = await fetchSchema(
-      openCypherFetchFn,
-      new ClientLoggerConnector()
-    );
+    const schema = await fetchSchema(openCypherFetchFn);
     expect(schema).toBeDefined();
     const routeEdge = schema.edges[0];
     expect(routeEdge.total).toBeUndefined();
@@ -435,7 +398,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    await fetchSchema(openCypherFetchFn, new ClientLoggerConnector());
+    await fetchSchema(openCypherFetchFn);
 
     expect(openCypherFetchFn.mock.calls[3][0]).toStrictEqual(
       "MATCH () -[e:`route`]- () RETURN e AS object LIMIT 1"
@@ -457,7 +420,7 @@ describe("OpenCypher > fetchSchema", () => {
         throw new Error(query);
       });
 
-    await fetchSchema(openCypherFetchFn, new ClientLoggerConnector());
+    await fetchSchema(openCypherFetchFn);
 
     expect(openCypherFetchFn.mock.calls[3][0]).toStrictEqual(
       "MATCH () -[e:`route`]- () RETURN e AS object LIMIT 1"

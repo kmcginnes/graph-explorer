@@ -13,6 +13,7 @@ import { logger as proxyLogger, requestLoggingMiddleware } from "./logging.js";
 import { clientRoot, proxyServerRoot } from "./paths.js";
 import { errorHandlingMiddleware, handleError } from "./error-handler.js";
 import { BooleanStringSchema, env } from "./env.js";
+import { createRouterMiddleware } from "./app-router.js";
 
 const app = express();
 
@@ -147,9 +148,12 @@ async function fetchData(
 }
 
 app.use(compression()); // Use compression middleware
+
 app.use(cors());
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
 app.use(
   "/defaultConnection",
   express.static(path.join(clientRoot, "defaultConnection.json"))
@@ -504,6 +508,8 @@ app.post("/logger", (req, res, next) => {
     next(error);
   }
 });
+
+app.use("/trpc", createRouterMiddleware());
 
 // Error handler middleware to log errors and send appropriate response.
 app.use(errorHandlingMiddleware());

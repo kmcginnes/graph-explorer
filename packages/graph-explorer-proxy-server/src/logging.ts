@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { pino } from "pino";
 import { PrettyOptions } from "pino-pretty";
 import { env } from "./env.js";
+import { z } from "zod";
 
 export type LogLevel = pino.LevelWithSilent;
 

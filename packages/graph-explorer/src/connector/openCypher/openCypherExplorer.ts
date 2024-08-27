@@ -9,7 +9,7 @@ import { ConnectionConfig } from "@shared/types";
 import { DEFAULT_SERVICE_TYPE } from "@/utils/constants";
 import { Explorer, ExplorerRequestOptions } from "../useGEFetchTypes";
 import { env, logger } from "@/utils";
-import { createLoggerFromConnection } from "@/core/connector";
+import { remoteLogger } from "@/connector/remoteLogger";
 import { FeatureFlags } from "@/core";
 
 function _openCypherFetch(
@@ -39,7 +39,6 @@ export function createOpenCypherExplorer(
   connection: ConnectionConfig,
   featureFlags: FeatureFlags
 ): Explorer {
-  const remoteLogger = createLoggerFromConnection(connection);
   const serviceType = connection.serviceType || DEFAULT_SERVICE_TYPE;
   return {
     connection: connection,
@@ -53,7 +52,6 @@ export function createOpenCypherExplorer(
       );
       return fetchSchema(
         _openCypherFetch(connection, featureFlags, options),
-        remoteLogger,
         summary
       );
     },

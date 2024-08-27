@@ -9,7 +9,7 @@ import { GraphSummary } from "./types";
 import { v4 } from "uuid";
 import { Explorer, ExplorerRequestOptions } from "../useGEFetchTypes";
 import { logger } from "@/utils";
-import { createLoggerFromConnection } from "@/core/connector";
+import { remoteLogger } from "@/connector/remoteLogger";
 import { FeatureFlags } from "@/core";
 
 function _gremlinFetch(
@@ -70,7 +70,6 @@ export function createGremlinExplorer(
   connection: ConnectionConfig,
   featureFlags: FeatureFlags
 ): Explorer {
-  const remoteLogger = createLoggerFromConnection(connection);
   return {
     connection: connection,
     async fetchSchema(options) {
@@ -78,7 +77,6 @@ export function createGremlinExplorer(
       const summary = await fetchSummary(connection, featureFlags, options);
       return fetchSchema(
         _gremlinFetch(connection, featureFlags, options),
-        remoteLogger,
         summary
       );
     },

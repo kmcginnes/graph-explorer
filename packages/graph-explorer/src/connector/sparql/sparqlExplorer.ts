@@ -24,7 +24,7 @@ import {
 import { ConnectionConfig } from "@shared/types";
 import { v4 } from "uuid";
 import { env, logger } from "@/utils";
-import { createLoggerFromConnection } from "@/core/connector";
+import { remoteLogger } from "@/connector/remoteLogger";
 import { FeatureFlags } from "@/core";
 
 const replaceBlankNodeFromSearch = (
@@ -198,7 +198,6 @@ export function createSparqlExplorer(
   featureFlags: FeatureFlags,
   blankNodes: BlankNodesMap
 ): Explorer {
-  const remoteLogger = createLoggerFromConnection(connection);
   return {
     connection: connection,
     async fetchSchema(options) {
@@ -206,7 +205,6 @@ export function createSparqlExplorer(
       const summary = await fetchSummary(connection, featureFlags, options);
       return fetchSchema(
         _sparqlFetch(connection, featureFlags, options),
-        remoteLogger,
         summary
       );
     },

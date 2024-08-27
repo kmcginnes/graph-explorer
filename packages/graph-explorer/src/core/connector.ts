@@ -1,9 +1,4 @@
 import { every, isEqual } from "lodash";
-import {
-  ClientLoggerConnector,
-  LoggerConnector,
-  ServerLoggerConnector,
-} from "@/connector/LoggerConnector";
 import { createGremlinExplorer } from "@/connector/gremlin/gremlinExplorer";
 import { createOpenCypherExplorer } from "@/connector/openCypher/openCypherExplorer";
 import { createSparqlExplorer } from "@/connector/sparql/sparqlExplorer";
@@ -11,7 +6,6 @@ import { mergedConfigurationSelector } from "./StateProvider/configuration";
 import { selector } from "recoil";
 import { equalSelector } from "@/utils/recoilState";
 import { ConnectionConfig } from "@shared/types";
-import { logger } from "@/utils";
 import { featureFlagsSelector } from "./featureFlags";
 
 /**
@@ -67,32 +61,3 @@ export const explorerSelector = selector({
     }
   },
 });
-
-/**
- * Logger based on the active connection proxy URL.
- */
-export const loggerSelector = selector<LoggerConnector>({
-  key: "logger",
-  get: ({ get }) => createLoggerFromConnection(get(activeConnectionSelector)),
-});
-
-/** Creates a logger instance that will be remote if the connection is using the
- * proxy server. Otherwise it will be a client only logger. */
-export function createLoggerFromConnection(
-  connection?: ConnectionConfig
-): LoggerConnector {
-  // Check for a url and that we are using the proxy server
-  if (!connection || !connection.url || connection.proxyConnection !== true) {
-    logger.debug(
-      "Connection did not contain enough information to create a remote logger, so using a client logger instead",
-      connection
-    );
-    return new ClientLoggerConnector();
-  }
-
-  logger.debug(
-    "Creating a remote server logger using proxy server URL",
-    connection.url
-  );
-  return new ServerLoggerConnector(connection.url);
-}

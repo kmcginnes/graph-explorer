@@ -24,5 +24,8 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "references": [{ "path": "../shared" }]
+  "references": [
+    { "path": "../shared" },
+    { "path": "../graph-explorer-proxy-server" }
+  ]
 }

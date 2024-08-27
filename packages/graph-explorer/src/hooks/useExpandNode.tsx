@@ -10,17 +10,14 @@ import type {
   NeighborsRequest,
   NeighborsResponse,
 } from "@/connector/useGEFetchTypes";
-import {
-  activeConnectionSelector,
-  explorerSelector,
-  loggerSelector,
-} from "@/core/connector";
+import { activeConnectionSelector, explorerSelector } from "@/core/connector";
 import useEntities from "./useEntities";
 import { useRecoilValue } from "recoil";
 import { useMutation } from "@tanstack/react-query";
 import { Vertex } from "@/types/entities";
 import { useUpdateAllNodeCounts } from "./useUpdateNodeCounts";
 import { createDisplayError } from "@/utils/createDisplayError";
+import { remoteLogger } from "@/connector/remoteLogger";
 
 /*
 
@@ -56,7 +53,6 @@ export function ExpandNodeProvider(props: PropsWithChildren) {
   const explorer = useRecoilValue(explorerSelector);
   const [_, setEntities] = useEntities();
   const { enqueueNotification, clearNotification } = useNotification();
-  const remoteLogger = useRecoilValue(loggerSelector);
 
   const { isPending, mutate } = useMutation({
     mutationFn: async (
