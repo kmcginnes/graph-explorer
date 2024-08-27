@@ -61,7 +61,3 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
-
-function getApiServerUrl(env: Record<string, string>) {
-  const host = env.HOST ?? "localhost";
-}

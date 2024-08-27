@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import { trpc } from "@/connector/trpc";
 import { env } from "./env";
 
 /*
