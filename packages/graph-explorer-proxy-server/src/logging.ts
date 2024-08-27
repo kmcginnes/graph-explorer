@@ -5,6 +5,16 @@ import { env } from "./env.js";
 
 export type LogLevel = pino.LevelWithSilent;
 
+export const LogLevelSchema = z.enum([
+  "fatal",
+  "error",
+  "warn",
+  "info",
+  "debug",
+  "trace",
+  "silent",
+]);
+
 export const logger = createLogger();
 
 /** Create a logger instance with pino. */
@@ -50,18 +60,7 @@ export function logRequestAndResponse(req: Request, res: Response) {
   const logLevel = logLevelFromStatusCode(res.statusCode);
 
   const requestMessage = `[${req.method} ${req.path}] Response ${res.statusCode} ${res.statusMessage}`;
-
-  switch (logLevel) {
-    case "debug":
-      logger.debug(requestMessage);
-      break;
-    case "error":
-      logger.error(requestMessage);
-      break;
-    case "warn":
-      logger.warn(requestMessage);
-      break;
-  }
+  logMessage(logLevel, requestMessage);
 }
 
 /** Creates the pino-http middleware with the given logger and appropriate options. */
@@ -88,4 +87,27 @@ export function requestLoggingMiddleware() {
 
     next();
   };
+}
+
+/** Logs a message with the given log level. */
+export function logMessage(level: LogLevel, message: string) {
+  switch (level) {
+    case "silent":
+      break;
+    case "trace":
+      logger.trace(message);
+      break;
+    case "debug":
+      logger.debug(message);
+      break;
+    case "info":
+      logger.info(message);
+      break;
+    case "error":
+      logger.error(message);
+      break;
+    case "warn":
+      logger.warn(message);
+      break;
+  }
 }
