@@ -85,6 +85,9 @@ importers:
       '@emotion/utils':
         specifier: ^1.2.1
         version: 1.2.1
+      '@graph-explorer/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@mantine/core':
         specifier: ^7.9.0
         version: 7.9.0(@mantine/hooks@7.9.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
@@ -443,6 +446,9 @@ importers:
       '@aws-sdk/credential-providers':
         specifier: ^3.621.0
         version: 3.621.0(@aws-sdk/client-sso-oidc@3.635.0)
+      '@graph-explorer/shared':
+        specifier: workspace:*
+        version: link:../shared
       aws4:
         specifier: ^1.13.0
         version: 1.13.0
@@ -519,6 +525,22 @@ importers:
       vitest:
         specifier: ^2.0.5
         version: 2.0.5(@types/node@20.12.8)(happy-dom@14.12.3)(jsdom@24.1.0)
+
+  packages/shared:
+    dependencies:
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/uuid':
+        specifier: ^8.3.4
+        version: 8.3.4
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
 
 packages:
 

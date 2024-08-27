@@ -4,8 +4,6 @@ import { Vertex } from "@/types/entities";
 import {
   createRandomEdge,
   createRandomEntities,
-  createRandomInteger,
-  createRandomName,
   createRandomSchema,
   createRandomVertex,
 } from "@/utils/testing";
@@ -16,6 +14,10 @@ import { Entities } from "@/core/StateProvider/entitiesSelector";
 import { renderHookWithRecoilRoot } from "@/utils/testing";
 import { waitForValueToChange } from "@/utils/testing/waitForValueToChange";
 import { vi } from "vitest";
+import {
+  createRandomInteger,
+  createRandomName,
+} from "@graph-explorer/shared/src/utils/testing";
 
 describe("useEntities", () => {
   beforeEach(() => {

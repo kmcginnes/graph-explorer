@@ -1,10 +1,10 @@
 import { Edge, Vertex } from "@/types/entities";
 import {
   ConfigurationContextProps,
-  ConnectionConfig,
   EdgeTypeConfig,
   VertexTypeConfig,
 } from "@/core";
+import { ConnectionConfig } from "@graph-explorer/shared/src/types";
 
 export type QueryOptions = RequestInit & {
   queryId?: string;

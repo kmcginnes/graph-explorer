@@ -1,4 +1,4 @@
-import { ConnectionConfig } from "@/core";
+import { ConnectionConfig } from "@graph-explorer/shared/src/types";
 import fetchNeighbors from "./queries/fetchNeighbors";
 import fetchNeighborsCount from "./queries/fetchNeighborsCount";
 import fetchSchema from "./queries/fetchSchema";
