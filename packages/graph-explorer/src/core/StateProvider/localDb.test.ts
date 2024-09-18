@@ -19,7 +19,7 @@ import {
   createRandomDate,
   createRandomInteger,
   createRandomName,
-} from "@shared/utils/testing";
+} from "@graph-explorer/shared/utils/testing";
 
 describe("exportFromLocalForage", () => {
   let timestamp: Date;

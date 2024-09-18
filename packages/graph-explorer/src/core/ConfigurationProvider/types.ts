@@ -2,7 +2,7 @@ import {
   EdgePreferences,
   VertexPreferences,
 } from "@/core/StateProvider/userPreferences";
-import { ConnectionConfig } from "@shared/types";
+import { ConnectionConfig } from "@graph-explorer/shared";
 
 export type AttributeConfig = {
   /**

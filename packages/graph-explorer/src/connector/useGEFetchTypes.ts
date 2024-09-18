@@ -4,7 +4,7 @@ import {
   EdgeTypeConfig,
   VertexTypeConfig,
 } from "@/core";
-import { ConnectionConfig } from "@shared/types";
+import { ConnectionConfig } from "@graph-explorer/shared";
 
 export type QueryOptions = RequestInit & {
   queryId?: string;

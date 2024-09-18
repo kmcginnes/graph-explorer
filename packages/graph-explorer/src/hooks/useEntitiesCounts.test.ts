@@ -13,7 +13,7 @@ import {
   configurationAtom,
 } from "@/core/StateProvider/configuration";
 import { schemaAtom } from "@/core/StateProvider/schema";
-import { createRandomInteger } from "@shared/utils/testing";
+import { createRandomInteger } from "@graph-explorer/shared/utils/testing";
 
 function renderUseEntitiesHook(config: RawConfiguration, schema: Schema) {
   return renderHookWithRecoilRoot(

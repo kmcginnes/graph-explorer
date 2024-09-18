@@ -6,7 +6,7 @@ import { InfoTooltip, TextArea } from "@/components";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import { ConnectionConfig } from "@shared/types";
+import { ConnectionConfig } from "@graph-explorer/shared";
 import {
   ConfigurationContextProps,
   RawConfiguration,

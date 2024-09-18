@@ -7,7 +7,7 @@ import {
   createRandomName,
   createRandomDate,
   createRandomInteger,
-} from "@shared/utils/testing";
+} from "@graph-explorer/shared/utils/testing";
 import useUpdateSchema from "./useUpdateSchema";
 import { act } from "@testing-library/react";
 import { useRecoilValue } from "recoil";

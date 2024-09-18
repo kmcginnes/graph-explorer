@@ -21,7 +21,7 @@ import {
   SPARQLKeywordSearchRequest,
   SPARQLNeighborsRequest,
 } from "./types";
-import { ConnectionConfig } from "@shared/types";
+import { ConnectionConfig } from "@graph-explorer/shared";
 import { v4 } from "uuid";
 import { env, logger } from "@/utils";
 import { createLoggerFromConnection } from "@/core/connector";

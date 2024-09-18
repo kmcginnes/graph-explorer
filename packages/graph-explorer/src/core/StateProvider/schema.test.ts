@@ -4,7 +4,7 @@ import {
   createRandomVertex,
 } from "@/utils/testing";
 import { extractConfigFromEntity, updateSchemaFromEntities } from "./schema";
-import { createArray } from "@shared/utils/testing";
+import { createArray } from "@graph-explorer/shared/utils/testing";
 
 describe("schema", () => {
   describe("extractConfigFromEntity", () => {

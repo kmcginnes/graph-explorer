@@ -17,7 +17,7 @@ import {
   createRandomUrlString,
   createRecord,
   randomlyUndefined,
-} from "@shared/utils/testing";
+} from "@graph-explorer/shared/utils/testing";
 import {
   EdgePreferences,
   UserStyling,

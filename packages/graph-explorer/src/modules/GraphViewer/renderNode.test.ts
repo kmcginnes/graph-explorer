@@ -2,7 +2,10 @@
 
 // DEV NOTE: The DOMParser in happy-dom is not fully functional. Using jsdom until it works properly.
 
-import { createRandomName, createRandomColor } from "@shared/utils/testing";
+import {
+  createRandomName,
+  createRandomColor,
+} from "@graph-explorer/shared/utils/testing";
 import { ICONS_CACHE, VertexIconConfig, renderNode } from "./renderNode";
 import { vi } from "vitest";
 

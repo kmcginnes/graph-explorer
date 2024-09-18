@@ -10,7 +10,7 @@ import { createSparqlExplorer } from "@/connector/sparql/sparqlExplorer";
 import { mergedConfigurationSelector } from "./StateProvider/configuration";
 import { selector } from "recoil";
 import { equalSelector } from "@/utils/recoilState";
-import { ConnectionConfig } from "@shared/types";
+import { ConnectionConfig } from "@graph-explorer/shared";
 import { logger } from "@/utils";
 import { featureFlagsSelector } from "./featureFlags";
 

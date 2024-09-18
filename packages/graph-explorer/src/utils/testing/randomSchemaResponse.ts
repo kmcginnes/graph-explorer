@@ -9,7 +9,7 @@ import {
   createRandomName,
   randomlyUndefined,
   createRandomInteger,
-} from "@shared/utils/testing";
+} from "@graph-explorer/shared/utils/testing";
 
 /**
  * Creates a random schema response object.

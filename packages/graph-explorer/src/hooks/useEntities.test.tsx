@@ -14,7 +14,10 @@ import { Entities } from "@/core/StateProvider/entitiesSelector";
 import { renderHookWithRecoilRoot } from "@/utils/testing";
 import { waitForValueToChange } from "@/utils/testing/waitForValueToChange";
 import { vi } from "vitest";
-import { createRandomInteger, createRandomName } from "@shared/utils/testing";
+import {
+  createRandomInteger,
+  createRandomName,
+} from "@graph-explorer/shared/utils/testing";
 
 describe("useEntities", () => {
   beforeEach(() => {

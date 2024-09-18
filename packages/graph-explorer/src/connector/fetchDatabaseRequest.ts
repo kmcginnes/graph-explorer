@@ -1,4 +1,4 @@
-import { type ConnectionConfig } from "@shared/types";
+import { type ConnectionConfig } from "@graph-explorer/shared";
 import { DEFAULT_SERVICE_TYPE } from "@/utils/constants";
 import { anySignal } from "./utils/anySignal";
 import { FeatureFlags } from "@/core";
