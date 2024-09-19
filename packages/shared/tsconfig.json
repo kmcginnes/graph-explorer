@@ -3,8 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "lib": ["es2023"],
-    "module": "node16",
-    "target": "es2022",
+    "module": "NodeNext",
+    "target": "ES2022",
     "types": ["vitest/globals"],
 
     /* Path aliasing */
@@ -14,7 +14,9 @@
 
     /* Bundler mode */
     "moduleResolution": "NodeNext",
-    "emitDeclarationOnly": true
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
   },
   "include": ["src"]
 }

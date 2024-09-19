@@ -10,7 +10,7 @@
     "dev": "vite --force",
     "clean": "tsc --build --clean && rimraf dist coverage",
     "vite-build": "NODE_OPTIONS=--max_old_space_size=6144 vite build",
-    "build": "pnpm vite-build -- --mode production"
+    "build": "tsc --build && pnpm vite-build -- --mode production"
   },
   "author": "amazon",
   "license": "Apache-2.0",

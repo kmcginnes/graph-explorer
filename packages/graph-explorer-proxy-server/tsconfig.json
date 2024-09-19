@@ -19,10 +19,8 @@
     "baseUrl": "./src",
     "rootDir": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@shared/*": ["../../shared/src/*"]
+      "@/*": ["./*"]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "../shared" }, { "path": "./tsconfig.build.json" }]
+  "include": ["src"]
 }

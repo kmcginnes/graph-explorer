@@ -11,8 +11,7 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
-      "@/types/*": ["./@types/*"],
-      "@shared/*": ["../../shared/src/*"]
+      "@/types/*": ["./@types/*"]
     },
 
     /* Bundler mode */
@@ -23,6 +22,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "references": [{ "path": "../shared" }]
+  "include": ["src"]
 }
