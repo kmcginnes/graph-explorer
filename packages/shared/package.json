@@ -13,6 +13,10 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
+    "./env": {
+      "import": "./dist/env/index.js",
+      "types": "./dist/env/index.d.ts"
+    },
     "./utils/testing": {
       "import": "./dist/utils/testing/index.js",
       "types": "./dist/utils/testing/index.d.ts"

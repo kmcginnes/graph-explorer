@@ -12,7 +12,13 @@ import { IncomingHttpHeaders } from "http";
 import { logger as proxyLogger, requestLoggingMiddleware } from "./logging.js";
 import { clientRoot, proxyServerRoot } from "./paths.js";
 import { errorHandlingMiddleware, handleError } from "./error-handler.js";
-import { BooleanStringSchema, env } from "./env.js";
+import { env } from "./env.js";
+import {
+  CLIENT_PATH,
+  extractClientUrl,
+  extractServerUrl,
+} from "@graph-explorer/shared/env";
+import { BooleanStringSchema } from "@graph-explorer/shared";
 
 const app = express();
 
@@ -156,19 +162,11 @@ app.use(
 );
 
 // Host the Graph Explorer UI static files
-const staticFilesVirtualPath = "/explorer";
 const staticFilesPath = path.join(clientRoot, "dist");
 
 proxyLogger.info("Hosting client side static files from: %s", staticFilesPath);
-proxyLogger.info(
-  "Hosting client side static files at: %s",
-  staticFilesVirtualPath ?? "/"
-);
-if (staticFilesVirtualPath) {
-  app.use(staticFilesVirtualPath, express.static(staticFilesPath));
-} else {
-  app.use(express.static(staticFilesPath));
-}
+proxyLogger.info("Hosting client side static files at: %s", CLIENT_PATH);
+app.use(CLIENT_PATH, express.static(staticFilesPath));
 
 // POST endpoint for SPARQL queries.
 app.post("/sparql", (req, res, next) => {
@@ -512,44 +510,51 @@ app.use((_req, res) => {
   res.status(404).send("The requested resource was not available");
 });
 
-// Relative paths to certificate files
-const certificateKeyFilePath = path.join(
-  proxyServerRoot,
-  "cert-info/server.key"
-);
-const certificateFilePath = path.join(proxyServerRoot, "cert-info/server.crt");
-
-// Get the port numbers to listen on
-const host = env.HOST;
-const httpPort = env.PROXY_SERVER_HTTP_PORT;
-const httpsPort = env.PROXY_SERVER_HTTPS_PORT;
-const useHttps =
-  env.PROXY_SERVER_HTTPS_CONNECTION &&
-  fs.existsSync(certificateKeyFilePath) &&
-  fs.existsSync(certificateFilePath);
-
 // Log the server locations based on the configuration.
 function logServerLocations() {
-  const scheme = useHttps ? "https" : "http";
-  let port = "";
+  const serverUrl = extractServerUrl(env);
+  const clientUrl = extractClientUrl(env);
 
-  // Only show the port if it is not one of the defaults
-  if (useHttps && httpsPort !== 443) {
-    port = `:${httpsPort}`;
-  } else if (!useHttps && httpPort !== 80) {
-    port = `:${httpPort}`;
-  }
-
-  const baseUrl = `${scheme}://${host}${port}`;
-  proxyLogger.info(`Proxy server located at ${baseUrl}`);
-  proxyLogger.info(
-    `Graph Explorer UI located at: ${baseUrl}${staticFilesVirtualPath ?? ""}`
-  );
+  proxyLogger.info(`Proxy server located at ${serverUrl}`);
+  proxyLogger.info(`Graph Explorer UI located at: ${clientUrl}`);
 }
 
 // Start the server on port 80 or 443 (if HTTPS is enabled)
 function startServer() {
+  // Get the port numbers to listen on
+  const httpPort = env.PROXY_SERVER_HTTP_PORT;
+  const httpsPort = env.PROXY_SERVER_HTTPS_PORT;
+  const useHttps = env.PROXY_SERVER_HTTPS_CONNECTION;
+
   if (useHttps) {
+    // Relative paths to certificate files
+    const certificateKeyFilePath = path.join(
+      proxyServerRoot,
+      "cert-info/server.key"
+    );
+    const certificateFilePath = path.join(
+      proxyServerRoot,
+      "cert-info/server.crt"
+    );
+
+    // Ensure certificate key file exist or exit
+    if (!fs.existsSync(certificateKeyFilePath)) {
+      proxyLogger.fatal(
+        "Certificate key file is missing. Expected at %s",
+        certificateKeyFilePath
+      );
+      process.exit(1);
+    }
+
+    // Ensure certificate file exist or exit
+    if (!fs.existsSync(certificateFilePath)) {
+      proxyLogger.fatal(
+        "Certificate file is missing. Expected at %s",
+        certificateFilePath
+      );
+      process.exit(1);
+    }
+
     const options = {
       key: fs.readFileSync(certificateKeyFilePath),
       cert: fs.readFileSync(certificateFilePath),

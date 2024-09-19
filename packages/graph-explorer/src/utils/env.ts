@@ -3,5 +3,6 @@ export const env = {
   PROD: import.meta.env.MODE === "production",
   MODE: import.meta.env.MODE,
   BASE_URL: import.meta.env.BASE_URL,
+  API_URL: __API_URL__,
   GRAPH_EXP_FEEDBACK_URL: import.meta.env.GRAPH_EXP_FEEDBACK_URL,
 };

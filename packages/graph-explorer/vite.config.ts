@@ -3,9 +3,17 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { loadEnv, PluginOption } from "vite";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
+import {
+  extractClientUrl,
+  extractServerUrl,
+  EnvironmentValuesSchema,
+} from "@graph-explorer/shared/env";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+  const parsedEnv = EnvironmentValuesSchema.parse(env);
+  const serverUrl = extractServerUrl(parsedEnv);
+  const clientUrl = extractClientUrl(parsedEnv);
 
   const htmlPlugin = (): PluginOption => {
     return {
@@ -24,11 +32,13 @@ export default defineConfig(({ mode }) => {
   return {
     server: {
       host: true,
+      origin: serverUrl,
     },
-    base: env.GRAPH_EXP_ENV_ROOT_FOLDER,
+    base: clientUrl,
     envPrefix: "GRAPH_EXP",
     define: {
       __GRAPH_EXP_VERSION__: JSON.stringify(process.env.npm_package_version),
+      __API_URL__: JSON.stringify(serverUrl),
     },
     plugins: [tsconfigPaths(), htmlPlugin(), react()],
     test: {
