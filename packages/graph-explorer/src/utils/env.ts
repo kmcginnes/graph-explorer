@@ -1,7 +1,8 @@
 export const env = {
-  DEV: import.meta.env.MODE !== "production",
-  PROD: import.meta.env.MODE === "production",
-  MODE: import.meta.env.MODE,
-  BASE_URL: import.meta.env.BASE_URL,
-  GRAPH_EXP_FEEDBACK_URL: import.meta.env.GRAPH_EXP_FEEDBACK_URL,
+  DEV: process.env.NODE_ENV !== "production",
+  PROD: process.env.NODE_ENV === "production",
+  MODE: process.env.NODE_ENV,
+  BASE_URL: process.env.NEXT_PUBLIC_BASE_URL ?? window.location.href,
+  NEXT_PUBLIC_FEEDBACK_URL: process.env.NEXT_PUBLIC_FEEDBACK_URL,
+  VERSION: process.env.version,
 };

@@ -1,13 +1,35 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import queryString from "query-string";
-import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
 import { HashRouter as Router } from "react-router-dom";
-import App from "./App";
-import { RawConfiguration } from "./core";
-import ConnectedProvider from "./core/ConnectedProvider";
-import "./index.css";
+import { RawConfiguration } from "@/core";
+import ConnectedProvider from "@/core/ConnectedProvider";
+// import "./index.css";
 import "@mantine/core/styles.css";
-import { DEFAULT_SERVICE_TYPE } from "./utils/constants";
+import { DEFAULT_SERVICE_TYPE } from "@/utils/constants";
+
+const App = dynamic(() => import("../../App"), { ssr: false });
+
+export function ClientOnly() {
+  const [config, setConfig] = useState<RawConfiguration | undefined>(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const config = await grabConfig();
+      setConfig(config);
+    })();
+  }, []);
+
+  return (
+    <Router>
+      <ConnectedProvider config={config}>
+        <App />
+      </ConnectedProvider>
+    </Router>
+  );
+}
 
 const grabConfig = async (): Promise<RawConfiguration | undefined> => {
   const defaultConnectionPath = `${location.origin}/defaultConnection`;
@@ -78,28 +100,3 @@ const grabConfig = async (): Promise<RawConfiguration | undefined> => {
     );
   }
 };
-
-const BootstrapApp = () => {
-  const [config, setConfig] = useState<RawConfiguration | undefined>(undefined);
-
-  useEffect(() => {
-    (async () => {
-      const config = await grabConfig();
-      setConfig(config);
-    })();
-  }, []);
-
-  return (
-    <React.StrictMode>
-      <Router>
-        <ConnectedProvider config={config}>
-          <App />
-        </ConnectedProvider>
-      </Router>
-    </React.StrictMode>
-  );
-};
-
-const container = document.getElementById("root");
-const root = createRoot(container!);
-root.render(<BootstrapApp />);

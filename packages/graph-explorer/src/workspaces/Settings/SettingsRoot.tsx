@@ -9,7 +9,7 @@ import {
 import { Link, NavLink, Outlet, To } from "react-router-dom";
 import { PropsWithChildren, Suspense } from "react";
 import AppLoadingPage from "@/core/AppLoadingPage";
-import { cn } from "@/utils";
+import { cn, env } from "@/utils";
 import { APP_NAME } from "@/utils/constants";
 
 export default function SettingsRoot() {
@@ -18,7 +18,7 @@ export default function SettingsRoot() {
       <Workspace.TopBar logoVisible>
         <Workspace.TopBar.Title title={`${APP_NAME} Settings`} />
         <Workspace.TopBar.Version>
-          {__GRAPH_EXP_VERSION__}
+          {env.VERSION ?? "unknown"}
         </Workspace.TopBar.Version>
         <Workspace.TopBar.AdditionalControls>
           <Link to="/connections">

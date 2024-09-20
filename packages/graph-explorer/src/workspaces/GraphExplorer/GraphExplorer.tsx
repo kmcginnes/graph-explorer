@@ -1,4 +1,4 @@
-import { cn } from "@/utils";
+import { cn, env } from "@/utils";
 import debounce from "lodash/debounce";
 import { Resizable } from "re-resizable";
 import { useCallback, useEffect, useState } from "react";
@@ -180,7 +180,7 @@ const GraphExplorer = () => {
           <KeywordSearch />
         </Workspace.TopBar.Content>
         <Workspace.TopBar.Version>
-          {__GRAPH_EXP_VERSION__}
+          {env.VERSION ?? "unknown"}
         </Workspace.TopBar.Version>
         <Workspace.TopBar.AdditionalControls>
           <IconButton

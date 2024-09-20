@@ -15,6 +15,7 @@ import AvailableConnections from "@/modules/AvailableConnections";
 import ConnectionDetail from "@/modules/ConnectionDetail";
 import defaultStyles from "./Connections.styles";
 import { APP_NAME } from "@/utils/constants";
+import { env } from "process";
 
 const Connections = () => {
   const styleWithTheme = useWithTheme();
@@ -44,7 +45,7 @@ const Connections = () => {
           subtitle={`Connection: ${config?.displayLabel || config?.id || "none"}`}
         />
         <Workspace.TopBar.Version>
-          {__GRAPH_EXP_VERSION__}
+          {env.VERSION ?? "unknown"}
         </Workspace.TopBar.Version>
         <Workspace.TopBar.AdditionalControls>
           <div className="flex gap-2">

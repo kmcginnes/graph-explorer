@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { logger } from "@/utils";
+import { env, logger } from "@/utils";
 import { deserializeData, serializeData } from "./serializeData";
 import { fromFileToJson, toJsonFileData } from "@/utils/fileData";
 import saveAs from "file-saver";
@@ -132,7 +132,7 @@ export async function createBackupData(localDb: LocalDb) {
 
   const result: SerializedBackup = {
     backupSource: APP_NAME,
-    backupSourceVersion: __GRAPH_EXP_VERSION__,
+    backupSourceVersion: env.VERSION ?? "unknown",
     backupVersion: "1.0",
     backupTimestamp: new Date(),
     data: backupData,

@@ -8,3 +8,7 @@
 
 # TypeScript build cache manifests
 *.tsbuildinfo
+
+# Next
+.next
+next-env.d.ts

@@ -1,4 +1,4 @@
-import { cn } from "@/utils";
+import { cn, env } from "@/utils";
 import clone from "lodash/clone";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -99,7 +99,7 @@ function DataExplorerContent({ vertexType }: ConnectionsProps) {
           subtitle={`Connection: ${config?.displayLabel || config?.id}`}
         />
         <Workspace.TopBar.Version>
-          {__GRAPH_EXP_VERSION__}
+          {env.VERSION ?? "unknown"}
         </Workspace.TopBar.Version>
         <Workspace.TopBar.AdditionalControls>
           <Link to={"/graph-explorer"}>

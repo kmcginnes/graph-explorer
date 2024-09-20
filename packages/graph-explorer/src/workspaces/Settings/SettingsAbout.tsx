@@ -15,7 +15,7 @@ export default function SettingsAbout() {
       <PageHeading>{APP_NAME}</PageHeading>
       <SettingsSectionContainer>
         <SettingsSection>
-          <Paragraph>Version: {__GRAPH_EXP_VERSION__}</Paragraph>
+          <Paragraph>Version: {env.VERSION ?? "unknown"}</Paragraph>
         </SettingsSection>
         <SettingsSection>
           <div className="max-w-paragraph">
@@ -25,7 +25,7 @@ export default function SettingsAbout() {
               encounter an issue, please let us know.
             </Paragraph>
           </div>
-          <a href={env.GRAPH_EXP_FEEDBACK_URL} className="self-start">
+          <a href={env.NEXT_PUBLIC_FEEDBACK_URL} className="self-start">
             <Button icon={<SendIcon />}>Provide Feedback</Button>
           </a>
         </SettingsSection>

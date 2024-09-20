@@ -1,0 +1,63 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Graph Explorer",
+  description: "Graph Explorer",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <head>
+        {/* <link rel="icon" href="%BASE_URL%/favicon.ico" /> */}
+        <meta name="theme-color" content="#000000" />
+        {/* <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="%BASE_URL%/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="%BASE_URL%/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="%BASE_URL%/favicon-16x16.png"
+        />
+        <link
+          rel="mask-icon"
+          href="%PUBLIC_URL%/safari-pinned-tab.svg"
+          color="#FFFFFF"
+        /> */}
+        <meta name="theme-color" content="#ffffff" />
+        {/*     
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+     */}
+        {/* <link rel="manifest" href="%BASE_URL%/manifest.json" /> */}
+        {/*     
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+     */}
+      </head>
+
+      <body>
+        <div id="root">{children}</div>
+        {/* <script type="module" src="/src/index.tsx"></script> */}
+      </body>
+    </html>
+  );
+}
