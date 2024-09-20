@@ -15,12 +15,12 @@ const App = dynamic(() => import("../../App"), { ssr: false });
 export function ClientOnly() {
   const [config, setConfig] = useState<RawConfiguration | undefined>(undefined);
 
-  useEffect(() => {
-    (async () => {
-      const config = await grabConfig();
-      setConfig(config);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const config = await grabConfig();
+  //     setConfig(config);
+  //   })();
+  // }, []);
 
   return (
     <Router>
@@ -28,6 +28,16 @@ export function ClientOnly() {
         <App />
       </ConnectedProvider>
     </Router>
+  );
+
+  // return <Example />;
+}
+
+function Example() {
+  return (
+    <div className="mx-auto max-w-screen-xl py-20">
+      <h1 className="text-4xl font-bold">Next.js React App</h1>
+    </div>
   );
 }
 
