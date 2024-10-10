@@ -2,6 +2,7 @@ import { type ConnectionConfig } from "@shared/types";
 import { DEFAULT_SERVICE_TYPE } from "@/utils/constants";
 import { anySignal } from "./utils/anySignal";
 import { FeatureFlags } from "@/core";
+import { DatabaseRequest } from "@/data/DatabaseRequest";
 
 type NeptuneError = {
   code: string;
@@ -75,7 +76,7 @@ async function decodeErrorSafely(response: Response): Promise<any> {
 }
 
 // Construct the request headers based on the connection settings
-function getAuthHeaders(
+export function getAuthHeaders(
   connection: ConnectionConfig | undefined,
   featureFlags: FeatureFlags,
   typeHeaders: HeadersInit | undefined
@@ -96,7 +97,9 @@ function getAuthHeaders(
 }
 
 // Construct an AbortSignal for the fetch timeout if configured
-function getFetchTimeoutSignal(connection: ConnectionConfig | undefined) {
+export function getFetchTimeoutSignal(
+  connection: ConnectionConfig | undefined
+) {
   if (!connection?.fetchTimeoutMs) {
     return null;
   }
@@ -133,5 +136,26 @@ export async function fetchDatabaseRequest(
 
   // A successful response is assumed to be JSON
   const data = await response.json();
+  return data;
+}
+
+export async function fetchDatabaseRequestNew(dbRequest: DatabaseRequest) {
+  const response = await fetch("/api/db", {
+    method: "POST",
+    body: JSON.stringify(dbRequest),
+  });
+
+  if (!response.ok) {
+    const error = await decodeErrorSafely(response);
+    if (isNeptuneError(error)) {
+      throw new Error(error.detailedMessage, { cause: error });
+    }
+    throw new Error("Network response was not OK", { cause: error });
+  }
+
+  const rawText = await response.text();
+
+  // A successful response is assumed to be JSON
+  const data = JSON.parse(rawText);
   return data;
 }

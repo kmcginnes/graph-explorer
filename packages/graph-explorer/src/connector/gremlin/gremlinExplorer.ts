@@ -4,13 +4,17 @@ import fetchNeighborsCount from "./queries/fetchNeighborsCount";
 import fetchSchema from "./queries/fetchSchema";
 import fetchVertexTypeCounts from "./queries/fetchVertexTypeCounts";
 import keywordSearch from "./queries/keywordSearch";
-import { fetchDatabaseRequest } from "../fetchDatabaseRequest";
+import {
+  fetchDatabaseRequest,
+  fetchDatabaseRequestNew,
+} from "../fetchDatabaseRequest";
 import { GraphSummary } from "./types";
 import { v4 } from "uuid";
 import { Explorer, ExplorerRequestOptions } from "../useGEFetchTypes";
 import { logger } from "@/utils";
 import { createLoggerFromConnection } from "@/core/connector";
 import { FeatureFlags } from "@/core";
+import { DatabaseRequest } from "@/data/DatabaseRequest";
 
 function _gremlinFetch(
   connection: ConnectionConfig,
@@ -19,26 +23,44 @@ function _gremlinFetch(
 ) {
   return async (queryTemplate: string) => {
     logger.debug(queryTemplate);
-    const body = JSON.stringify({ query: queryTemplate });
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      Accept: "application/vnd.gremlin-v3.0+json",
-    };
-    if (options?.queryId && connection.proxyConnection === true) {
-      headers.queryId = options.queryId;
+
+    const databaseUrl = connection.proxyConnection
+      ? connection.graphDbUrl
+      : connection.url;
+
+    if (!databaseUrl) {
+      throw new Error("Must provide a database URL in the connection");
     }
 
-    return fetchDatabaseRequest(
-      connection,
-      featureFlags,
-      `${connection.url}/gremlin`,
-      {
-        method: "POST",
-        headers,
-        body,
-        ...options,
-      }
-    );
+    const dbRequest: DatabaseRequest = {
+      authMode: "public",
+      databaseUrl: databaseUrl,
+      query: queryTemplate,
+      queryEngine: connection.queryEngine ?? "gremlin",
+    };
+
+    return fetchDatabaseRequestNew(dbRequest);
+
+    // const body = JSON.stringify({ query: queryTemplate });
+    // const headers: HeadersInit = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/vnd.gremlin-v3.0+json",
+    // };
+    // if (options?.queryId && connection.proxyConnection === true) {
+    //   headers.queryId = options.queryId;
+    // }
+
+    // return fetchDatabaseRequest(
+    //   connection,
+    //   featureFlags,
+    //   `${connection.url}/gremlin`,
+    //   {
+    //     method: "POST",
+    //     headers,
+    //     body,
+    //     ...options,
+    //   }
+    // );
   };
 }
 
