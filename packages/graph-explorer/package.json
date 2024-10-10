@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "clean": "tsc --build --clean && rimraf dist coverage",
     "build": "next build",
     "start": "next start"
