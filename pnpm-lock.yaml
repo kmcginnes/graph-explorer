@@ -73,6 +73,9 @@ importers:
 
   packages/graph-explorer:
     dependencies:
+      '@aws-sdk/credential-providers':
+        specifier: ^3.651.1
+        version: 3.651.1(@aws-sdk/client-sso-oidc@3.651.1(@aws-sdk/client-sts@3.651.1))
       '@emotion/cache':
         specifier: ^11.13.1
         version: 11.13.1
@@ -166,6 +169,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.56.2
         version: 5.56.2(@tanstack/react-query@5.56.2(react@18.3.1))(react@18.3.1)
+      aws4:
+        specifier: ^1.13.2
+        version: 1.13.2
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -347,6 +353,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
+      '@types/aws4':
+        specifier: ^1.11.6
+        version: 1.11.6
       '@types/color':
         specifier: ^3.0.6
         version: 3.0.6

@@ -14,7 +14,27 @@ import { Explorer, ExplorerRequestOptions } from "../useGEFetchTypes";
 import { logger } from "@/utils";
 import { createLoggerFromConnection } from "@/core/connector";
 import { FeatureFlags } from "@/core";
-import { DatabaseRequest } from "@/data/DatabaseRequest";
+import { AuthMode, DatabaseRequest } from "@/data/DatabaseRequest";
+
+function createAuthMode(connection: ConnectionConfig): AuthMode {
+  if (connection.awsAuthEnabled) {
+    if (!connection.awsRegion || !connection.serviceType) {
+      throw new Error(
+        "Must provide region and service type when IAM is enabled"
+      );
+    }
+
+    return {
+      name: "IAM",
+      region: connection.awsRegion,
+      serviceType: connection.serviceType,
+    };
+  } else {
+    return {
+      name: "PUBLIC",
+    };
+  }
+}
 
 function _gremlinFetch(
   connection: ConnectionConfig,
@@ -32,8 +52,10 @@ function _gremlinFetch(
       throw new Error("Must provide a database URL in the connection");
     }
 
+    const authMode = createAuthMode(connection);
+
     const dbRequest: DatabaseRequest = {
-      authMode: "public",
+      authMode: authMode,
       databaseUrl: databaseUrl,
       query: queryTemplate,
       queryEngine: connection.queryEngine ?? "gremlin",
