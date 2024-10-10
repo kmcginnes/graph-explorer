@@ -333,7 +333,7 @@ may receive 404 not found responses or get connection refused errors.
   - Queries are handled via `/gremlin`, `/opencypher`, `/sparql`
   - Summary APIs are handled via `/summary`, `/pg/statistics/summary`,
     `/rdf/statistics/summary`
-  - Logging is handled by `/logger`
+  - Logging is handled by `/api/logger`
   - Default connection is handled by `/defaultConnection`
 
 > [!IMPORTANT]  

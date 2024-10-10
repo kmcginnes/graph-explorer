@@ -15,9 +15,8 @@ export class ServerLoggerConnector implements LoggerConnector {
   private readonly _baseUrl: string;
   private readonly _clientLogger: ClientLoggerConnector;
 
-  constructor(connectionUrl: string) {
-    const url = connectionUrl.replace(/\/$/, "");
-    this._baseUrl = `${url}/logger`;
+  constructor() {
+    this._baseUrl = `/api/logger`;
     this._clientLogger = new ClientLoggerConnector();
   }
 

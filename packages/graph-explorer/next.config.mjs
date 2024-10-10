@@ -6,6 +6,9 @@ const nextConfig = {
   env: {
     version: pack.version,
   },
+  experimental: {
+    serverComponentsExternalPackages: ["pino", "pino-pretty"],
+  },
 };
 
 export default nextConfig;

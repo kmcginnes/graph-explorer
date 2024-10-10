@@ -39,7 +39,7 @@ export function createOpenCypherExplorer(
   connection: ConnectionConfig,
   featureFlags: FeatureFlags
 ): Explorer {
-  const remoteLogger = createLoggerFromConnection(connection);
+  const remoteLogger = createLoggerFromConnection();
   const serviceType = connection.serviceType || DEFAULT_SERVICE_TYPE;
   return {
     connection: connection,

@@ -198,7 +198,7 @@ export function createSparqlExplorer(
   featureFlags: FeatureFlags,
   blankNodes: BlankNodesMap
 ): Explorer {
-  const remoteLogger = createLoggerFromConnection(connection);
+  const remoteLogger = createLoggerFromConnection();
   return {
     connection: connection,
     async fetchSchema(options) {

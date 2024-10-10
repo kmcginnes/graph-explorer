@@ -67,6 +67,8 @@
     "memoize-one": "^6.0.0",
     "next": "^14.2.13",
     "papaparse": "^5.4.1",
+    "pino": "^9.4.0",
+    "pino-pretty": "^11.2.2",
     "query-string": "^9.1.0",
     "rc-tabs": "^15.2.0",
     "re-resizable": "^6.9.18",

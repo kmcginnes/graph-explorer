@@ -26,11 +26,6 @@ interface DbQueryIncomingHttpHeaders extends IncomingHttpHeaders {
   "db-query-logging-enabled"?: string;
 }
 
-interface LoggerIncomingHttpHeaders extends IncomingHttpHeaders {
-  level?: string;
-  message?: string;
-}
-
 app.use(requestLoggingMiddleware());
 
 // Function to get IAM headers for AWS4 signing process.
@@ -469,40 +464,6 @@ app.get("/rdf/statistics/summary", (req, res, next) => {
     region,
     serviceType
   );
-});
-
-app.post("/logger", (req, res, next) => {
-  const headers = req.headers as LoggerIncomingHttpHeaders;
-  let message;
-  let level;
-  try {
-    if (headers["level"] === undefined) {
-      throw new Error("No log level passed.");
-    } else {
-      level = headers["level"];
-    }
-    if (headers["message"] === undefined) {
-      throw new Error("No log message passed.");
-    } else {
-      message = JSON.parse(headers["message"]).replaceAll("\\", "");
-    }
-    if (level.toLowerCase() === "error") {
-      proxyLogger.error(message);
-    } else if (level.toLowerCase() === "warn") {
-      proxyLogger.warn(message);
-    } else if (level.toLowerCase() === "info") {
-      proxyLogger.info(message);
-    } else if (level.toLowerCase() === "debug") {
-      proxyLogger.debug(message);
-    } else if (level.toLowerCase() === "trace") {
-      proxyLogger.trace(message);
-    } else {
-      throw new Error("Tried to log to an unknown level.");
-    }
-    res.send("Log received.");
-  } catch (error) {
-    next(error);
-  }
 });
 
 // Error handler middleware to log errors and send appropriate response.

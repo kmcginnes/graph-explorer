@@ -67,12 +67,6 @@ export function logRequestAndResponse(req: Request, res: Response) {
 /** Creates the pino-http middleware with the given logger and appropriate options. */
 export function requestLoggingMiddleware() {
   return (req: Request, res: Response, next: NextFunction) => {
-    // Ignore requests to logger endpoint
-    if (req.path.includes("/logger")) {
-      next();
-      return;
-    }
-
     // Ignore CORS options requests
     if (req.method === "OPTIONS") {
       next();

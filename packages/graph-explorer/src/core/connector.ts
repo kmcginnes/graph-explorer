@@ -68,31 +68,19 @@ export const explorerSelector = selector({
   },
 });
 
+// TODO: Remove this selector as it is no longer necessary
+
 /**
  * Logger based on the active connection proxy URL.
  */
 export const loggerSelector = selector<LoggerConnector>({
   key: "logger",
-  get: ({ get }) => createLoggerFromConnection(get(activeConnectionSelector)),
+  get: () => createLoggerFromConnection(),
 });
 
 /** Creates a logger instance that will be remote if the connection is using the
  * proxy server. Otherwise it will be a client only logger. */
-export function createLoggerFromConnection(
-  connection?: ConnectionConfig
-): LoggerConnector {
-  // Check for a url and that we are using the proxy server
-  if (!connection || !connection.url || connection.proxyConnection !== true) {
-    logger.debug(
-      "Connection did not contain enough information to create a remote logger, so using a client logger instead",
-      connection
-    );
-    return new ClientLoggerConnector();
-  }
-
-  logger.debug(
-    "Creating a remote server logger using proxy server URL",
-    connection.url
-  );
-  return new ServerLoggerConnector(connection.url);
+export function createLoggerFromConnection(): LoggerConnector {
+  logger.debug("Creating a remote server logger");
+  return new ServerLoggerConnector();
 }

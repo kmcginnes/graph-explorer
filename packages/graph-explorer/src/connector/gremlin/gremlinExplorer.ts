@@ -70,7 +70,7 @@ export function createGremlinExplorer(
   connection: ConnectionConfig,
   featureFlags: FeatureFlags
 ): Explorer {
-  const remoteLogger = createLoggerFromConnection(connection);
+  const remoteLogger = createLoggerFromConnection();
   return {
     connection: connection,
     async fetchSchema(options) {

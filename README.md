@@ -352,6 +352,8 @@ refer to this
 
 ## Logging
 
+<!-- TODO: Update this section with new logging information -->
+
 Logs are, by default, sent to the console and will be visible as output to the
 docker logs. If you want to access the full set of logs, you can run
 `docker logs {container name or id}`.
@@ -373,7 +375,7 @@ Within node-server.js, you'll notice three things.
 2. An `errorHandler` - This automatically sends errors to the `proxyLogger` and
    can log extra information by adding wanted text to the error object at a key
    called `extraInfo`.
-3. An endpoint called `/logger` - This is how you would log things from the
+3. An endpoint called `/api/logger` - This is how you would log things from the
    browser. It needs a log level and message header passed and you can then
    expect to see the message logged at the provided log level.
 

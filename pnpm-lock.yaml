@@ -229,6 +229,12 @@ importers:
       papaparse:
         specifier: ^5.4.1
         version: 5.4.1
+      pino:
+        specifier: ^9.4.0
+        version: 9.4.0
+      pino-pretty:
+        specifier: ^11.2.2
+        version: 11.2.2
       query-string:
         specifier: ^9.1.0
         version: 9.1.0
