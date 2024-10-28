@@ -6,6 +6,8 @@ import {
   KeywordSearchResponse,
   NeighborsRequest,
   NeighborsResponse,
+  RawQueryRequest,
+  RawQueryResponse,
   VertexIdType,
 } from "./useGEFetchTypes";
 import { VertexId } from "@/@types/entities";
@@ -25,13 +27,28 @@ export function searchQuery(
     enabled: Boolean(explorer) && Boolean(request),
     queryFn: async ({ signal }): Promise<KeywordSearchResponse | null> => {
       if (!explorer || !request) {
-        return { vertices: [] };
+        return { vertices: [], edges: [] };
       }
       return await explorer.keywordSearch(request, { signal });
     },
   });
 }
 
+export function rawQuery(
+  request: RawQueryRequest | null,
+  explorer: Explorer | null
+) {
+  return queryOptions({
+    queryKey: ["db", "query", request, explorer],
+    enabled: Boolean(explorer) && Boolean(request),
+    queryFn: async ({ signal }): Promise<RawQueryResponse> => {
+      if (!explorer || !request || !request.query) {
+        return { vertices: [], edges: [] };
+      }
+      return await explorer.rawQuery(request, { signal });
+    },
+  });
+}
 /**
  * Retrieves the neighbor info for the given node using the provided filters to
  * limit the results.

@@ -186,6 +186,7 @@ export type KeywordSearchResponse = {
    * List of vertices.
    */
   vertices: Array<Vertex>;
+  edges: Array<Edge>;
 };
 
 export type ErrorResponse = {
@@ -201,6 +202,15 @@ export type ConfigurationWithConnection = Omit<
 
 export type ExplorerRequestOptions = RequestInit & {
   queryId?: string;
+};
+
+export type RawQueryRequest = {
+  query: string;
+};
+
+export type RawQueryResponse = {
+  vertices: Array<Vertex>;
+  edges: Array<Edge>;
 };
 
 /**
@@ -226,4 +236,8 @@ export type Explorer = {
     req: KeywordSearchRequest,
     options?: ExplorerRequestOptions
   ) => Promise<KeywordSearchResponse>;
+  rawQuery: (
+    req: RawQueryRequest,
+    options?: ExplorerRequestOptions
+  ) => Promise<RawQueryResponse>;
 };

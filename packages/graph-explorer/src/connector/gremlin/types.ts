@@ -75,6 +75,11 @@ export type GEdgeList = {
   "@value": Array<GEdge>;
 };
 
+export type GEntityList = {
+  "@type": "g:List";
+  "@value": Array<GVertex | GEdge>;
+};
+
 export type GremlinFetch = <TResult = any>(
   queryTemplate: string
 ) => Promise<TResult>;

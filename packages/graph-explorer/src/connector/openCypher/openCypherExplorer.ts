@@ -87,6 +87,9 @@ export function createOpenCypherExplorer(
         req
       );
     },
+    rawQuery(_req, _options) {
+      throw new Error("Function not implemented");
+    },
   } satisfies Explorer;
 }
 
