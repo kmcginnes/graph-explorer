@@ -89,6 +89,7 @@
     "recoil": "^0.7.7",
     "swiper": "^11.1.14",
     "tailwind-merge": "^2.5.3",
+    "tailwindcss-animate": "^1.0.7",
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
