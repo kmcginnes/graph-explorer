@@ -13,6 +13,7 @@ import { logger as proxyLogger, requestLoggingMiddleware } from "./logging.js";
 import { clientRoot, proxyServerRoot } from "./paths.js";
 import { errorHandlingMiddleware, handleError } from "./error-handler.js";
 import { BooleanStringSchema, env } from "./env.js";
+import { naturalLanguageRouter } from "./natural-language.js";
 
 const app = express();
 
@@ -139,6 +140,9 @@ async function fetchData(
       serviceType
     );
     const data = await response.json();
+    if (!response.ok) {
+      proxyLogger.warn("Response data: %o", data);
+    }
     res.status(response.status);
     res.send(data);
   } catch (error) {
@@ -169,6 +173,8 @@ if (staticFilesVirtualPath) {
 } else {
   app.use(express.static(staticFilesPath));
 }
+
+app.use(naturalLanguageRouter);
 
 // POST endpoint for SPARQL queries.
 app.post("/sparql", (req, res, next) => {
