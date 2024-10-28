@@ -213,6 +213,22 @@ export type RawQueryResponse = {
   edges: Array<Edge>;
 };
 
+export type VertexDetailsRequest = {
+  vertexId: VertexId;
+};
+
+export type VertexDetailsResponse = {
+  vertex: Vertex | null;
+};
+
+export type EdgeDetailsRequest = {
+  edgeId: string;
+};
+
+export type EdgeDetailsResponse = {
+  edge: Edge | null;
+};
+
 /**
  * Abstracted interface to the common database queries used by
  * Graph Explorer.
@@ -240,4 +256,12 @@ export type Explorer = {
     req: RawQueryRequest,
     options?: ExplorerRequestOptions
   ) => Promise<RawQueryResponse>;
+  vertexDetails: (
+    req: VertexDetailsRequest,
+    options?: ExplorerRequestOptions
+  ) => Promise<VertexDetailsResponse>;
+  edgeDetails: (
+    req: EdgeDetailsRequest,
+    options?: ExplorerRequestOptions
+  ) => Promise<EdgeDetailsResponse>;
 };

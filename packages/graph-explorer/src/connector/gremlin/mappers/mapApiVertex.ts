@@ -11,6 +11,7 @@ const mapApiVertex = (
 ): Vertex => {
   const labels = apiVertex["@value"].label.split("::");
   const vt = labels[0];
+  const isFragment = apiVertex["@value"].properties == null;
 
   return {
     id: toStringId(apiVertex["@value"].id) as VertexId,
@@ -19,7 +20,8 @@ const mapApiVertex = (
     types: labels,
     neighborsCount: neighborsCount?.totalCount || 0,
     neighborsCountByType: neighborsCount?.counts || {},
-    attributes: parsePropertiesValues(apiVertex["@value"].properties),
+    attributes: parsePropertiesValues(apiVertex["@value"].properties ?? {}),
+    __isFragment: isFragment,
   };
 };
 

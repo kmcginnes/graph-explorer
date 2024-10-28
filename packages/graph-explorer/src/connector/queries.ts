@@ -1,6 +1,8 @@
 import { queryOptions } from "@tanstack/react-query";
 import {
   CountsByTypeResponse,
+  EdgeDetailsRequest,
+  EdgeDetailsResponse,
   Explorer,
   KeywordSearchRequest,
   KeywordSearchResponse,
@@ -8,6 +10,8 @@ import {
   NeighborsResponse,
   RawQueryRequest,
   RawQueryResponse,
+  VertexDetailsRequest,
+  VertexDetailsResponse,
   VertexIdType,
 } from "./useGEFetchTypes";
 import { VertexId } from "@/@types/entities";
@@ -46,6 +50,38 @@ export function rawQuery(
         return { vertices: [], edges: [] };
       }
       return await explorer.rawQuery(request, { signal });
+    },
+  });
+}
+
+export function vertexDetailsQuery(
+  request: VertexDetailsRequest | null,
+  explorer: Explorer | null
+) {
+  return queryOptions({
+    queryKey: ["db", "vertex", "details", request, explorer],
+    enabled: Boolean(explorer) && Boolean(request),
+    queryFn: async ({ signal }): Promise<VertexDetailsResponse> => {
+      if (!explorer || !request || !request.vertexId) {
+        return { vertex: null };
+      }
+      return await explorer.vertexDetails(request, { signal });
+    },
+  });
+}
+
+export function edgeDetailsQuery(
+  request: EdgeDetailsRequest | null,
+  explorer: Explorer | null
+) {
+  return queryOptions({
+    queryKey: ["db", "edge", "details", request, explorer],
+    enabled: Boolean(explorer) && Boolean(request),
+    queryFn: async ({ signal }): Promise<EdgeDetailsResponse> => {
+      if (!explorer || !request || !request.edgeId) {
+        return { edge: null };
+      }
+      return await explorer.edgeDetails(request, { signal });
     },
   });
 }

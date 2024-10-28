@@ -320,5 +320,11 @@ export function createSparqlExplorer(
     rawQuery(_req, _options) {
       throw new Error("Function not implemented");
     },
+    vertexDetails(_req, _options) {
+      throw new Error("Function not implemented");
+    },
+    edgeDetails(_req, _options) {
+      throw new Error("Function not implemented");
+    },
   } satisfies Explorer;
 }

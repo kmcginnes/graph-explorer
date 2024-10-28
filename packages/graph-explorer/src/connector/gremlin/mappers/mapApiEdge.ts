@@ -4,6 +4,7 @@ import parseEdgePropertiesValues from "./parseEdgePropertiesValues";
 import toStringId from "./toStringId";
 
 const mapApiEdge = (apiEdge: GEdge): Edge => {
+  const isFragment = apiEdge["@value"].properties == null;
   return {
     id: toStringId(apiEdge["@value"].id) as EdgeId,
     type: apiEdge["@value"].label,
@@ -12,6 +13,7 @@ const mapApiEdge = (apiEdge: GEdge): Edge => {
     target: toStringId(apiEdge["@value"].inV) as VertexId,
     targetType: apiEdge["@value"].inVLabel,
     attributes: parseEdgePropertiesValues(apiEdge["@value"].properties || {}),
+    __isFragment: isFragment,
   };
 };
 

@@ -121,5 +121,35 @@ export function createGremlinExplorer(
       remoteLogger.info("[Gremlin Explorer] Fetching raw query results...");
       return rawQuery(_gremlinFetch(connection, featureFlags, options), req);
     },
+    async vertexDetails(req, options) {
+      options ??= {};
+      options.queryId = v4();
+
+      remoteLogger.info("[Gremlin Explorer] Fetching raw query results...");
+      const result = await rawQuery(
+        _gremlinFetch(connection, featureFlags, options),
+        {
+          query: `g.V('${req.vertexId}')`,
+        }
+      );
+      return {
+        vertex: result.vertices ? result.vertices[0] : null,
+      };
+    },
+    async edgeDetails(req, options) {
+      options ??= {};
+      options.queryId = v4();
+
+      remoteLogger.info("[Gremlin Explorer] Fetching raw query results...");
+      const result = await rawQuery(
+        _gremlinFetch(connection, featureFlags, options),
+        {
+          query: `g.E('${req.edgeId}')`,
+        }
+      );
+      return {
+        edge: result.edges ? result.edges[0] : null,
+      };
+    },
   } satisfies Explorer;
 }

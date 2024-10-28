@@ -48,7 +48,7 @@ export type GVertex = {
   "@value": {
     id: string | GInt64;
     label: string;
-    properties: Record<string, Array<GVertexProperty>>;
+    properties?: Record<string, Array<GVertexProperty>>;
   };
 };
 
@@ -75,10 +75,35 @@ export type GEdgeList = {
   "@value": Array<GEdge>;
 };
 
+export type GPath = {
+  "@type": "g:Path";
+  "@value": {
+    labels: GList;
+    objects: GList;
+  };
+};
+
+export type GList = {
+  "@type": "g:List";
+  "@value": Array<GAnyValue>;
+};
+
+export type GMap = {
+  "@type": "g:Map";
+  "@value": Array<GAnyValue>;
+};
+
+export type GSet = {
+  "@type": "g:Set";
+  "@value": Array<GAnyValue>;
+};
+
 export type GEntityList = {
   "@type": "g:List";
   "@value": Array<GVertex | GEdge>;
 };
+
+export type GAnyValue = GList | GMap | GSet | GPath | GVertex | GEdge;
 
 export type GremlinFetch = <TResult = any>(
   queryTemplate: string

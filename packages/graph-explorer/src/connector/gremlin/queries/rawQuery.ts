@@ -3,10 +3,11 @@ import {
   RawQueryRequest,
   RawQueryResponse,
 } from "@/connector/useGEFetchTypes";
-import { GEntityList, GremlinFetch } from "../types";
+import { GAnyValue, GremlinFetch } from "../types";
 import isErrorResponse from "@/connector/utils/isErrorResponse";
 import mapApiVertex from "../mappers/mapApiVertex";
 import mapApiEdge from "../mappers/mapApiEdge";
+import { Edge, Vertex } from "@/@types/entities";
 
 type RawGremlinQueryResponse = {
   requestId: string;
@@ -15,7 +16,7 @@ type RawGremlinQueryResponse = {
     code: number;
   };
   result: {
-    data: GEntityList;
+    data: GAnyValue;
   };
 };
 
@@ -30,17 +31,29 @@ export default async function rawQuery(
     throw new Error(data.detailedMessage);
   }
 
-  const vertices = data.result.data["@value"]
-    .map(value => {
-      return value["@type"] === "g:Vertex" ? mapApiVertex(value) : null;
-    })
-    .filter(v => v != null);
+  const entities = extractEntities(data.result.data);
 
-  const edges = data.result.data["@value"]
-    .map(value => {
-      return value["@type"] === "g:Edge" ? mapApiEdge(value) : null;
-    })
-    .filter(e => e != null);
+  return {
+    vertices: entities.filter(e => "vertex" in e).map(e => e.vertex),
+    edges: entities.filter(e => "edge" in e).map(e => e.edge),
+  };
+}
 
-  return { vertices, edges };
+function extractEntities(
+  data: GAnyValue
+): Array<{ vertex: Vertex } | { edge: Edge }> {
+  if (data["@type"] === "g:Edge") {
+    return [{ edge: mapApiEdge(data) }];
+  } else if (data["@type"] === "g:Vertex") {
+    return [{ vertex: mapApiVertex(data) }];
+  } else if (data["@type"] === "g:Path") {
+    return extractEntities(data["@value"].objects);
+  } else if (
+    data["@type"] === "g:List" ||
+    data["@type"] === "g:Map" ||
+    data["@type"] === "g:Set"
+  ) {
+    return data["@value"].flatMap((item: GAnyValue) => extractEntities(item));
+  }
+  return [];
 }
