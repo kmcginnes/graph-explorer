@@ -98,6 +98,7 @@ export default {
     },
     fontFamily: {
       sans: [
+        "Inter",
         "Nunito Sans",
         "-apple-system",
         "BlinkMacSystemFont",
