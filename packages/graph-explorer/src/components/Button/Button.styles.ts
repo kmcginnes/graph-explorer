@@ -85,7 +85,6 @@ export const defaultStyles =
       danger: string;
     } = {
       filled: css`
-        position: relative;
         padding: 0 ${getPaddingSizeBySize(theme, size)};
         background-color: ${isDarkTheme ? primary?.dark : primary?.main};
         color: ${primary?.contrastText};
