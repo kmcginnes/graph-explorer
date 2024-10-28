@@ -1,7 +1,6 @@
 import { cn } from "@/utils";
 import type { CSSProperties, PropsWithChildren } from "react";
 import { createContext } from "react";
-import defaultStyles from "./ThemeProvider.styles.css";
 import DEFAULT_DARK_THEME from "./themes/dark";
 import DEFAULT_LIGHT_THEME from "./themes/light";
 import type { ThemeContextType } from "./types";
@@ -41,7 +40,7 @@ function ThemeProvider({
   return (
     <ThemeContext.Provider value={theme}>
       <div
-        className={cn(`${theme.themeName}-wrapper`, defaultStyles(), className)}
+        className={cn(`${theme.themeName}-wrapper`, className)}
         style={{ ...cssVariables, height: "100%" }}
       >
         {children}
