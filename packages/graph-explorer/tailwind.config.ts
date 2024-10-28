@@ -111,6 +111,16 @@ export default {
         "Helvetica Neue",
         "sans-serif",
       ],
+      mono: [
+        "ui-monospace",
+        "SFMono-Regular",
+        "Menlo",
+        "Monaco",
+        "Consolas",
+        "Liberation Mono",
+        "Courier New",
+        "monospace",
+      ],
     },
     fontWeight: {
       light: "300",
