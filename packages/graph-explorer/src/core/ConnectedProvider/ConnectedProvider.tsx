@@ -57,10 +57,10 @@ const ConnectedProvider = (
               </MantineEmotionProvider>
             </MantineProvider>
           </DndProvider>
-          <ReactQueryDevtools
+          {/* <ReactQueryDevtools
             initialIsOpen={false}
             buttonPosition="bottom-left"
-          />
+          /> */}
         </QueryClientProvider>
       </div>
     </ErrorBoundary>
