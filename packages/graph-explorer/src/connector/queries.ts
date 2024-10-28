@@ -31,7 +31,7 @@ export function searchQuery(
     enabled: Boolean(explorer) && Boolean(request),
     queryFn: async ({ signal }): Promise<KeywordSearchResponse | null> => {
       if (!explorer || !request) {
-        return { vertices: [], edges: [] };
+        return { vertices: [], edges: [], scalars: [] };
       }
       return await explorer.keywordSearch(request, { signal });
     },
@@ -47,7 +47,7 @@ export function rawQuery(
     enabled: Boolean(explorer) && Boolean(request),
     queryFn: async ({ signal }): Promise<RawQueryResponse> => {
       if (!explorer || !request || !request.query) {
-        return { vertices: [], edges: [] };
+        return { vertices: [], edges: [], scalars: [] };
       }
       return await explorer.rawQuery(request, { signal });
     },

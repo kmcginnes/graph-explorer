@@ -14,6 +14,7 @@ const mapApiVertex = (
   const isFragment = apiVertex["@value"].properties == null;
 
   return {
+    entityType: "vertex",
     id: toStringId(apiVertex["@value"].id) as VertexId,
     idType: detectIdType(apiVertex["@value"].id),
     type: vt,
