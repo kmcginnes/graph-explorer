@@ -6,6 +6,7 @@ import {
 } from "@/core/ConfigurationProvider";
 import useTextTransform from "./useTextTransform";
 import { SelectOption } from "@/components";
+import { useUpdateNodeCountsQuery } from "./useUpdateNodeCounts";
 
 export type NeighborOption = SelectOption & {
   config?: VertexTypeConfig;
@@ -15,23 +16,22 @@ export default function useNeighborsOptions(vertex: Vertex): NeighborOption[] {
   const config = useConfiguration();
   const textTransform = useTextTransform();
 
+  const query = useUpdateNodeCountsQuery(vertex.id, vertex.idType);
+
   return useMemo(() => {
-    return Object.keys(vertex.neighborsCountByType)
+    const countOfNeighborsByType = query.data?.counts ?? {};
+
+    return Object.keys(countOfNeighborsByType)
       .map(vt => {
         const vConfig = config?.getVertexTypeConfig(vt);
 
         return {
           label: vConfig?.displayLabel || textTransform(vt),
           value: vt,
-          isDisabled: vertex.__unfetchedNeighborCounts?.[vt] === 0,
+          isDisabled: countOfNeighborsByType[vt] === 0,
           config: vConfig,
         };
       })
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [
-    config,
-    textTransform,
-    vertex.neighborsCountByType,
-    vertex.__unfetchedNeighborCounts,
-  ]);
+  }, [config, textTransform, query.data]);
 }

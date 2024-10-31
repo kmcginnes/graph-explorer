@@ -1,7 +1,7 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { Vertex, VertexId } from "@/types/entities";
+import { VertexId } from "@/types/entities";
 import { useNotification } from "@/components/NotificationProvider";
 import { neighborsCountQuery } from "@/connector/queries";
 import { activeConnectionSelector, explorerSelector } from "@/core/connector";
@@ -30,7 +30,7 @@ export function useUpdateNodeCountsQuery(
  * pipeline since it uses effects for progress and error notifications.
  */
 export function useUpdateAllNodeCounts() {
-  const [entities, setEntities] = useEntities();
+  const [entities] = useEntities();
   const connection = useRecoilValue(activeConnectionSelector);
   const explorer = useRecoilValue(explorerSelector);
   const { enqueueNotification, clearNotification } = useNotification();
@@ -49,19 +49,9 @@ export function useUpdateAllNodeCounts() {
       .toArray(),
     combine: results => {
       // Combines data with existing node data and filters out undefined
-      const data = results
-        .flatMap(result => (result.data ? [result.data] : []))
-        .map(data => {
-          const prevNode = entities.nodes.get(data.nodeId);
-          const node: Vertex | undefined = prevNode
-            ? {
-                ...prevNode,
-                neighborsCount: data.totalCount,
-                neighborsCountByType: data.counts,
-              }
-            : undefined;
-          return node;
-        });
+      const data = results.flatMap(result =>
+        result.data ? [result.data] : []
+      );
 
       return {
         data: data,
@@ -71,26 +61,6 @@ export function useUpdateAllNodeCounts() {
       };
     },
   });
-
-  // Update the graph with the node counts from the query results
-  useEffect(() => {
-    // Ensure we have expanded and finished all count queries
-    if (query.pending) {
-      return;
-    }
-
-    // Update node graph with counts
-    setEntities(prev => ({
-      nodes: new Map(
-        prev.nodes.entries().map(([id, node]) => {
-          const nodeWithCounts = query.data.find(n => n?.id === id);
-
-          return [id, nodeWithCounts ?? node];
-        })
-      ),
-      edges: prev.edges,
-    }));
-  }, [query.data, query.pending, setEntities]);
 
   // Show loading notification
   useEffect(() => {
@@ -117,4 +87,6 @@ export function useUpdateAllNodeCounts() {
     });
     return () => clearNotification(notificationId);
   }, [clearNotification, query.pending, query.hasErrors, enqueueNotification]);
+
+  return query;
 }

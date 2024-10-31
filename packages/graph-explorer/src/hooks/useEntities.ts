@@ -53,38 +53,6 @@ const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
           })
         );
 
-        // Update counts filtering by defined and not hidden
-        const nodesWithoutHiddenCounts = new Map(
-          filteredNodes.entries().map(([id, node]) => {
-            const [totalNeighborCount, totalNeighborCounts] = Object.entries(
-              node.neighborsCountByType
-            ).reduce(
-              (totalNeighborsCounts, [type, count]) => {
-                if (!config?.getVertexTypeConfig(node.type)?.hidden) {
-                  totalNeighborsCounts[1][type] = count;
-                } else {
-                  totalNeighborsCounts[0] -= count;
-                }
-
-                return totalNeighborsCounts;
-              },
-              [node.neighborsCount, {}] as [
-                number,
-                typeof node.neighborsCountByType,
-              ]
-            );
-
-            return [
-              id,
-              <Vertex>{
-                ...node,
-                neighborsCount: totalNeighborCount,
-                neighborsCountByType: totalNeighborCounts,
-              },
-            ];
-          })
-        );
-
         // Filter edges that are defined and not hidden
         const filteredEdges = new Map(
           nextEntities.edges.entries().filter(([_id, edge]) => {
@@ -93,7 +61,7 @@ const useEntities = ({ disableFilters }: { disableFilters?: boolean } = {}): [
         );
 
         set(entitiesSelector, {
-          nodes: nodesWithoutHiddenCounts,
+          nodes: filteredNodes,
           edges: filteredEdges,
           preserveSelection: nextEntities.preserveSelection,
           selectNewEntities: nextEntities.selectNewEntities,

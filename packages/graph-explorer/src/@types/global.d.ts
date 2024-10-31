@@ -21,3 +21,5 @@ declare module "react" {
     onPointerLeaveCapture?: (e: React.PointerEvent<T>) => void;
   }
 }
+
+declare module "cytoscape-cola";

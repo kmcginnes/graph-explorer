@@ -2,6 +2,8 @@ import { Branded } from "@/utils";
 
 export type EdgeId = Branded<string, "EdgeId">;
 export type VertexId = Branded<string, "VertexId">;
+export type VertexLabel = Branded<string, "VertexLabel">;
+export type EdgeLabel = Branded<string, "VertexLabel">;
 
 export type Vertex = {
   /**
@@ -40,19 +42,6 @@ export type Vertex = {
    * - For RDF, subjects can be connected to other subjects which are literals
    */
   attributes: Record<string, string | number>;
-  /**
-   * The total number of neighbors.
-   * - For PG, all connected nodes independently of their direction (in/out)
-   * - For RDF, all subjects which be compliant with:
-   *   1. <resourceURI> ?pred ?subject
-   *   2. ?subject ?pred <resourceURI>
-   *   3. FILTER(!isLiteral(?subject))
-   */
-  neighborsCount: number;
-  /**
-   * The total number of neighbors by type.
-   */
-  neighborsCountByType: Record<string, number>;
 
   // The following properties are computed on run-time
   /**
@@ -65,14 +54,6 @@ export type Vertex = {
    */
   __isBlank?: boolean;
   /**
-   * Total number of non-fetched neighbors
-   */
-  __unfetchedNeighborCount?: number;
-  /**
-   * Non-fetched neighbors by type
-   */
-  __unfetchedNeighborCounts?: Record<string, number>;
-  /**
    * Fetched incoming edges connected with the vertex
    */
   __fetchedInEdgeCount?: number;
@@ -80,6 +61,12 @@ export type Vertex = {
    * Fetched outgoing edges connected with the vertex
    */
   __fetchedOutEdgeCount?: number;
+};
+
+export type VertexNeighbors = {
+  vertexId: VertexId;
+  count: number | null;
+  countByType: Map<VertexLabel, number | null>;
 };
 
 export type Edge = {

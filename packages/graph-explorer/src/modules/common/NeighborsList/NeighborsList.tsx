@@ -7,6 +7,7 @@ import defaultStyles from "./NeighborsList.styles";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { activeConnectionSelector } from "@/core/connector";
+import { useNeighborCounts } from "@/hooks/useNeighborCounts";
 
 export type NeighborsListProps = {
   vertex: Vertex;
@@ -18,16 +19,21 @@ export default function NeighborsList({ vertex }: NeighborsListProps) {
   const styleWithTheme = useWithTheme();
   const neighborsOptions = useNeighborsOptions(vertex);
   const [showMore, setShowMore] = useState(false);
+  const neighborCounts = useNeighborCounts(vertex);
+
+  const totalCountOfNeighbors = neighborCounts.totalNeighbors ?? "---";
 
   return (
     <div className={cn(styleWithTheme(defaultStyles), "section")}>
-      <div className={"title"}>Neighbors ({vertex.neighborsCount})</div>
+      <div className={"title"}>Neighbors ({totalCountOfNeighbors})</div>
       {neighborsOptions
         .slice(0, showMore ? undefined : MAX_NEIGHBOR_TYPE_ROWS)
         .map(op => {
           const neighborsInView =
-            vertex.neighborsCountByType[op.value] -
-            (vertex.__unfetchedNeighborCounts?.[op.value] ?? 0);
+            neighborCounts.totalFetchedNeighborsByType.get(op.value) ?? 0;
+          const totalNeighbors =
+            neighborCounts.totalNeighborsByType.get(op.value) ?? 0;
+
           return (
             <div key={op.value} className={"node-item"}>
               <div className={"vertex-type"}>
@@ -52,9 +58,7 @@ export default function NeighborsList({ vertex }: NeighborsListProps) {
                     {neighborsInView}
                   </Chip>
                 </Tooltip>
-                <Chip className="min-w-12">
-                  {vertex.neighborsCountByType[op.value]}
-                </Chip>
+                <Chip className="min-w-12">{totalNeighbors}</Chip>
               </div>
             </div>
           );

@@ -19,6 +19,7 @@ import VertexHeader from "@/modules/common/VertexHeader";
 import { ExpandNodeRequest } from "@/hooks/useExpandNode";
 import { useUpdateNodeCountsQuery } from "@/hooks/useUpdateNodeCounts";
 import { cn } from "@/utils";
+import { useNeighborCounts } from "@/hooks/useNeighborCounts";
 
 export type NodeExpandContentProps = {
   vertex: Vertex;
@@ -83,13 +84,16 @@ function ExpansionOptions({
 }) {
   const t = useTranslations();
 
+  const neighborCounts = useNeighborCounts(vertex);
+
   const [selectedType, setSelectedType] = useState<string>(
     firstNeighborAvailableForExpansion(neighborsOptions)?.value ?? ""
   );
   const [filters, setFilters] = useState<Array<NodeExpandFilter>>([]);
   const [limit, setLimit] = useState<number | null>(null);
 
-  const hasUnfetchedNeighbors = Boolean(vertex.__unfetchedNeighborCount);
+  const hasUnfetchedNeighbors =
+    (neighborCounts.totalUnfetchedNeighbors ?? 0) > 0;
   const hasSelectedType = Boolean(selectedType);
 
   // Reset filters when selected type changes
@@ -134,10 +138,7 @@ function ExpansionOptions({
             })),
             limit: limit || undefined,
             offset:
-              limit !== null && vertex.__unfetchedNeighborCounts
-                ? vertex.neighborsCountByType[selectedType] -
-                  vertex.__unfetchedNeighborCounts[selectedType]
-                : undefined,
+              limit !== null ? neighborCounts.totalFetchedNeighbors : undefined,
           }}
         />
       </ModuleContainerFooter>

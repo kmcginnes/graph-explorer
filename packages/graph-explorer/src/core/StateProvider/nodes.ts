@@ -1,5 +1,5 @@
-import { atom, selector } from "recoil";
-import type { Vertex, VertexId } from "@/types/entities";
+import { atom, DefaultValue, selector, selectorFamily } from "recoil";
+import type { Vertex, VertexId, VertexNeighbors } from "@/types/entities";
 import isDefaultValue from "./isDefaultValue";
 
 export function toNodeMap(nodes: Vertex[]): Map<VertexId, Vertex> {
@@ -40,6 +40,32 @@ export const nodesSelector = selector<Map<VertexId, Vertex>>({
       set(nodesOutOfFocusIdsAtom, cleanFn);
     get(nodesFilteredIdsAtom).size > 0 && set(nodesFilteredIdsAtom, cleanFn);
   },
+});
+
+export const nodeCountsMapAtom = atom<Map<VertexId, VertexNeighbors>>({
+  key: "node-counts-map",
+  default: new Map(),
+});
+
+export const nodeCountsSelector = selectorFamily({
+  key: "node-counts",
+  get:
+    (vertexId: VertexId) =>
+    ({ get }) => {
+      return vertexId ? (get(nodeCountsMapAtom).get(vertexId) ?? null) : null;
+    },
+  set:
+    (vertexId: VertexId) =>
+    ({ set }, counts: DefaultValue | VertexNeighbors | null) => {
+      set(nodeCountsMapAtom, prev => {
+        const result = new Map(prev);
+        if (counts instanceof DefaultValue || counts == null) {
+          result.delete(vertexId);
+          return result;
+        }
+        return result.set(vertexId, counts);
+      });
+    },
 });
 
 export const nodesSelectedIdsAtom = atom<Set<VertexId>>({

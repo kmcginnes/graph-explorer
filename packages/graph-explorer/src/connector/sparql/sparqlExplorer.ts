@@ -252,9 +252,13 @@ export function createSparqlExplorer(
       const bNode = blankNodes.get(req.vertexId);
 
       if (bNode?.neighbors) {
+        // return {
+        //   totalCount: bNode.vertex.neighborsCount,
+        //   counts: bNode.vertex.neighborsCountByType,
+        // };
         return {
-          totalCount: bNode.vertex.neighborsCount,
-          counts: bNode.vertex.neighborsCountByType,
+          totalCount: 0,
+          counts: {},
         };
       }
 
@@ -272,8 +276,8 @@ export function createSparqlExplorer(
           ...bNode,
           vertex: {
             ...bNode.vertex,
-            neighborsCount: response.totalCount,
-            neighborsCountByType: response.counts,
+            // neighborsCount: response.totalCount,
+            // neighborsCountByType: response.counts,
           },
           neighbors: response.neighbors,
         });

@@ -6,12 +6,18 @@ import { nodesAtom } from "@/core/StateProvider/nodes";
 import useDisplayNames from "@/hooks/useDisplayNames";
 import useTextTransform from "@/hooks/useTextTransform";
 import { VertexId } from "@/@types/entities";
+import { useUpdateAllNodeCounts } from "@/hooks/useUpdateNodeCounts";
+import { getNeighborsByIdSelector } from "@/core/StateProvider/entitiesSelector";
 
 const useNodeBadges = () => {
   const config = useConfiguration();
   const textTransform = useTextTransform();
   const getDisplayNames = useDisplayNames();
   const nodes = useRecoilValue(nodesAtom);
+
+  const neighborCountQueries = useUpdateAllNodeCounts();
+  const getExpandedNeighbors = useRecoilValue(getNeighborsByIdSelector);
+  const map = new Map(neighborCountQueries.data.map(x => [x.nodeId, x]));
 
   const nodesCurrentNames = useMemo(() => {
     return new Map(
@@ -30,6 +36,11 @@ const useNodeBadges = () => {
         // Ensure we have the node name and title
         const name = nodesCurrentNames.get(nodeData.id)?.name ?? "";
         const title = nodesCurrentNames.get(nodeData.id)?.title ?? "";
+        const counts = map.get(nodeData.id);
+        const expandedNeighbors = getExpandedNeighbors(nodeData.id);
+        const unfetched = counts
+          ? counts.totalCount - expandedNeighbors.uniqueNeighbors.size
+          : 0;
 
         return [
           {
@@ -56,8 +67,8 @@ const useNodeBadges = () => {
             hidden:
               zoomLevel === "small" ||
               outOfFocusIds.has(nodeData.id) ||
-              !nodeData.__unfetchedNeighborCount,
-            text: String(nodeData.__unfetchedNeighborCount),
+              !unfetched,
+            text: String(unfetched),
             anchor: "center",
             fontSize: 5,
             borderRadius: 4,
@@ -73,7 +84,7 @@ const useNodeBadges = () => {
           },
         ];
       },
-    [nodesCurrentNames]
+    [getExpandedNeighbors, map, nodesCurrentNames]
   );
 };
 

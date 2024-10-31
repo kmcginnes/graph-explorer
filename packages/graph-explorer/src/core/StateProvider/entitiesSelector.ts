@@ -1,7 +1,7 @@
 import isEqual from "lodash/isEqual";
 import isEqualWith from "lodash/isEqualWith";
 import type { GetRecoilValue, RecoilState, SetRecoilState } from "recoil";
-import { selector } from "recoil";
+import { selector, selectorFamily } from "recoil";
 import type { Edge, EdgeId, Vertex, VertexId } from "@/types/entities";
 import { edgesAtom, edgesSelectedIdsAtom, edgesSelector } from "./edges";
 import {
@@ -46,6 +46,89 @@ function removeFromSetIfDeleted<T>(
   return copiedSelectorIds;
 }
 
+type VertexConnection = {
+  direction: "in" | "out";
+  neighbor: {
+    id: VertexId;
+    type: string;
+  };
+  edge: Edge;
+};
+
+export const vertexNeighborsSelector = selectorFamily({
+  key: "vertex-neighbors",
+  get:
+    (vertexId: VertexId) =>
+    ({ get }) => {
+      const entities = get(entitiesSelector);
+
+      // Get all OUT connected edges: current node is source and target should exist
+      const outConnections: VertexConnection[] = entities.edges
+        .values()
+        .filter(
+          edge => edge.source === vertexId && entities.nodes.has(edge.target)
+        )
+        .flatMap(edge =>
+          edge.targetType.split("::").map(
+            type =>
+              ({
+                direction: "out",
+                edge,
+                neighbor: {
+                  id: edge.target,
+                  type,
+                },
+              }) satisfies VertexConnection
+          )
+        )
+        .toArray();
+
+      // Get all IN connected edges: current node is target and source should exist
+      const inConnections: VertexConnection[] = entities.edges
+        .values()
+        .filter(
+          edge => edge.target === vertexId && entities.nodes.has(edge.source)
+        )
+        .flatMap(edge =>
+          edge.sourceType.split("::").map(
+            type =>
+              ({
+                direction: "in",
+                edge,
+                neighbor: {
+                  id: edge.source,
+                  type,
+                },
+              }) satisfies VertexConnection
+          )
+        )
+        .toArray();
+
+      const connections = [...outConnections, ...inConnections];
+      const byType = connections.reduce((mapByType, connection) => {
+        const neighbors =
+          mapByType.get(connection.neighbor.type) ?? new Set<VertexId>();
+        neighbors.add(connection.neighbor.id);
+        return mapByType.set(connection.neighbor.type, neighbors);
+      }, new Map<string, Set<VertexId>>());
+
+      const uniqueNeighbors = new Set(connections.map(c => c.neighbor.id));
+
+      return {
+        connections,
+        byType,
+        uniqueNeighbors,
+      };
+    },
+});
+
+export const getNeighborsByIdSelector = selector({
+  key: "vertex-neighbors-by-id",
+  get: ({ get }) => {
+    return (id: VertexId) => get(vertexNeighborsSelector(id));
+  },
+});
+
 // This selector is the safer way to add entities to the graph
 // It computes stats (counts) every time that some entity is added
 const entitiesSelector = selector<Entities>({
@@ -89,52 +172,12 @@ const entitiesSelector = selector<Entities>({
           .filter(edge => edge.target === id && nonDupNodes.has(edge.source))
           .toArray();
 
-        // Re-mapping neighborsCountByType to only un-fetched counts
-        const __unfetchedNeighborCounts = Object.entries(
-          node.neighborsCountByType
-        ).reduce(
-          (counts, [type, count]) => {
-            // All edges FROM current node to TYPE that it is in the graph
-            const fetchedOutEdgesByType = outConnections.filter(
-              edge =>
-                edge.targetType.split("::").includes(type) &&
-                nonDupNodes.has(edge.target)
-            );
-
-            // All edges TO current node from TYPE that it is in the graph
-            const fetchedInEdgesByType = inConnections.filter(
-              edge =>
-                edge.sourceType.split("::").includes(type) &&
-                nonDupNodes.has(edge.source)
-            );
-
-            // Count only unique connected nodes
-            const distinctConnectedNodes = new Set([
-              ...fetchedOutEdgesByType.map(et => et.target),
-              ...fetchedInEdgesByType.map(et => et.source),
-            ]);
-
-            counts[type] = Math.max(0, count - distinctConnectedNodes.size);
-
-            return counts;
-          },
-          {} as Record<string, number>
-        );
-
         return [
           id,
           <Vertex>{
             ...node,
-            __unfetchedNeighborCounts,
             __fetchedOutEdgeCount: outConnections.length,
             __fetchedInEdgeCount: inConnections.length,
-            __unfetchedNeighborCount: Math.max(
-              0,
-              Object.values(__unfetchedNeighborCounts).reduce(
-                (sum, count) => sum + count,
-                0
-              )
-            ),
           },
         ];
       })
