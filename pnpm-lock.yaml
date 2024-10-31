@@ -187,6 +187,9 @@ importers:
       cytoscape-canvas:
         specifier: ^3.0.1
         version: 3.0.1
+      cytoscape-cola:
+        specifier: ^2.5.1
+        version: 2.5.1(cytoscape@3.31.1)
       cytoscape-d3-force:
         specifier: ^1.1.4
         version: 1.1.4(cytoscape@3.31.1)
@@ -3446,6 +3449,11 @@ packages:
   cytoscape-canvas@3.0.1:
     resolution: {integrity: sha512-R1nCLnJHGTR5fWEpNQQBPyoigdnfhnk1lOHegzmzz1Kg6yxzVf0hfdRAMa0wPAhtC4kkgyoViiIfZ/zyCqMhEQ==}
 
+  cytoscape-cola@2.5.1:
+    resolution: {integrity: sha512-4/2S9bW1LvdsEPmxXN1OEAPFPbk7DvCx2c9d+TblkQAAvptGaSgtPWCByTEGgT8UxCxcVqes2aFPO5pzwo7R2w==}
+    peerDependencies:
+      cytoscape: ^3.2.0
+
   cytoscape-d3-force@1.1.4:
     resolution: {integrity: sha512-8NjI/yEoB3YqVsdf7ud7Oh8Kyi+C9Lhh1fICmtemIo6EC1ZUtm8KcPNLkQySYO8nRS2mQKj5eVdCr7W0L8ONoQ==}
     peerDependencies:
@@ -3470,14 +3478,32 @@ packages:
     resolution: {integrity: sha512-Hx5Mtb1+hnmAKaZZ/7zL1Y5HTFYOjdDswZy/jD+1WINRU8KVi1B7+vlHdsTwY+VCFucTreoyu1RDzQJ9u0d2Hw==}
     engines: {node: '>=0.10'}
 
+  d3-dispatch@1.0.6:
+    resolution: {integrity: sha512-fVjoElzjhCEy+Hbn8KygnmMS7Or0a9sI2UzGwoB7cCtvI1XpVN9GpoYlnb3xt2YV66oXYb1fLJ8GMvP4hdU1RA==}
+
   d3-dispatch@2.0.0:
     resolution: {integrity: sha512-S/m2VsXI7gAti2pBoLClFFTMOO1HTtT0j99AuXLoGFKO6deHDdnv6ZGTxSTTUTgO1zVcv82fCOtDjYK4EECmWA==}
+
+  d3-drag@1.2.5:
+    resolution: {integrity: sha512-rD1ohlkKQwMZYkQlYVCrSFxsWPzI97+W+PaEIBNTMxRuxz9RF0Hi5nJWHGVJ3Om9d2fRTe1yOBINJyy/ahV95w==}
 
   d3-force@2.1.1:
     resolution: {integrity: sha512-nAuHEzBqMvpFVMf9OX75d00OxvOXdxY+xECIXjW6Gv8BRrXu6gAWbv/9XKrvfJ5i5DCokDW7RYE50LRoK092ew==}
 
+  d3-path@1.0.9:
+    resolution: {integrity: sha512-VLaYcn81dtHVTjEHd8B+pbe9yHWpXKZUC87PzoFmsFrJqgFwDe/qxfp5MlfsfM1V5E/iVt0MmEbWQ7FVIXh/bg==}
+
   d3-quadtree@2.0.0:
     resolution: {integrity: sha512-b0Ed2t1UUalJpc3qXzKi+cPGxeXRr4KU9YSlocN74aTzp6R/Ud43t79yLLqxHRWZfsvWXmbDWPpoENK1K539xw==}
+
+  d3-selection@1.4.2:
+    resolution: {integrity: sha512-SJ0BqYihzOjDnnlfyeHT0e30k0K1+5sR3d5fNueCNeuhZTnGw4M4o8mqJchSwgKMXCNFo+e2VTChiSJ0vYtXkg==}
+
+  d3-shape@1.3.7:
+    resolution: {integrity: sha512-EUkvKjqPFUAZyOlhY5gzCxCeI0Aep04LwIRpsZ/mLFelJiUfnK56jo5JMDSE7yyP2kLSb6LtF+S5chMk7uqPqw==}
+
+  d3-timer@1.0.10:
+    resolution: {integrity: sha512-B1JDm0XDaQC+uvo4DT79H0XmBskgS3l6Ve+1SBCfxgmtIb1AVrPIoqd+nPSv+loMX8szQ0sVUhGngL7D5QPiXw==}
 
   d3-timer@2.0.0:
     resolution: {integrity: sha512-TO4VLh0/420Y/9dO3+f9abDEFYeCUr2WZRlxJvbp4HPTQcSylXNiL6yZa9FIUvV1yRiFufl1bszTCLDqv9PWNA==}
@@ -5920,6 +5946,9 @@ packages:
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
+
+  webcola@3.4.0:
+    resolution: {integrity: sha512-4BiLXjXw3SJHo3Xd+rF+7fyClT6n7I+AR6TkBqyQ4kTsePSAMDLRCXY1f3B/kXJeP9tYn4G1TblxTO+jAt0gaw==}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -9583,6 +9612,11 @@ snapshots:
 
   cytoscape-canvas@3.0.1: {}
 
+  cytoscape-cola@2.5.1(cytoscape@3.31.1):
+    dependencies:
+      cytoscape: 3.31.1
+      webcola: 3.4.0
+
   cytoscape-d3-force@1.1.4(cytoscape@3.31.1):
     dependencies:
       cytoscape: 3.31.1
@@ -9605,7 +9639,14 @@ snapshots:
 
   cytoscape@3.31.1: {}
 
+  d3-dispatch@1.0.6: {}
+
   d3-dispatch@2.0.0: {}
+
+  d3-drag@1.2.5:
+    dependencies:
+      d3-dispatch: 1.0.6
+      d3-selection: 1.4.2
 
   d3-force@2.1.1:
     dependencies:
@@ -9613,7 +9654,17 @@ snapshots:
       d3-quadtree: 2.0.0
       d3-timer: 2.0.0
 
+  d3-path@1.0.9: {}
+
   d3-quadtree@2.0.0: {}
+
+  d3-selection@1.4.2: {}
+
+  d3-shape@1.3.7:
+    dependencies:
+      d3-path: 1.0.9
+
+  d3-timer@1.0.10: {}
 
   d3-timer@2.0.0: {}
 
@@ -12229,6 +12280,13 @@ snapshots:
       graceful-fs: 4.2.11
 
   web-streams-polyfill@3.3.3: {}
+
+  webcola@3.4.0:
+    dependencies:
+      d3-dispatch: 1.0.6
+      d3-drag: 1.2.5
+      d3-shape: 1.3.7
+      d3-timer: 1.0.10
 
   webidl-conversions@7.0.0: {}
 

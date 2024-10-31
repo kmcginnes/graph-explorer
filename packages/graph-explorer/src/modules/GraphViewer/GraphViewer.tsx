@@ -59,6 +59,10 @@ export type GraphViewerProps = {
 
 const LAYOUT_OPTIONS = [
   {
+    label: "Cola",
+    value: "COLA",
+  },
+  {
     label: "Force Directed  (F0Cose)",
     value: "F_COSE",
   },

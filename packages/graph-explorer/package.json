@@ -52,6 +52,7 @@
     "cva": "1.0.0-beta.1",
     "cytoscape": "^3.31.1",
     "cytoscape-canvas": "^3.0.1",
+    "cytoscape-cola": "^2.5.1",
     "cytoscape-d3-force": "^1.1.4",
     "cytoscape-dagre": "^2.5.0",
     "cytoscape-fcose": "^2.2.0",

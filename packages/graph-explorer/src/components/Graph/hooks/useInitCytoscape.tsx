@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { GraphProps } from "../Graph";
 import { Config, CytoscapeType } from "../Graph.model";
 import { useDeepMemo } from "@/hooks";
+import cola from "cytoscape-cola";
+
+cytoscape.use(cola);
 
 export interface UseInitCytoscapeProps
   extends Required<
