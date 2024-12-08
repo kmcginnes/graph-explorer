@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import type { PropsWithChildren, ReactElement } from "react";
+import type { PropsWithChildren } from "react";
 import { useMemo } from "react";
 import { groupChildrenByType } from "@/utils";
 import NavBarLogo from "./NavBarLogo";
@@ -92,5 +92,5 @@ WorkspaceTopBar.Version = WorkspaceTopBarVersion;
 
 export default WorkspaceTopBar as ((
   props: PropsWithChildren<WorkspaceTopBarProps>
-) => ReactElement) &
+) => React.ReactNode) &
   WorkspaceTopBarComposition & { displayName: string };

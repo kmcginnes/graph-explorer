@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import type { PropsWithChildren, ReactElement } from "react";
+import type { PropsWithChildren } from "react";
 import { useMemo } from "react";
 import { getChildrenOfType } from "@/utils";
 import getChildOfType from "@/utils/getChildOfType";
@@ -97,5 +97,5 @@ Workspace.Footer = WorkspaceFooter;
 
 export default Workspace as ((
   props: PropsWithChildren<WorkspaceProps>
-) => ReactElement) &
+) => React.ReactNode) &
   WorkspaceComposition;

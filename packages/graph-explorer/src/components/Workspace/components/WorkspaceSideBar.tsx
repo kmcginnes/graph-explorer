@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import type { PropsWithChildren, ReactElement } from "react";
+import type { PropsWithChildren } from "react";
 import { useMemo } from "react";
 import getChildOfType from "@/utils/getChildOfType";
 import getChildrenOfType from "@/utils/getChildrenOfType";
@@ -57,5 +57,5 @@ WorkspaceSideBar.Content = WorkspaceSideBarContent;
 
 export default WorkspaceSideBar as ((
   props: PropsWithChildren<WorkspaceSideBarProps>
-) => ReactElement) &
+) => React.ReactNode) &
   WorkspaceSideBarComposition & { displayName: string };
