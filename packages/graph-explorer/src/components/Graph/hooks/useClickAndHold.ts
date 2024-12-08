@@ -4,7 +4,7 @@ const NOOP = () => {};
 
 const useClickAndHold = (effect = NOOP) => {
   const isHeld = useRef(false);
-  const effectFn = useRef<() => void>();
+  const effectFn = useRef<() => void>(undefined);
   effectFn.current = effect;
 
   const runEffect = useCallback(() => {
