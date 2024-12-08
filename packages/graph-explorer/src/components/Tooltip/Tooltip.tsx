@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import type { PropsWithChildren, ReactNode } from "react";
 import { cloneElement, useEffect } from "react";
 import { Arrow, useHover, useLayer } from "react-laag";
