@@ -92,7 +92,7 @@ export const Input = (
             )
         : (props.onChange as (v: string) => void),
     },
-    (ref as RefObject<HTMLInputElement>) || localRef
+    (ref as RefObject<HTMLInputElement | null>) || localRef
   );
 
   const clickHandlers = onClick ? { onClick } : {};

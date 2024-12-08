@@ -81,7 +81,7 @@ export type AdvancedListProps<T extends object> = {
   hideEmptyState?: boolean;
   renderPopover?: (
     item: AdvancedListItemType<T>,
-    itemRef: RefObject<HTMLDivElement>
+    itemRef: RefObject<HTMLDivElement | null>
   ) => ReactNode;
   hidePopover?: boolean;
   disableVirtualization?: boolean;

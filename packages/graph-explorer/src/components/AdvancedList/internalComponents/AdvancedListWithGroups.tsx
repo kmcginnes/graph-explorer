@@ -60,7 +60,7 @@ type ElementsListWithGroupsProps<T extends object> = {
   hideCount?: boolean;
   renderPopover?: (
     item: AdvancedListItemType<any>,
-    itemRef: RefObject<HTMLDivElement>
+    itemRef: RefObject<HTMLDivElement | null>
   ) => ReactNode;
   hidePopover?: boolean;
   activeItemIds?: string[];

@@ -30,7 +30,7 @@ const SelectPopover = (
       shouldCloseOnBlur: true,
       isDismissable: false,
     },
-    ref as RefObject<HTMLDivElement>
+    ref as RefObject<HTMLDivElement | null>
   );
   // Add a hidden <DismissButton> component at the end of the popover
   // to allow screen reader users to dismiss the popup easily.

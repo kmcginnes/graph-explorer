@@ -26,7 +26,7 @@ export const Button = (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     props,
-    ref as RefObject<HTMLButtonElement>
+    ref as RefObject<HTMLButtonElement | null>
   );
   const {
     children,

@@ -26,7 +26,7 @@ const ListBox = forwardRef(
     const { listBoxProps } = useListBox(
       props,
       state,
-      ref as RefObject<HTMLUListElement>
+      ref as RefObject<HTMLUListElement | null>
     );
 
     return (

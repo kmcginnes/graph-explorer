@@ -34,7 +34,7 @@ type AdvancedListItemProps<T extends object> = {
   overrideTitle?: ReactNode;
   renderPopover?: (
     item: AdvancedListItemType<any>,
-    itemRef: RefObject<HTMLDivElement>
+    itemRef: RefObject<HTMLDivElement | null>
   ) => ReactNode;
   hidePopover?: boolean;
   isActive?: boolean;

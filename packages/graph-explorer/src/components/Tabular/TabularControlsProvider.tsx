@@ -11,9 +11,9 @@ import {
 import type { TabularInstance } from "./helpers/tableInstanceToTabularInstance";
 
 type TabularContextValue<T extends object> = {
-  tableRef: RefObject<HTMLDivElement>;
+  tableRef: RefObject<HTMLDivElement | null>;
   instance: TabularInstance<T>;
-  headerControlsRef: RefObject<HTMLDivElement>;
+  headerControlsRef: RefObject<HTMLDivElement | null>;
   headerControlsPosition?: string;
   setHeaderControlsPosition(position: CSSProperties["position"]): void;
   disablePagination?: boolean;

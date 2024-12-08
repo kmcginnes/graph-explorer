@@ -63,7 +63,7 @@ export const TextArea = (
   const localRef = useRef<HTMLTextAreaElement>(null);
   const { labelProps, inputProps } = useTextField(
     props,
-    (ref as RefObject<HTMLTextAreaElement>) || localRef
+    (ref as RefObject<HTMLTextAreaElement | null>) || localRef
   );
 
   const clickHandlers = onClick ? { onClick } : {};

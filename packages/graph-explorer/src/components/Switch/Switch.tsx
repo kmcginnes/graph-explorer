@@ -47,12 +47,12 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         setSelected: (isSelected: boolean) => onChange(isSelected),
         toggle: () => onChange(!isSelected),
       },
-      ref as RefObject<HTMLInputElement>
+      ref as RefObject<HTMLInputElement | null>
     );
     const { isFocusVisible, focusProps } = useFocusRing();
     const styleWithTheme = useWithTheme();
     return (
-      <label
+      (<label
         onClick={e => e.stopPropagation()}
         className={cn(className, styleWithTheme(defaultSwitchLabelStyles), {
           ["switch-label-disabled"]: isDisabled,
@@ -63,7 +63,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           <input
             {...inputProps}
             {...focusProps}
-            ref={ref as RefObject<HTMLInputElement>}
+            ref={ref as RefObject<HTMLInputElement | null>}
           />
         </VisuallyHidden>
         {labelPosition === "left" && <>{props.children}</>}
@@ -86,7 +86,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           </div>
         </div>
         {labelPosition === "right" && <>{props.children}</>}
-      </label>
+      </label>)
     );
   }
 );
