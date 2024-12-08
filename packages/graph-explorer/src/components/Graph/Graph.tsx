@@ -12,6 +12,7 @@ import {
   useCallback,
   useImperativeHandle,
   useState,
+  type JSX,
 } from "react";
 import type {
   Config,

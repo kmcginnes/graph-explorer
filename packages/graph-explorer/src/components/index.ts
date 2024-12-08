@@ -1,4 +1,4 @@
-import { ComponentProps, JSXElementConstructor } from "react";
+import { ComponentProps, JSXElementConstructor, type JSX } from "react";
 
 export { default as AdvancedList } from "./AdvancedList";
 export * from "./AdvancedList";
