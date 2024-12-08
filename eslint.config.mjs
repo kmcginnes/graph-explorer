@@ -13,12 +13,30 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const gitignorePath = path.resolve(__dirname, ".gitignore");
 
-export default [
+export default tseslint.config(
   includeIgnoreFile(gitignorePath),
+  {
+    ignores: [
+      "**/tailwind.config.ts",
+      "**/eslint.config.mjs",
+      "**/vitest.config.ts",
+      "**/vitest.workspace.ts",
+      "**/*.config.js",
+    ],
+  },
   { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
+  { settings: { react: { version: "18" } } },
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.recommendedTypeChecked,
   reactLint.configs.flat.recommended,
   {
     plugins: { "react-hooks": fixupPluginRules(reactHooksLint) },
@@ -35,12 +53,6 @@ export default [
   eslintConfigPrettier,
   // General rules
   {
-    ignores: ["tailwind.config.ts"],
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
-    },
     rules: {
       "no-console": ["error", { allow: ["warn", "error"] }],
 
@@ -86,6 +98,5 @@ export default [
       "@tanstack/query/no-rest-destructuring": "warn",
       "@tanstack/query/stable-query-client": "error",
     },
-    settings: { react: { version: "18" } },
-  },
-];
+  }
+);
