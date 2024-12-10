@@ -3,13 +3,12 @@ import type { AriaTextFieldOptions } from "@react-aria/textfield";
 import { useTextField } from "@react-aria/textfield";
 import type { ValueBase } from "@react-types/shared";
 import type {
-  ForwardedRef,
   InputHTMLAttributes,
   MouseEventHandler,
   ReactNode,
   RefObject,
 } from "react";
-import { forwardRef, useRef } from "react";
+import { useRef } from "react";
 import { useWithTheme } from "@/core";
 import { inputContainerStyles } from "./Input.styles";
 
@@ -32,6 +31,7 @@ export interface BaseInputProps
   onClick?: MouseEventHandler;
   clearButton?: ReactNode;
   overrideInputProps?: InputHTMLAttributes<HTMLInputElement>;
+  ref?: RefObject<HTMLInputElement>;
 }
 
 interface TextInputProps extends BaseInputProps, ValueBase<string> {}
@@ -49,22 +49,20 @@ export type InputProps = TextInputProps | NumberInputProps;
 const isNumberInput = (props: InputProps): props is NumberInputProps =>
   props.type === "number";
 
-export const Input = (
-  {
-    labelPlacement = "top",
-    size = "md",
-    fullWidth = false,
-    hideError = false,
-    startAdornment,
-    endAdornment,
-    noMargin = false,
-    onClick,
-    clearButton,
-    overrideInputProps,
-    ...props
-  }: InputProps,
-  ref: ForwardedRef<HTMLInputElement>
-) => {
+function Input({
+  labelPlacement = "top",
+  size = "md",
+  fullWidth = false,
+  hideError = false,
+  startAdornment,
+  endAdornment,
+  noMargin = false,
+  onClick,
+  clearButton,
+  overrideInputProps,
+  ref,
+  ...props
+}: InputProps) {
   const {
     label,
     className,
@@ -151,6 +149,6 @@ export const Input = (
       </div>
     </div>
   );
-};
+}
 
-export default forwardRef<HTMLInputElement, InputProps>(Input);
+export default Input;
