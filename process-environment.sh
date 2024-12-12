@@ -75,3 +75,54 @@ if [ -n "$PUBLIC_OR_PROXY_ENDPOINT" ]; then
     echo "\"GRAPH_EXP_CONNECTION_URL\":\"${GRAPH_CONNECTION_URL}\"," >> ./packages/graph-explorer/defaultConnection.json
     echo -e "\"GRAPH_EXP_AWS_REGION\":\"${AWS_REGION}\"\n}" >> ./packages/graph-explorer/defaultConnection.json
 fi
+
+# Create the server URL environment variable
+
+# Determine if we should use HTTPS or HTTP, checking both 
+# GRAPH_EXP_HTTPS_CONNECTION and PROXY_SERVER_HTTPS_CONNECTION
+GRAPH_EXP_REVISED_HTTPS="false"
+if [[ "$GRAPH_EXP_HTTPS_CONNECTION" == "true" ]]; then
+  GRAPH_EXP_REVISED_HTTPS="true"
+fi
+if [[ "$PROXY_SERVER_HTTPS_CONNECTION" == "true" ]]; then
+  GRAPH_EXP_REVISED_HTTPS="true"
+fi
+
+# Set the protocol and port based on the HTTPS setting
+if [[ "$GRAPH_EXP_REVISED_HTTPS" == "true" ]]; then
+  PROTOCOL="https"
+  PROVIDED_PORT="$PROXY_SERVER_HTTPS_PORT"
+  DEFAULT_PORT="443"
+else
+  PROTOCOL="http"
+  PROVIDED_PORT="$PROXY_SERVER_HTTP_PORT"
+  DEFAULT_PORT="80"
+fi
+
+# Set port or use default port
+if [ -n "$PROVIDED_PORT" ]; then
+  GRAPH_EXP_REVISED_PORT="$PROVIDED_PORT"
+else
+  GRAPH_EXP_REVISED_PORT="$DEFAULT_PORT"
+fi
+
+# Set the hostname or use the default hostname
+if [ -n "$HOST" ]; then
+  GRAPH_EXP_REVISED_CERTIFICATE_HOSTNAME="$HOST"
+else
+  GRAPH_EXP_REVISED_CERTIFICATE_HOSTNAME="localhost"
+fi
+
+# Construct the full URL using the proxy server URL if provided
+if [[ -n "$PUBLIC_OR_PROXY_ENDPOINT" ]]; then
+  GRAPH_EXP_REVISED_PUBLIC_SERVER_URL="$PUBLIC_OR_PROXY_ENDPOINT"
+else
+  GRAPH_EXP_REVISED_PUBLIC_SERVER_URL="${PROTOCOL}://$GRAPH_EXP_REVISED_CERTIFICATE_HOSTNAME:$GRAPH_EXP_REVISED_PORT"
+fi
+
+
+# Export the new environment variable
+export GRAPH_EXP_REVISED_PUBLIC_SERVER_URL
+export GRAPH_EXP_REVISED_CERTIFICATE_HOSTNAME
+export GRAPH_EXP_REVISED_PORT
+export GRAPH_EXP_REVISED_HTTPS

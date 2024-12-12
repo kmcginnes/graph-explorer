@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ./process-environment.sh
+./createServerUrl.sh
 
 PROXY_SERVER_HTTPS_CONNECTION_VALUE=$(grep -e 'PROXY_SERVER_HTTPS_CONNECTION' ./packages/graph-explorer/.env | cut -d "=" -f 2)
 

@@ -520,30 +520,18 @@ const certificateKeyFilePath = path.join(
 const certificateFilePath = path.join(proxyServerRoot, "cert-info/server.crt");
 
 // Get the port numbers to listen on
-const host = env.HOST;
-const httpPort = env.PROXY_SERVER_HTTP_PORT;
-const httpsPort = env.PROXY_SERVER_HTTPS_PORT;
 const useHttps =
-  env.PROXY_SERVER_HTTPS_CONNECTION &&
+  env.GRAPH_EXP_REVISED_HTTPS &&
   fs.existsSync(certificateKeyFilePath) &&
   fs.existsSync(certificateFilePath);
+const port = env.GRAPH_EXP_REVISED_PORT ?? (useHttps ? 443 : 80);
 
 // Log the server locations based on the configuration.
 function logServerLocations() {
-  const scheme = useHttps ? "https" : "http";
-  let port = "";
-
-  // Only show the port if it is not one of the defaults
-  if (useHttps && httpsPort !== 443) {
-    port = `:${httpsPort}`;
-  } else if (!useHttps && httpPort !== 80) {
-    port = `:${httpPort}`;
-  }
-
-  const baseUrl = `${scheme}://${host}${port}`;
-  proxyLogger.info(`Proxy server located at ${baseUrl}`);
+  const baseUrl = env.GRAPH_EXP_REVISED_PUBLIC_SERVER_URL;
+  proxyLogger.info(`Public Graph Explorer base URL is: ${baseUrl}`);
   proxyLogger.info(
-    `Graph Explorer UI located at: ${baseUrl}${staticFilesVirtualPath ?? ""}`
+    `Public Graph Explorer UI URL is: ${baseUrl}${staticFilesVirtualPath ?? ""}`
   );
 }
 
@@ -554,11 +542,11 @@ function startServer() {
       key: fs.readFileSync(certificateKeyFilePath),
       cert: fs.readFileSync(certificateFilePath),
     };
-    return https.createServer(options, app).listen(httpsPort, () => {
+    return https.createServer(options, app).listen(port, () => {
       logServerLocations();
     });
   } else {
-    return app.listen(httpPort, () => {
+    return app.listen(port, () => {
       logServerLocations();
     });
   }

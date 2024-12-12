@@ -1,0 +1,6 @@
+{
+  "GRAPH_EXP_PUBLIC_OR_PROXY_ENDPOINT": "http://localhost",
+  "GRAPH_EXP_CONNECTION_URL": "https://db-neptune-gx-data-generator.cluster-cjiepzx2kerx.us-west-2.neptune.amazonaws.com:8182",
+  "GRAPH_EXP_USING_PROXY_SERVER": true,
+  "GRAPH_EXP_GRAPH_TYPE": "gremlin"
+}
