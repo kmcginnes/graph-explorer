@@ -13,16 +13,16 @@ export const getSelectThemeWithDefaults = memoize(
       const defaultStylesByVariantAndValidationState = {
         default: {
           invalid: {
-            background: background.contrast,
+            background: background.input,
             color: text.primary,
             border: `1px solid ${error.main}`,
             placeholder: text.disabled,
             label: error.main,
           },
           valid: {
-            background: background.contrast,
+            background: background.input,
             color: text.primary,
-            border: `1px solid transparent`,
+            border: `1px solid ${palette.border}`,
             placeholder: text.disabled,
             label: text.primary,
           },
@@ -96,19 +96,20 @@ export const getSelectThemeWithDefaults = memoize(
         disabledOpacity: baseFormTheme?.disabledOpacity || "70%",
         padding: "0",
         paddingSmall: "0",
+        boxShadow: theme.shadow.sm,
         focus: {
           outlineColor: `0 0 0 1px
           ${
             styleByValidationState[validationState || "valid"].input.focus
               .shadow
           }`,
-          background:
-            baseFormTheme?.focus?.background || background.contrastSecondary,
+          // background:
+          //   baseFormTheme?.focus?.background || background.contrastSecondary,
           color: baseFormTheme?.focus?.color || text.primary,
         },
         hover: {
-          background:
-            baseFormTheme?.hover?.background || background.contrastSecondary,
+          // background:
+          //   baseFormTheme?.hover?.background || background.contrastSecondary,
           color: baseFormTheme?.hover?.color || text.primary,
         },
         label: {

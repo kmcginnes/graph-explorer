@@ -4,21 +4,55 @@ import React from "react";
 import { IconButton, IconButtonProps } from "@/components/IconButton";
 import { XIcon } from "lucide-react";
 
+type PanelVariant = "default" | "sidebar";
+
 interface PanelProps extends React.ComponentPropsWithoutRef<"div"> {
-  variant?: "default" | "sidebar";
+  variant?: PanelVariant;
+}
+
+type PanelContextValue = {
+  variant: PanelVariant;
+};
+
+const PanelContext = React.createContext<PanelContextValue | null>(null);
+
+function PanelProvider({
+  variant,
+  children,
+}: {
+  variant: PanelVariant;
+  children: React.ReactNode;
+}) {
+  return (
+    <PanelContext.Provider value={{ variant }}>
+      {children}
+    </PanelContext.Provider>
+  );
+}
+
+function usePanelVariant() {
+  const context = React.useContext(PanelContext);
+  if (!context) {
+    throw new Error("usePanelVariant must be used within a PanelProvider");
+  }
+  return context.variant;
 }
 
 const Panel = React.forwardRef<React.ElementRef<"div">, PanelProps>(
   ({ variant = "default", className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "bg-background-default text-text-primary flex h-full flex-col overflow-hidden",
-        variant === "default" && "shadow-base rounded",
-        className
-      )}
-      {...props}
-    />
+    <PanelProvider variant={variant}>
+      <div
+        ref={ref}
+        className={cn(
+          "text-text-primary flex h-full flex-col overflow-hidden",
+          variant === "default"
+            ? "shadow-base bg-background-default rounded"
+            : "bg-background-secondary",
+          className
+        )}
+        {...props}
+      />
+    </PanelProvider>
   )
 );
 Panel.displayName = "Panel";
@@ -26,16 +60,22 @@ Panel.displayName = "Panel";
 const PanelContent = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "bg-background-default flex h-full w-full grow flex-col overflow-y-auto",
-      className
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const variant = usePanelVariant();
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "flex h-full w-full grow flex-col overflow-y-auto",
+        variant === "default"
+          ? "bg-background-default"
+          : "bg-background-secondary",
+        className
+      )}
+      {...props}
+    />
+  );
+});
 PanelContent.displayName = "PanelContent";
 
 export type Action = {
@@ -54,32 +94,45 @@ export type Action = {
 const PanelHeader = React.forwardRef<
   React.ElementRef<"div">,
   React.PropsWithChildren<React.ComponentPropsWithoutRef<"div">>
->(({ className, children, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "bg-background-default flex min-h-[48px] w-full shrink-0 items-center gap-4 border-b px-3 py-1",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </div>
-));
+>(({ className, children, ...props }, ref) => {
+  const variant = usePanelVariant();
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "flex min-h-[48px] w-full shrink-0 items-center gap-4 border-b px-3 py-1",
+        variant === "default" && "bg-background-default",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
 PanelHeader.displayName = "PanelHeader";
 
 const PanelFooter = React.forwardRef<
   React.ElementRef<"div">,
   React.PropsWithChildren<React.ComponentPropsWithoutRef<"div">>
->(({ className, children, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("bg-background-default w-full border-t px-3 py-3", className)}
-    {...props}
-  >
-    {children}
-  </div>
-));
+>(({ className, children, ...props }, ref) => {
+  const variant = usePanelVariant();
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "w-full border-t px-3 py-3",
+        variant === "default"
+          ? "bg-background-default"
+          : "bg-background-secondary",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
 PanelFooter.displayName = "PanelFooter";
 
 const PanelTitle = React.forwardRef<

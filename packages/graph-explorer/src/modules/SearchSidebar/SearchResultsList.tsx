@@ -73,7 +73,7 @@ function LoadedResults({ vertices, edges, scalars }: MappedQueryResults) {
 
   return (
     <>
-      <div className="bg-background-contrast/35 grow p-3">
+      <div className="grow p-3">
         <ul className="border-divider flex flex-col overflow-hidden rounded-xl border shadow">
           {vertices.map(entity => (
             <li

@@ -35,12 +35,12 @@ const WorkspaceSideBar = ({
   return (
     <div
       className={cn(
-        "shadow-left bg-background-default flex",
+        "shadow-left bg-background-secondary flex",
         direction === "row" && "flex-row",
         direction === "row-reverse" && "flex-row-reverse"
       )}
     >
-      <div className="bg-brand-100 text-brand-900 dark:text-brand-100 flex flex-col gap-2 p-2 dark:bg-gray-900">
+      <div className="text-brand-900 dark:text-brand-100 flex flex-col gap-2 border-x p-2 dark:bg-gray-900">
         {sidebarActions}
       </div>
       {sidebarContent}

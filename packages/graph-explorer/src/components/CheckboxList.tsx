@@ -61,7 +61,7 @@ export default function CheckboxList({
   return (
     <div className={cn("space-y-2", className)}>
       {title && <div className="text-base font-medium">{title}</div>}
-      <div className="border-divider flex flex-col gap-3 rounded-lg border py-3">
+      <div className="border-divider bg-background-default flex flex-col gap-3 rounded-lg border py-3">
         {checkboxes.map(checkbox => {
           return (
             <Label
