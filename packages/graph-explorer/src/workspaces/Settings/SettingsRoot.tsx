@@ -11,6 +11,7 @@ import { PropsWithChildren, Suspense } from "react";
 import AppLoadingPage from "@/core/AppLoadingPage";
 import { cn } from "@/utils";
 import { APP_NAME } from "@/utils/constants";
+import { cva } from "cva";
 
 export default function SettingsRoot() {
   return (
@@ -61,17 +62,26 @@ function SideBar() {
   );
 }
 
+const sidebarItemStyles = cva({
+  base: "text-text-secondary font-base hover:bg-background-contrast flex w-full flex-row items-center rounded-md px-2 py-1 text-lg",
+  variants: {
+    variant: {
+      default: "",
+      active:
+        "bg-primary-main text-primary-contrastText hover:bg-primary-light font-bold",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
 function SideBarItem(props: PropsWithChildren<{ to: To }>) {
   return (
     <NavLink
       to={props.to}
       className={({ isActive }) =>
-        cn(
-          "flex w-full flex-row items-center rounded-md px-2 py-1 text-lg",
-          isActive &&
-            "bg-primary-main text-primary-contrastText hover:bg-primary-light font-bold",
-          !isActive && "text-text-secondary font-base hover:bg-gray-200"
-        )
+        cn(sidebarItemStyles({ variant: isActive ? "active" : "default" }))
       }
     >
       <ForwardIcon className="h-6 w-6" />

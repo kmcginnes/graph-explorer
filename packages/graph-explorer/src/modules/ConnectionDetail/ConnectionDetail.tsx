@@ -36,6 +36,8 @@ import saveConfigurationToFile from "@/utils/saveConfigurationToFile";
 import CreateConnection from "@/modules/CreateConnection";
 import ConnectionData from "./ConnectionData";
 import defaultStyles from "./ConnectionDetail.styles";
+import { Label } from "@/components/radix";
+import { InfoBar, InfoBarItem } from "./InfoBar";
 
 export type ConnectionDetailProps = {
   isSync: boolean;
@@ -135,22 +137,26 @@ const ConnectionDetail = ({ isSync, onSyncChange }: ConnectionDetailProps) => {
         </PanelHeaderActions>
       </PanelHeader>
       <PanelContent>
-        <div className="info-bar">
-          <div className="item">
-            <div className="tag">Type</div>
-            <div className="value">{t("connection-detail.graph-type")}</div>
-          </div>
-          <div className="item">
-            <div className="tag">URL</div>
-            <div className="value">{config.connection?.url}</div>
-          </div>
+        <InfoBar>
+          <InfoBarItem>
+            <Label>Type</Label>
+            <div className="text-text-primary font-medium">
+              {t("connection-detail.graph-type")}
+            </div>
+          </InfoBarItem>
+          <InfoBarItem>
+            <Label>URL</Label>
+            <div className="text-text-primary font-medium">
+              {config.connection?.url}
+            </div>
+          </InfoBarItem>
           {!!lastSyncUpdate && (
-            <div className="item">
-              <div className="tag">
-                <div>Last Synchronization</div>
-              </div>
+            <InfoBarItem>
+              <Label>Last Synchronization</Label>
               {!lastSyncFail && (
-                <div className="value">{formatDate(lastSyncUpdate)}</div>
+                <div className="text-text-primary font-medium">
+                  {formatDate(lastSyncUpdate)}
+                </div>
               )}
               {!lastSyncUpdate && !lastSyncFail && (
                 <Chip variant="warning">Not Synchronized</Chip>
@@ -158,12 +164,12 @@ const ConnectionDetail = ({ isSync, onSyncChange }: ConnectionDetailProps) => {
               {lastSyncFail && (
                 <Chip variant="error">Synchronization Failed</Chip>
               )}
-            </div>
+            </InfoBarItem>
           )}
-          <NotInProduction featureFlag={showDebugActionsAtom}>
-            <DebugActions />
-          </NotInProduction>
-        </div>
+        </InfoBar>
+        <NotInProduction featureFlag={showDebugActionsAtom}>
+          <DebugActions />
+        </NotInProduction>
         {!isSync && !!lastSyncUpdate && <ConnectionData />}
         {!lastSyncUpdate && !isSync && (
           <PanelEmptyState
@@ -274,18 +280,24 @@ function DebugActions() {
   };
 
   return (
-    <div className="item">
-      <div className="tag">Debug Actions</div>
-      <div className="flex flex-wrap gap-2">
-        <Button onPress={() => deleteSchema()}>Delete Schema</Button>
-        <Button onPress={() => resetSchemaLastUpdated()}>
-          Reset Last Updated
-        </Button>
-        <Button onPress={() => setSchemaSyncFailed()}>Last Sync Failed</Button>
-        <Button onPress={() => resetVertexTotals()}>Reset Vertex Totals</Button>
-        <Button onPress={() => resetAllTotals()}>Reset All Totals</Button>
-      </div>
-    </div>
+    <InfoBar>
+      <InfoBarItem>
+        <Label>Debug Actions</Label>
+        <div className="flex flex-wrap gap-2">
+          <Button onPress={() => deleteSchema()}>Delete Schema</Button>
+          <Button onPress={() => resetSchemaLastUpdated()}>
+            Reset Last Updated
+          </Button>
+          <Button onPress={() => setSchemaSyncFailed()}>
+            Last Sync Failed
+          </Button>
+          <Button onPress={() => resetVertexTotals()}>
+            Reset Vertex Totals
+          </Button>
+          <Button onPress={() => resetAllTotals()}>Reset All Totals</Button>
+        </div>
+      </InfoBarItem>
+    </InfoBar>
   );
 }
 

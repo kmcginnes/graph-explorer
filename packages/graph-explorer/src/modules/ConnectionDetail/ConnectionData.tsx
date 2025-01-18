@@ -25,6 +25,8 @@ import useTranslations from "@/hooks/useTranslations";
 import defaultStyles from "./ConnectionDetail.styles";
 import { Virtuoso } from "react-virtuoso";
 import React from "react";
+import { Label } from "@/components/radix";
+import { InfoBar, InfoBarItem } from "./InfoBar";
 
 const ConnectionData = () => {
   const styleWithTheme = useWithTheme();
@@ -33,32 +35,28 @@ const ConnectionData = () => {
 
   return (
     <div className={cn(styleWithTheme(defaultStyles), "flex grow flex-col")}>
-      <div className="info-bar">
-        <div className="item">
-          <div className="tag">{t("connection-detail.nodes")}</div>
-          <div className="value">
-            <Chip className="value-chip">
-              <GraphIcon />
-              {totalNodes != null && (
-                <HumanReadableNumberFormatter value={totalNodes} />
-              )}
-              {totalNodes == null && "Unknown"}
-            </Chip>
-          </div>
-        </div>
-        <div className="item">
-          <div className="tag">{t("connection-detail.edges")}</div>
-          <div className="value">
-            <Chip className="value-chip">
-              <EdgeIcon />
-              {totalEdges != null && (
-                <HumanReadableNumberFormatter value={totalEdges} />
-              )}
-              {totalEdges == null && "Unknown"}
-            </Chip>
-          </div>
-        </div>
-      </div>
+      <InfoBar>
+        <InfoBarItem>
+          <Label>{t("connection-detail.nodes")}</Label>
+          <Chip>
+            <GraphIcon />
+            {totalNodes != null && (
+              <HumanReadableNumberFormatter value={totalNodes} />
+            )}
+            {totalNodes == null && "Unknown"}
+          </Chip>
+        </InfoBarItem>
+        <InfoBarItem>
+          <Label>{t("connection-detail.edges")}</Label>
+          <Chip>
+            <EdgeIcon />
+            {totalEdges != null && (
+              <HumanReadableNumberFormatter value={totalEdges} />
+            )}
+            {totalEdges == null && "Unknown"}
+          </Chip>
+        </InfoBarItem>
+      </InfoBar>
 
       <SearchableVertexTypesList />
     </div>

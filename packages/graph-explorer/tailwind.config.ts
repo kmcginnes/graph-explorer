@@ -45,9 +45,9 @@ export default {
         hover: "rgb(var(--color-input-hover) / <alpha-value>)",
       },
       primary: {
-        light: blue[300],
-        main: blue[500],
-        dark: blue[800],
+        light: "hsl(var(--color-primary-light) / <alpha-value>)",
+        main: "hsl(var(--color-primary-main) / <alpha-value>)",
+        dark: "hsl(var(--color-primary-dark) / <alpha-value>)",
         contrastText: white,
       },
       secondary: {
@@ -143,7 +143,7 @@ export default {
           "linear-gradient(225deg, #4d72f2 12.15%, #3334b9 87.02%)",
       },
       borderColor: {
-        DEFAULT: gray["200"],
+        DEFAULT: "rgb(var(--color-divider) / <alpha-value>)",
       },
       maxWidth: {
         paragraph: "40rem",

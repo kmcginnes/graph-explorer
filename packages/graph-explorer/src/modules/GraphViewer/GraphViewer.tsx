@@ -236,7 +236,7 @@ export default function GraphViewer({
           </PanelHeaderActions>
         </PanelHeader>
         <PanelContent
-          className="bg-background-secondary relative flex h-full w-full"
+          className="bg-background-primary relative flex h-full w-full"
           ref={parentRef}
         >
           <Graph

@@ -25,7 +25,8 @@
     --color-text-disabled: 158 158 158;
 
     --color-background-default: var(--color-white);
-    --color-background-secondary: 224 233 246;
+    /* --color-background-secondary: 224 233 246; */
+    --color-background-secondary: var(--color-gray-100);
     --color-background-contrast: var(--color-gray-200);
     --color-background-contrast-secondary: var(--color-gray-300);
 
@@ -40,6 +41,10 @@
     --color-brand-800: 205deg 92% 24%;
     --color-brand-900: 205deg 95% 12%;
     --color-brand-950: 205deg 98% 6%;
+
+    --color-primary-light: var(--color-brand-300);
+    --color-primary-main: var(--color-brand-500);
+    --color-primary-dark: var(--color-brand-800);
 
     --color-secondary-light: 255 184 46;
     --color-secondary-main: 250 133 0;
@@ -79,20 +84,29 @@
     --color-text-secondary: 224 224 224;
     --color-text-disabled: 160 160 160;
 
-    --color-background-default: 16 16 16;
     --color-background-secondary: 38 38 38;
+    --color-background-default: 16 16 16;
     --color-background-contrast: var(--color-gray-700);
     --color-background-contrast-secondary: var(--color-gray-600);
 
-    --color-primary-main: 67 171 244;
-    --color-primary-dark: 18 142 229;
+    --color-primary-light: var(--color-brand-800);
+    --color-primary-main: var(--color-brand-600);
+    --color-primary-dark: var(--color-brand-200);
 
     --color-success-light: 102 187 106;
     --color-success-main: 129 199 132;
     --color-success-dark: 56 142 60;
 
-    --color-divider: var(--color-gray-700);
-    --color-border: var(--color-gray-700);
+    --color-success-light: 18 146 113;
+    --color-success-main: 39 175 140;
+    --color-success-dark: 49 222 178;
+
+    --color-info-light: 23 69 123;
+    --color-info-main: 18 142 229;
+    --color-info-dark: 100 199 255;
+
+    --color-divider: var(--color-gray-800);
+    --color-border: var(--color-gray-800);
   }
 
   html {

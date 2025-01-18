@@ -48,7 +48,7 @@ export const Toast: FC<ToastProps> = ({
   const Icon = icons[type];
   return (
     <div className={cn(stylesWithTheme(defaultStyles), className)}>
-      <Card className={cn("card", type)} transparent>
+      <Card className={cn("card", type)}>
         <div className="icon">
           <Icon width={24} height={24} />
         </div>

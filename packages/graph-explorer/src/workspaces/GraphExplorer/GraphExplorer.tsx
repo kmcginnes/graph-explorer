@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   Button,
+  Divider,
   EdgeIcon,
   IconButton,
   NamespaceIcon,
@@ -157,7 +158,7 @@ const GraphExplorer = () => {
             icon={<GridIcon />}
             onClick={toggleView("table-view")}
           />
-          <div className="v-divider" />
+          <Divider orientation="vertical" className="h-1/2" />
           <Link to="/connections">
             <Button className="button" icon={<DatabaseIcon />} variant="filled">
               Open Connections

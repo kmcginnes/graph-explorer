@@ -18,7 +18,7 @@ export function VertexRow({
         className="size-11 p-[8px]"
       />
       <div className="flex grow flex-col items-start">
-        <div className="text-base font-bold leading-snug">
+        <div className="text-text-primary text-base font-bold leading-snug">
           {vertex.displayTypes} &rsaquo; {vertex.displayName}
         </div>
         <div className="text-text-secondary/90 line-clamp-2 text-base leading-snug">

@@ -7,7 +7,7 @@ const chip = cva({
   base: "chip inline-flex h-[22px] select-none items-center justify-center gap-1 overflow-hidden text-ellipsis whitespace-nowrap rounded-full px-2.5 text-sm font-medium text-white [&>svg]:size-4",
   variants: {
     variant: {
-      info: "bg-info-main",
+      info: "bg-primary-main",
       success: "bg-success-main",
       error: "bg-error-main",
       warning: "bg-warning-main",

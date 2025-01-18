@@ -3,8 +3,6 @@ import type { ThemeStyleFn } from "@/core";
 
 const defaultStyles: ThemeStyleFn = ({ theme }) => css`
   .info-bar {
-    background: ${theme.palette.background.default};
-    border-bottom: solid 1px ${theme.palette.divider};
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;

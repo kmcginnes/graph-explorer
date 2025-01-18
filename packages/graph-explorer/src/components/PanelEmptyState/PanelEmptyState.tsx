@@ -30,9 +30,9 @@ const PanelEmptyState = ({
   const variantStyles = cva({
     variants: {
       variant: {
-        info: "from-primary-main to-primary-light bg-gradient-to-b shadow-[0_0_20px_2px_hsl(205,95%,71%,70%)]",
+        info: "from-primary-main to-primary-light bg-gradient-to-b shadow-[0_0_20px_2px_hsl(205,95%,71%,70%)] dark:shadow-none",
         error:
-          "from-error-main to-error-light bg-gradient-to-b shadow-[0_0_20px_2px_rgba(255,144,119,0.7)]",
+          "from-error-main to-error-light bg-gradient-to-b shadow-[0_0_20px_2px_rgba(255,144,119,0.7)] dark:shadow-none",
       },
     },
     defaultVariants: {

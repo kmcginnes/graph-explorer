@@ -4,7 +4,7 @@ import { PlusCircleIcon } from "lucide-react";
 
 const EmptyState = () => {
   return (
-    <div className="pointer-events-none absolute inset-0 flex select-none flex-col items-center justify-center bg-gray-100/60 p-4">
+    <div className="pointer-events-none absolute inset-0 flex select-none flex-col items-center justify-center p-4">
       <PanelEmptyState
         className=""
         icon={<SearchIcon />}

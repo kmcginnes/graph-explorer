@@ -77,7 +77,7 @@ export function NodeSearchResult({ node }: { node: Vertex }) {
             <EntityAttribute
               key={attr.name}
               attribute={attr}
-              className="border-b border-gray-200 px-3 py-2 last:border-0"
+              className="border-b px-3 py-2 last:border-0"
             />
           ))}
         </ul>
