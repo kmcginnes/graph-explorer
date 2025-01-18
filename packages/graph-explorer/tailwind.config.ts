@@ -4,15 +4,17 @@ import tailwindAnimate from "tailwindcss-animate";
 const black = "rgb(var(--color-black) / <alpha-value>)";
 const white = "rgb(var(--color-white) / <alpha-value>)";
 const gray = {
-  100: "rgb(var(--color-gray-100) / <alpha-value>)",
-  200: "rgb(var(--color-gray-200) / <alpha-value>)",
-  300: "rgb(var(--color-gray-300) / <alpha-value>)",
-  400: "rgb(var(--color-gray-400) / <alpha-value>)",
-  500: "rgb(var(--color-gray-500) / <alpha-value>)",
-  600: "rgb(var(--color-gray-600) / <alpha-value>)",
-  700: "rgb(var(--color-gray-700) / <alpha-value>)",
-  800: "rgb(var(--color-gray-800) / <alpha-value>)",
-  900: "rgb(var(--color-gray-900) / <alpha-value>)",
+  50: "hsl(var(--color-gray-50) / <alpha-value>)",
+  100: "hsl(var(--color-gray-100) / <alpha-value>)",
+  200: "hsl(var(--color-gray-200) / <alpha-value>)",
+  300: "hsl(var(--color-gray-300) / <alpha-value>)",
+  400: "hsl(var(--color-gray-400) / <alpha-value>)",
+  500: "hsl(var(--color-gray-500) / <alpha-value>)",
+  600: "hsl(var(--color-gray-600) / <alpha-value>)",
+  700: "hsl(var(--color-gray-700) / <alpha-value>)",
+  800: "hsl(var(--color-gray-800) / <alpha-value>)",
+  900: "hsl(var(--color-gray-900) / <alpha-value>)",
+  950: "hsl(var(--color-gray-950) / <alpha-value>)",
 };
 
 const blue = {
@@ -82,18 +84,18 @@ export default {
       },
       background: {
         default: "rgb(var(--color-background-default) / <alpha-value>)",
-        secondary: "rgb(var(--color-background-secondary) / <alpha-value>)",
-        contrast: "rgb(var(--color-background-contrast) / <alpha-value>)",
+        secondary: "hsl(var(--color-background-secondary) / <alpha-value>)",
+        contrast: "hsl(var(--color-background-contrast) / <alpha-value>)",
         "contrast-secondary":
-          "rgb(var(--color-background-contrast-secondary) / <alpha-value>)",
+          "rgb(hsl(--color-background-contrast-secondary) / <alpha-value>)",
       },
       text: {
         primary: "rgb(var(--color-text-primary) / <alpha-value>)",
         secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
         disabled: "rgb(var(--color-text-disabled) / <alpha-value>)",
       },
-      divider: "rgb(var(--color-divider) / <alpha-value>)",
-      border: "rgb(var(--color-border) / <alpha-value>)",
+      divider: "hsl(var(--color-divider) / <alpha-value>)",
+      border: "hsl(var(--color-border) / <alpha-value>)",
       // gray: colors.slate,
       // green: colors.emerald,
       // purple: colors.violet,
@@ -143,7 +145,7 @@ export default {
           "linear-gradient(225deg, #4d72f2 12.15%, #3334b9 87.02%)",
       },
       borderColor: {
-        DEFAULT: "rgb(var(--color-divider) / <alpha-value>)",
+        DEFAULT: "hsl(var(--color-divider) / <alpha-value>)",
       },
       maxWidth: {
         paragraph: "40rem",

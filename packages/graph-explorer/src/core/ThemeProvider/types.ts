@@ -44,6 +44,7 @@ export type Background = {
   secondary?: string;
   contrast?: string;
   contrastSecondary?: string;
+  input?: string;
 };
 
 export type ZIndex = {

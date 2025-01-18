@@ -7,6 +7,18 @@
     --color-white: 255 255 255;
     --color-black: 0 0 0;
 
+    --color-gray-50: 210deg 40% 98%;
+    --color-gray-100: 210deg 40% 96.1%;
+    --color-gray-200: 214.3deg 31.8% 91.4%;
+    --color-gray-300: 212.7deg 26.8% 83.9%;
+    --color-gray-400: 215 20deg.2% 65.1%;
+    --color-gray-500: 215.4deg 16.3% 46.9%;
+    --color-gray-600: 215.3deg 19.3% 34.5%;
+    --color-gray-700: 215.3deg 25% 26.7%;
+    --color-gray-800: 217.2deg 32.6% 17.5%;
+    --color-gray-900: 222.2deg 47.4% 11.2%;
+    --color-gray-950: 222.2deg 84% 4.9%;
+    /* 
     --color-gray-100: 248 248 248;
     --color-gray-200: 238 238 238;
     --color-gray-300: 224 224 224;
@@ -15,18 +27,19 @@
     --color-gray-600: 117 117 117;
     --color-gray-700: 97 97 97;
     --color-gray-800: 66 66 66;
-    --color-gray-900: 33 33 33;
+    --color-gray-900: 33 33 33; */
 
-    --color-input-background: var(--color-gray-100);
-    --color-input-hover: var(--color-gray-200);
+    --color-input-background: var(--color-white);
+    --color-input-hover: var(--color-white);
+    --color-input-border: var(--color-gray-200);
 
-    --color-text-primary: 33 33 33;
-    --color-text-secondary: 102 102 102;
-    --color-text-disabled: 158 158 158;
+    --color-text-primary: var(--color-gray-950);
+    --color-text-secondary: var(--color-gray-700);
+    --color-text-disabled: var(--color-gray-500);
 
     --color-background-default: var(--color-white);
     /* --color-background-secondary: 224 233 246; */
-    --color-background-secondary: var(--color-gray-100);
+    --color-background-secondary: var(--color-gray-50);
     --color-background-contrast: var(--color-gray-200);
     --color-background-contrast-secondary: var(--color-gray-300);
 
@@ -66,8 +79,8 @@
     --color-warning-main: 250 133 0;
     --color-warning-dark: 228 96 0;
 
-    --color-divider: var(--color-gray-300);
-    --color-border: var(--color-gray-300);
+    --color-divider: var(--color-gray-200);
+    --color-border: var(--color-gray-200);
 
     /* Allow animating intrinsic values like height */
     interpolate-size: allow-keywords;
