@@ -33,10 +33,11 @@ export const getInputThemeWithDefaults = memoize(
       valid: {
         color: baseFormTheme?.label?.color || text.primary,
         input: {
-          background: baseFormTheme?.background || background.contrast,
+          background: palette.common.white,
           color: baseFormTheme?.color || text.primary,
-          border: baseFormTheme?.border || "1px solid transparent",
+          border: `1px solid ${palette.border}`,
           placeholder: baseFormTheme?.placeholderColor || text.disabled,
+          shadow: theme.shadow.sm,
           focus: {
             shadow:
               baseFormTheme?.error?.focus?.outlineColor ||
@@ -68,14 +69,6 @@ export const getInputThemeWithDefaults = memoize(
             styleByValidationState[validationState || "valid"].input.focus
               .shadow
           }`,
-        background:
-          baseFormTheme?.focus?.background || background.contrastSecondary,
-        color: baseFormTheme?.focus?.color || text.primary,
-      },
-      hover: {
-        background:
-          baseFormTheme?.hover?.background || background.contrastSecondary,
-        color: baseFormTheme?.hover?.color || text.primary,
       },
       label: {
         color: styleByValidationState[validationState].color,

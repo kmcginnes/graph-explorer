@@ -43,13 +43,13 @@ const WorkspaceTopBar = ({
   return (
     <div
       className={cn(
-        "bg-background-default text-text-primary border-divider flex flex-col border-b",
+        "bg-background-secondary text-text-primary border-divider flex flex-col border-b",
         className
       )}
     >
       <div
         className={cn(
-          "bg-background-default text-text-primary flex min-h-[3.5rem] items-center gap-3",
+          "bg-background-secondary text-text-primary flex min-h-[3.5rem] items-center gap-3",
           logoVisible ? "pr-2" : "px-2"
         )}
       >

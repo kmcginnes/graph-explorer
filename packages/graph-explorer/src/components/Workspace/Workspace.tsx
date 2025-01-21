@@ -74,7 +74,7 @@ const Workspace = ({
           <div className="flex h-full grow flex-col overflow-auto">
             <div
               className={cn(
-                "flex h-full grow gap-2 overflow-auto p-2",
+                "flex h-full grow overflow-auto",
                 orientation === "vertical" ? "flex-col" : "flex-row"
               )}
             >

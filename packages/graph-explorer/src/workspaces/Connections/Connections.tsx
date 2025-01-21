@@ -70,7 +70,7 @@ export default function Connections() {
         </Workspace.TopBar.AdditionalControls>
       </Workspace.TopBar>
       <Workspace.Content>
-        <div className="grid h-full grid-cols-2 gap-2">
+        <div className="grid h-full grid-cols-2">
           <div className="h-full grow">
             <AvailableConnections
               isSync={isSyncing}

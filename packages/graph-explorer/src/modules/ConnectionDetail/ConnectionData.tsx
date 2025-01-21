@@ -131,7 +131,10 @@ const Row = React.memo(({ config }: { config: DisplayVertexTypeConfig }) => (
             {config.attributes.length} attributes
           </ListRowSubtitle>
         </ListRowContent>
-        <ChevronRightIcon className="text-text-secondary size-5" />
+        <div className="pointer-events-none flex items-center gap-1">
+          <Label>Explore</Label>
+          <ChevronRightIcon className="text-text-secondary size-5" />
+        </div>
       </ListRow>
     </Link>
   </div>

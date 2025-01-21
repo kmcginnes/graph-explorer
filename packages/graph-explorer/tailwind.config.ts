@@ -83,16 +83,16 @@ export default {
         contrastText: white,
       },
       background: {
-        default: "rgb(var(--color-background-default) / <alpha-value>)",
+        default: "hsl(var(--color-background-default) / <alpha-value>)",
         secondary: "hsl(var(--color-background-secondary) / <alpha-value>)",
         contrast: "hsl(var(--color-background-contrast) / <alpha-value>)",
         "contrast-secondary":
-          "rgb(hsl(--color-background-contrast-secondary) / <alpha-value>)",
+          "hsl(var(--color-background-contrast-secondary) / <alpha-value>)",
       },
       text: {
-        primary: "rgb(var(--color-text-primary) / <alpha-value>)",
-        secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
-        disabled: "rgb(var(--color-text-disabled) / <alpha-value>)",
+        primary: "hsl(var(--color-text-primary) / <alpha-value>)",
+        secondary: "hsl(var(--color-text-secondary) / <alpha-value>)",
+        disabled: "hsl(var(--color-text-disabled) / <alpha-value>)",
       },
       divider: "hsl(var(--color-divider) / <alpha-value>)",
       border: "hsl(var(--color-border) / <alpha-value>)",

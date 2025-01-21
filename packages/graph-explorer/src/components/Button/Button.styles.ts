@@ -101,7 +101,7 @@ export const defaultStyles =
         background-color: ${isDarkTheme ? primary?.dark : primary?.main};
         color: ${primary?.contrastText};
         border: 1px solid transparent;
-        border-radius: 5px;
+        border-radius: ${theme.shape.borderRadius};
 
         &:disabled,
         &[disabled] {
@@ -130,12 +130,10 @@ export const defaultStyles =
       `,
       default: css`
         padding: 0 ${getPaddingSizeBySize(theme, size)};
-        background-color: ${isDarkTheme
-          ? background?.secondary
-          : background?.contrast};
+        background-color: ${theme.palette.border};
         color: ${isDarkTheme ? primary?.main : primary?.dark};
         border: 1px solid transparent;
-        border-radius: 5px;
+        border-radius: ${theme.shape.borderRadius};
 
         &:disabled,
         &[disabled] {
