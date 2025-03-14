@@ -33,7 +33,6 @@ export * from "./Input";
 export { default as InputField } from "./InputField";
 export * from "./InputField";
 
-export { default as TextArea } from "./TextArea";
 export * from "./TextArea";
 
 export * from "./Label";
