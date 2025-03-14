@@ -30,4 +30,4 @@ else
 fi
 
 echo "Starting graph explorer..."
-pnpm -w start
+NODE_ENV=production node packages/graph-explorer-proxy-server/dist/node-server.js
