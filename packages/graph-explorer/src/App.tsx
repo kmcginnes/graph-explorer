@@ -18,14 +18,14 @@ export const routes = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route element={<AppLayout />}>
-        <Route path="/connections" element={<Connections />} />
-        <Route path="/data-explorer/:vertexType" element={<DataExplorer />} />
-        <Route path="/graph-explorer" element={<GraphExplorer />} />
-        <Route path="/settings" element={<SettingsRoot />}>
+        <Route path="connections" element={<Connections />} />
+        <Route path="data-explorer/:vertexType" element={<DataExplorer />} />
+        <Route path="graph-explorer" element={<GraphExplorer />} />
+        <Route path="settings" element={<SettingsRoot />}>
           <Route path="general" element={<SettingsGeneral />} />
           <Route path="about" element={<SettingsAbout />} />
         </Route>
-        <Route path="*" element={<Redirect to="/graph-explorer" />} />
+        <Route path="*" element={<Redirect to="graph-explorer" />} />
       </Route>
     </>
   ),
