@@ -5,6 +5,7 @@
 **/.idea/
 **/dist/
 **/.env.local
+**/.react-router/
 
 # TypeScript build cache manifests
 *.tsbuildinfo
