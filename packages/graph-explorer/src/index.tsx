@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { HashRouter as Router } from "react-router";
-import App from "./App";
+import { RouterProvider } from "react-router";
+import { routes } from "./App";
 import "core-js/full/iterator";
 
 import "./index.css";
@@ -10,9 +10,7 @@ import "@mantine/core/styles.css";
 const BootstrapApp = () => {
   return (
     <React.StrictMode>
-      <Router>
-        <App />
-      </Router>
+      <RouterProvider router={routes} />
     </React.StrictMode>
   );
 };
