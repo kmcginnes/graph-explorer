@@ -17,13 +17,13 @@ import AppLayout from "./AppLayout";
 export const routes = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route element={<AppLayout />}>
-        <Route path="connections" element={<Connections />} />
-        <Route path="data-explorer/:vertexType" element={<DataExplorer />} />
-        <Route path="graph-explorer" element={<GraphExplorer />} />
-        <Route path="settings" element={<SettingsRoot />}>
-          <Route path="general" element={<SettingsGeneral />} />
-          <Route path="about" element={<SettingsAbout />} />
+      <Route Component={AppLayout}>
+        <Route path="connections" Component={Connections} />
+        <Route path="data-explorer/:vertexType" Component={DataExplorer} />
+        <Route path="graph-explorer" Component={GraphExplorer} />
+        <Route path="settings" Component={SettingsRoot}>
+          <Route path="general" Component={SettingsGeneral} />
+          <Route path="about" Component={SettingsAbout} />
         </Route>
         <Route path="*" element={<Redirect to="graph-explorer" />} />
       </Route>
