@@ -151,6 +151,9 @@ importers:
       '@react-aria/visually-hidden':
         specifier: ^3.8.20
         version: 3.8.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@react-router/node':
+        specifier: ^7.4.0
+        version: 7.4.0(react-router@7.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.2)
       '@react-stately/collections':
         specifier: ^3.12.2
         version: 3.12.2(react@18.3.1)
