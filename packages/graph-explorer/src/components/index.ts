@@ -17,6 +17,7 @@ export { default as PanelError } from "./PanelError";
 
 export { default as Divider } from "./Divider";
 
+export * from "./EmptyState";
 export * from "./FileButton";
 export * from "./Form";
 
