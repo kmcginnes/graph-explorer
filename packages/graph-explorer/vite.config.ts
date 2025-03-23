@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import react from "@vitejs/plugin-react";
+import { reactRouter } from "@react-router/dev/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { loadEnv, PluginOption } from "vite";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => {
     define: {
       __GRAPH_EXP_VERSION__: JSON.stringify(process.env.npm_package_version),
     },
-    plugins: [tsconfigPaths(), htmlPlugin(), react()],
+    plugins: [tsconfigPaths(), htmlPlugin(), reactRouter()],
     test: {
       environment: "happy-dom",
       globals: true,

@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-} from "react-router";
+import { Route, Routes } from "react-router";
 import Redirect from "./components/Redirect";
 import Connections from "./workspaces/Connections";
 import DataExplorer from "./workspaces/DataExplorer";
@@ -14,22 +10,19 @@ import {
 } from "./workspaces/Settings";
 import AppLayout from "./AppLayout";
 
-export const routes = createBrowserRouter(
-  createRoutesFromElements(
-    <>
+export function App() {
+  return (
+    <Routes>
       <Route Component={AppLayout}>
-        <Route path="connections" Component={Connections} />
-        <Route path="data-explorer/:vertexType" Component={DataExplorer} />
-        <Route path="graph-explorer" Component={GraphExplorer} />
-        <Route path="settings" Component={SettingsRoot}>
+        <Route path="/connections" Component={Connections} />
+        <Route path="/data-explorer/:vertexType" Component={DataExplorer} />
+        <Route path="/graph-explorer" Component={GraphExplorer} />
+        <Route path="/settings" Component={SettingsRoot}>
           <Route path="general" Component={SettingsGeneral} />
           <Route path="about" Component={SettingsAbout} />
         </Route>
-        <Route path="*" element={<Redirect to="graph-explorer" />} />
+        <Route path="*" element={<Redirect to="/graph-explorer" />} />
       </Route>
-    </>
-  ),
-  {
-    basename: import.meta.env.BASE_URL,
-  }
-);
+    </Routes>
+  );
+}

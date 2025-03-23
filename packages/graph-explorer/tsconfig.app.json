@@ -14,6 +14,7 @@
 
     /* Path aliasing */
     "baseUrl": "./src",
+    "rootDirs": [".", "./.react-router/types"],
     "paths": {
       "@/*": ["./*"],
       "@/types/*": ["./@types/*"],
@@ -28,6 +29,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", ".react-router/types/**/*"],
   "references": [{ "path": "../shared" }]
 }
