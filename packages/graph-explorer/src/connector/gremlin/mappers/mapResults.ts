@@ -65,11 +65,14 @@ function mapAnyValue(
     return [{ vertex: mapApiVertex(data) }];
   } else if (data["@type"] === "g:Path") {
     return mapAnyValue(data["@value"].objects);
-  } else if (
-    data["@type"] === "g:List" ||
-    data["@type"] === "g:Map" ||
-    data["@type"] === "g:Set"
-  ) {
+  } else if (data["@type"] === "g:Map") {
+    return (
+      data["@value"]
+        // Skip the keys in the map by skipping even indices
+        .filter((_, index) => index % 2 !== 0)
+        .flatMap((item: GAnyValue) => mapAnyValue(item))
+    );
+  } else if (data["@type"] === "g:List" || data["@type"] === "g:Set") {
     return data["@value"].flatMap((item: GAnyValue) => mapAnyValue(item));
   }
 

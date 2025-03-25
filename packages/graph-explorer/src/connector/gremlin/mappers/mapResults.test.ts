@@ -3,6 +3,7 @@ import { mapResults } from "./mapResults";
 import {
   createGEdge,
   createGList,
+  createGMap,
   createGVertex,
   createRandomEdge,
   createRandomVertex,
@@ -186,5 +187,14 @@ describe("mapResults", () => {
     const gList = createGList([booleanValue]);
     const result = mapResults(gList);
     expect(result).toEqual(toMappedQueryResults({ scalars: [booleanValue] }));
+  });
+
+  it("should map g:map results by skipping the keys", () => {
+    const vertex = createRandomVertex();
+    vertex.__isFragment = false;
+    const gVertex = createGVertex(vertex);
+    const gMap = createGMap(new Map([["key", gVertex]]));
+    const result = mapResults(gMap);
+    expect(result).toEqual(toMappedQueryResults({ vertices: [vertex] }));
   });
 });

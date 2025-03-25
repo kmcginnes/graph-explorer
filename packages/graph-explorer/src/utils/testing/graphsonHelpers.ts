@@ -3,6 +3,7 @@ import {
   GEdge,
   GInt64,
   GList,
+  GMap,
   GProperty,
   GVertex,
 } from "@/connector/gremlin/types";
@@ -20,6 +21,16 @@ export function createGList(items: GAnyValue[]): GList {
   return {
     "@type": "g:List",
     "@value": items,
+  };
+}
+
+export function createGMap(map: Map<string, GAnyValue>): GMap {
+  return {
+    "@type": "g:Map",
+    "@value": map
+      .entries()
+      .flatMap(([key, value]) => [key, value])
+      .toArray(),
   };
 }
 
