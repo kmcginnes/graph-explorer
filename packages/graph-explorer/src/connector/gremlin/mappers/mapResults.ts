@@ -2,7 +2,7 @@ import { Vertex, Edge, toNodeMap, toEdgeMap, createVertex } from "@/core";
 import { GAnyValue } from "../types";
 import mapApiEdge from "./mapApiEdge";
 import mapApiVertex from "./mapApiVertex";
-import { toMappedQueryResults } from "@/connector";
+import { ScalarValue, toMappedQueryResults } from "@/connector";
 
 export function mapResults(data: GAnyValue) {
   const values = mapAnyValue(data);
@@ -42,8 +42,10 @@ export function mapResults(data: GAnyValue) {
 
 function mapAnyValue(
   data: GAnyValue
-): Array<{ vertex: Vertex } | { edge: Edge } | { scalar: string | number }> {
+): Array<{ vertex: Vertex } | { edge: Edge } | { scalar: ScalarValue }> {
   if (typeof data === "string") {
+    return [{ scalar: data }];
+  } else if (typeof data === "boolean") {
     return [{ scalar: data }];
   } else if (
     data["@type"] === "g:Int32" ||
