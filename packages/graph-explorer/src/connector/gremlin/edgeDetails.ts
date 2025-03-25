@@ -41,6 +41,10 @@ export async function edgeDetails(
   // Map the results
   const entities = mapResults(data.result.data);
   const edge = entities.edges.length > 0 ? entities.edges[0] : null;
+  if (edge) {
+    edge.__isFragment = false;
+  }
+
   if (!edge) {
     logger.warn("Edge not found", request.edgeId);
   }

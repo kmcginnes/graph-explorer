@@ -38,12 +38,15 @@ export function createGVertex(vertex: Vertex): GVertex {
     } satisfies GInt64;
   })();
 
+  const properties = createGVertexProperties(vertex.attributes);
+
   return {
     "@type": "g:Vertex",
     "@value": {
       id,
       label: vertex.types.join("::"),
-      properties: createGVertexProperties(vertex.attributes),
+      // Don't include properties if it is null
+      ...(properties ? { properties } : {}),
     },
   };
 }
@@ -65,8 +68,12 @@ export function createGEdge(edge: Edge): GEdge {
 
 function createGVertexProperties(
   attributes: Vertex["attributes"]
-): GVertex["@value"]["properties"] {
-  const mapped = Object.entries(attributes).map(([key, value]) => ({
+): GVertex["@value"]["properties"] | null {
+  const entries = Object.entries(attributes);
+  if (entries.length === 0) {
+    return null;
+  }
+  const mapped = entries.map(([key, value]) => ({
     "@type": "g:VertexProperty",
     "@value": {
       label: key,

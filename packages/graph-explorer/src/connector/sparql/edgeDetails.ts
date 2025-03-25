@@ -87,6 +87,7 @@ export async function edgeDetails(
     target,
     targetTypes,
     attributes: {},
+    __isFragment: false,
   };
   return { edge };
 }

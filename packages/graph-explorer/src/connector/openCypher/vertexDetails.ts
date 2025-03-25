@@ -40,5 +40,6 @@ export async function vertexDetails(
   }
 
   const vertex = mapApiVertex(ocVertex);
+  vertex.__isFragment = false;
   return { vertex };
 }

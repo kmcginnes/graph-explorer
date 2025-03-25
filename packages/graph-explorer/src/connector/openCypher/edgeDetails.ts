@@ -50,6 +50,7 @@ export async function edgeDetails(
   const targetLabels = value.targetLabels;
 
   const edge = mapApiEdge(value.edge, sourceLabels, targetLabels);
+  edge.__isFragment = false;
 
   return { edge };
 }

@@ -40,6 +40,10 @@ export async function vertexDetails(
   // Map the results
   const entities = mapResults(data.result.data);
   const vertex = entities.vertices.length > 0 ? entities.vertices[0] : null;
+  if (vertex) {
+    vertex.__isFragment = false;
+  }
+
   if (!vertex) {
     logger.warn("Vertex not found", request.vertexId);
   }

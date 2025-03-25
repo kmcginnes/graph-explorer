@@ -81,6 +81,7 @@ export async function vertexDetails(
   }
 
   const vertex = mapToVertex(request.vertexId, parsed.data.results.bindings);
+  vertex.__isFragment = false;
 
   return { vertex };
 }
