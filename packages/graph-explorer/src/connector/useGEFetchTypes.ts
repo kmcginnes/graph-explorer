@@ -79,6 +79,8 @@ export type Criterion = {
 
 export type ScalarValue = number | string | boolean | Date;
 
+export type MapValue = Map<ScalarValue, ScalarValue | MapValue>;
+
 /**
  * Results from any query.
  *
@@ -89,6 +91,7 @@ export type MappedQueryResults = {
   vertices: Vertex[];
   edges: Edge[];
   scalars: ScalarValue[];
+  maps: MapValue[];
 };
 
 /** Constructs a `MappedQueryResults` instance without providing all values. */
@@ -99,6 +102,7 @@ export function toMappedQueryResults(
     vertices: value.vertices ?? [],
     edges: value.edges ?? [],
     scalars: value.scalars ?? [],
+    maps: value.maps ?? [],
   };
 }
 

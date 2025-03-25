@@ -1,8 +1,10 @@
 import {
   GAnyValue,
   GEdge,
+  GInt32,
   GInt64,
   GList,
+  GMap,
   GProperty,
   GVertex,
 } from "@/connector/gremlin/types";
@@ -23,20 +25,19 @@ export function createGList(items: GAnyValue[]): GList {
   };
 }
 
+export function createGMap(map: Map<string, GAnyValue>): GMap {
+  return {
+    "@type": "g:Map",
+    "@value": map
+      .entries()
+      .flatMap(([key, value]) => [key, value])
+      .toArray(),
+  };
+}
+
 export function createGVertex(vertex: Vertex): GVertex {
   // Create graphSON ID value
-  const id = (() => {
-    const rawId = getRawId(vertex.id);
-
-    if (typeof rawId === "string") {
-      return rawId;
-    }
-
-    return {
-      "@type": "g:Int64",
-      "@value": rawId,
-    } satisfies GInt64;
-  })();
+  const id = createIdValue(vertex.id);
 
   return {
     "@type": "g:Vertex",
@@ -74,13 +75,7 @@ function createGVertexProperties(
     "@type": "g:VertexProperty",
     "@value": {
       label: key,
-      value:
-        typeof value === "string"
-          ? value
-          : {
-              "@type": "g:Int64",
-              "@value": value,
-            },
+      value: typeof value === "string" ? value : createGInt64(value),
     },
   }));
 
@@ -102,13 +97,7 @@ function createGProperties(
           "@type": "g:Property",
           "@value": {
             key,
-            value:
-              typeof value === "string"
-                ? value
-                : {
-                    "@type": "g:Int64",
-                    "@value": value,
-                  },
+            value: typeof value === "string" ? value : createGInt64(value),
           },
         }) satisfies GProperty
     )
@@ -128,8 +117,19 @@ function createIdValue(id: VertexId | EdgeId) {
     return rawId;
   }
 
+  return createGInt64(rawId);
+}
+
+export function createGInt64(value: number): GInt64 {
   return {
     "@type": "g:Int64",
-    "@value": rawId,
-  } satisfies GInt64;
+    "@value": value,
+  };
+}
+
+export function createGInt32(value: number): GInt32 {
+  return {
+    "@type": "g:Int32",
+    "@value": value,
+  };
 }

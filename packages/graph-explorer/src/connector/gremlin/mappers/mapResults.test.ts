@@ -2,7 +2,9 @@ import { createEdge, createVertex } from "@/core";
 import { mapResults } from "./mapResults";
 import {
   createGEdge,
+  createGInt64,
   createGList,
+  createGMap,
   createGVertex,
   createRandomEdge,
   createRandomVertex,
@@ -189,5 +191,37 @@ describe("mapResults", () => {
     const gList = createGList([booleanValue]);
     const result = mapResults(gList);
     expect(result).toEqual(toMappedQueryResults({ scalars: [booleanValue] }));
+  });
+
+  it("should map g:map results that uses scalars for both keys and values", () => {
+    const vertex = createRandomVertex();
+    vertex.__isFragment = false;
+    const gValue = createGInt64(42);
+    const gMap = createGMap(new Map([["key", gValue]]));
+    const result = mapResults(gMap);
+    expect(result).toEqual(
+      toMappedQueryResults({ maps: [new Map([["key", 42]])] })
+    );
+  });
+
+  it("should map g:map results that uses scalars for keys and g:Map for values", () => {
+    const vertex = createRandomVertex();
+    vertex.__isFragment = false;
+    const gFooMap = createGMap(new Map([["bar", createGInt64(42)]]));
+    const gMap = createGMap(new Map([["foo", gFooMap]]));
+    const result = mapResults(gMap);
+    expect(result).toEqual(
+      toMappedQueryResults({
+        maps: [new Map([["foo", new Map([["bar", 42]])]])],
+      })
+    );
+  });
+
+  it("should ignore g:map results that don't use scalars for both keys and values", () => {
+    const vertex = createRandomVertex();
+    vertex.__isFragment = false;
+    const gMap = createGMap(new Map([["vertex", createGVertex(vertex)]]));
+    const result = mapResults(gMap);
+    expect(result).toEqual(toMappedQueryResults({}));
   });
 });
