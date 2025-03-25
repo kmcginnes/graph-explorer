@@ -74,7 +74,7 @@ export type Criterion = {
   dataType?: "String" | "Number" | "Date";
 };
 
-export type ScalarValue = number | string | Date;
+export type ScalarValue = number | string | boolean | Date;
 
 /**
  * Results from any query.

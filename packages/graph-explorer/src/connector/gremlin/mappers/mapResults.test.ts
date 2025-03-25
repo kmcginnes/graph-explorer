@@ -8,6 +8,7 @@ import {
   createRandomVertex,
 } from "@/utils/testing";
 import { toMappedQueryResults } from "@/connector";
+import { createRandomBoolean } from "@shared/utils/testing";
 
 describe("mapResults", () => {
   it("should handle empty g:List", () => {
@@ -178,5 +179,12 @@ describe("mapResults", () => {
     const gVertex = createGVertex(vertex);
     const result = mapResults(gVertex);
     expect(result).toEqual(toMappedQueryResults({ vertices: [vertex] }));
+  });
+
+  it("should map boolean results to scalar", () => {
+    const booleanValue = createRandomBoolean();
+    const gList = createGList([booleanValue]);
+    const result = mapResults(gList);
+    expect(result).toEqual(toMappedQueryResults({ scalars: [booleanValue] }));
   });
 });

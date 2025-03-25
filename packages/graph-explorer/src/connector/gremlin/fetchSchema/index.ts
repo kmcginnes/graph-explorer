@@ -4,7 +4,7 @@ import edgeLabelsTemplate from "./edgeLabelsTemplate";
 import edgesSchemaTemplate from "./edgesSchemaTemplate";
 import vertexLabelsTemplate from "./vertexLabelsTemplate";
 import verticesSchemaTemplate from "./verticesSchemaTemplate";
-import type { GEdge, GInt64, GVertex } from "../types";
+import type { GEdge, GInt64, GScalar, GVertex } from "../types";
 import { GraphSummary, GremlinFetch } from "../types";
 import { chunk } from "lodash";
 import { LoggerConnector } from "@/connector/LoggerConnector";
@@ -154,10 +154,7 @@ const fetchVerticesAttributes = async (
           return {
             name,
             displayLabel: sanitizeText(name),
-            dataType:
-              typeof value === "string"
-                ? "String"
-                : TYPE_MAP[value["@type"]] || "String",
+            dataType: mapDataType(value),
           };
         }),
       });
@@ -243,7 +240,7 @@ const fetchEdgesAttributes = async (
           return {
             name,
             displayLabel: sanitizeText(name),
-            dataType: typeof value === "string" ? "String" : value["@type"],
+            dataType: mapDataType(value),
           };
         }),
       });
@@ -256,6 +253,13 @@ const fetchEdgesAttributes = async (
 
   return edges;
 };
+
+/** Maps the gremlin data type to the Graph Explorer internal data type. */
+function mapDataType(value: GScalar) {
+  return typeof value === "string" || typeof value === "boolean"
+    ? "String"
+    : TYPE_MAP[value["@type"]] || "String";
+}
 
 const fetchEdgesSchema = async (
   gremlinFetch: GremlinFetch,
