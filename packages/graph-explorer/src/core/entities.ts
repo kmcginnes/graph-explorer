@@ -98,3 +98,27 @@ export type Entities = {
   nodes: Map<VertexId, Vertex>;
   edges: Map<EdgeId, Edge>;
 };
+
+/**
+ * Constructs a `Vertex` instance with the given id and type.
+ *
+ * This can be useful to create a vertex from the information on an `Edge`
+ * instance or from vertex references returned by a query.
+ *
+ * @param id The vertex id.
+ * @param type The vertex label or resource class.
+ * @returns A `Vertex` instance with the given id and type.
+ */
+export function createVertexFragment(
+  id: VertexId,
+  types: Vertex["types"]
+): Vertex {
+  return {
+    entityType: "vertex",
+    id,
+    type: types[0] ?? "",
+    types: types,
+    attributes: {},
+    __isFragment: true,
+  };
+}

@@ -1,4 +1,4 @@
-import { createEdgeId, createVertexId } from "@/core";
+import { createEdgeId, createVertexFragment, createVertexId } from "@/core";
 import { mapResults } from "./mapResults";
 import {
   createGEdge,
@@ -96,12 +96,15 @@ describe("mapResults", () => {
   it("should remove duplicate vertices", () => {
     const edge = createRandomEdge(createRandomVertex(), createRandomVertex());
     edge.__isFragment = false;
+    const sourceFragment = createVertexFragment(edge.source, edge.sourceTypes);
+    const targetFragment = createVertexFragment(edge.target, edge.targetTypes);
     const gEdge = createGEdge(edge);
     const gList = createGList([gEdge, gEdge]);
     const results = mapResults(gList);
     expect(results).toEqual(
       toMappedQueryResults({
         edges: [edge],
+        vertices: [sourceFragment, targetFragment],
       })
     );
   });
@@ -151,6 +154,10 @@ describe("mapResults", () => {
             },
             __isFragment: false,
           },
+        ],
+        vertices: [
+          createVertexFragment(createVertexId("2"), ["Person"]),
+          createVertexFragment(createVertexId("1"), ["Person"]),
         ],
       })
     );

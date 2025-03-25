@@ -2,6 +2,7 @@ import { useNotification } from "@/components/NotificationProvider";
 import { vertexDetailsQuery, VertexDetailsRequest } from "@/connector";
 import {
   activeSchemaSelector,
+  createVertexFragment,
   Edge,
   edgesAtom,
   nodesAtom,
@@ -31,6 +32,23 @@ export function useAddToGraph() {
     async (entities: { vertices?: Vertex[]; edges?: Edge[] }) => {
       const vertices = toNodeMap(entities.vertices ?? []);
       const edges = toEdgeMap(entities.edges ?? []);
+
+      // Add fragment vertices from the edges if they are missing
+      for (const edge of edges.values()) {
+        if (!vertices.has(edge.source)) {
+          vertices.set(
+            edge.source,
+            createVertexFragment(edge.source, edge.sourceTypes)
+          );
+        }
+
+        if (!vertices.has(edge.target)) {
+          vertices.set(
+            edge.target,
+            createVertexFragment(edge.target, edge.targetTypes)
+          );
+        }
+      }
 
       // Ensure all fragments are materialized
       const newVerticesMap = await materializeVertices(vertices);

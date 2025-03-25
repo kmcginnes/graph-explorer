@@ -1,4 +1,10 @@
-import { Vertex, Edge, toNodeMap, toEdgeMap } from "@/core";
+import {
+  Vertex,
+  Edge,
+  toNodeMap,
+  toEdgeMap,
+  createVertexFragment,
+} from "@/core";
 import { GAnyValue } from "../types";
 import mapApiEdge from "./mapApiEdge";
 import mapApiVertex from "./mapApiVertex";
@@ -11,7 +17,25 @@ export function mapResults(data: GAnyValue) {
   const vertexMap = toNodeMap(
     values.filter(e => "vertex" in e).map(e => e.vertex)
   );
+
   const edgeMap = toEdgeMap(values.filter(e => "edge" in e).map(e => e.edge));
+
+  // Add fragment vertices from the edges if they are missing
+  for (const edge of edgeMap.values()) {
+    if (!vertexMap.has(edge.source)) {
+      vertexMap.set(
+        edge.source,
+        createVertexFragment(edge.source, edge.sourceTypes)
+      );
+    }
+
+    if (!vertexMap.has(edge.target)) {
+      vertexMap.set(
+        edge.target,
+        createVertexFragment(edge.target, edge.targetTypes)
+      );
+    }
+  }
 
   const vertices = vertexMap.values().toArray();
   const edges = edgeMap.values().toArray();
