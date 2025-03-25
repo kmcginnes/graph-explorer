@@ -56,12 +56,12 @@ export function asyncLocalForageEffect<T>(key: string): AtomEffect<T> {
 
   return ({ setSelf, onSet }) => {
     setSelf(
-      localForage.getItem(key).then(
+      localForage.getItem(key)?.then(
         savedValue =>
           savedValue != null
             ? (savedValue as T | DefaultValue)
             : new DefaultValue() // Abort initialization if no value was stored
-      )
+      ) ?? new DefaultValue()
     );
 
     // Subscribe to state changes and persist them to localForage

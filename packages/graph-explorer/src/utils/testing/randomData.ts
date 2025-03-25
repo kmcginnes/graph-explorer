@@ -203,6 +203,7 @@ export function createRandomVertex(): Vertex {
     type: label,
     types: [label],
     attributes: createRecord(3, createRandomEntityAttribute),
+    __isFragment: false,
   };
 }
 
@@ -214,6 +215,7 @@ export function createRandomVertexForRdf(): Vertex {
     type: label,
     types: [label],
     attributes: createRecord(3, createRandomEntityAttributeForRdf),
+    __isFragment: false,
   };
 }
 
@@ -231,6 +233,7 @@ export function createRandomEdge(source: Vertex, target: Vertex): Edge {
     sourceTypes: source.types,
     target: target.id,
     targetTypes: target.types,
+    __isFragment: false,
   };
 }
 
@@ -245,6 +248,7 @@ export function createRandomEdgeForRdf(source: Vertex, target: Vertex): Edge {
     sourceTypes: source.types,
     target: target.id,
     targetTypes: target.types,
+    __isFragment: false,
   };
 }
 
