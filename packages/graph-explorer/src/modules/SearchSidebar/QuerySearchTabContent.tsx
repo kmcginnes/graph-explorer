@@ -22,6 +22,7 @@ import { logger } from "@/utils";
 import { atom, useRecoilState } from "recoil";
 import { LoadedResults } from "./LoadedResults";
 import { updateEdgeDetailsCache, updateVertexDetailsCache } from "@/connector";
+import Editor from "@monaco-editor/react";
 
 const formDataSchema = z.object({
   query: z.string().default(""),
@@ -71,6 +72,30 @@ export function QuerySearchTabContent() {
 
   return (
     <div className="bg-background-default flex h-full flex-col">
+      <Editor
+        height="5lh"
+        language="gremlin"
+        defaultValue={queryText}
+        options={{
+          placeholder: "e.g. g.V().limit(10)",
+          glyphMargin: false,
+          folding: false,
+          minimap: {
+            enabled: false,
+          },
+          lineNumbers: "off",
+          overviewRulerLanes: 0,
+          scrollbar: {
+            vertical: "hidden",
+            horizontal: "hidden",
+          },
+          scrollBeyondLastLine: false,
+          padding: {
+            top: 10,
+            bottom: 10,
+          },
+        }}
+      />
       <Form {...form}>
         <form
           className="border-divider flex shrink-0 flex-col gap-3 border-b p-3"
