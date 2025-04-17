@@ -6,6 +6,7 @@ import reactHooksLint from "eslint-plugin-react-hooks";
 import tanstackQueryLint from "@tanstack/eslint-plugin-query";
 import reactCompiler from "eslint-plugin-react-compiler";
 import eslintConfigPrettier from "eslint-config-prettier";
+import importPlugin from "eslint-plugin-import";
 import { fixupPluginRules, includeIgnoreFile } from "@eslint/compat";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,6 +41,25 @@ export default tseslint.config(
   },
   // Plugins
   pluginJs.configs.recommended,
+  {
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: tseslint.parser,
+    },
+    settings: {
+      "import/resolver": {
+        typescript: {
+          project: [
+            "./tsconfig.json", // matches all your workspaces
+          ],
+        },
+      },
+    },
+    extends: [
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+    ],
+  },
   tseslint.configs.recommendedTypeChecked,
   reactLint.configs.flat.recommended,
   {
