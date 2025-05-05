@@ -50,6 +50,81 @@ const activeConnectionSelector = atom(get => {
   );
 });
 
+export function useActiveConnection() {
+  return useAtomValue(activeConnectionSelector);
+}
+
+export type SensibleConnection = ReturnType<typeof mapToSensibleConnection>;
+
+export function useSensibleConnection() {
+  const connection = useActiveConnection();
+  if (!connection) {
+    throw new Error("Must have an active connection");
+  }
+  return mapToSensibleConnection(connection);
+}
+
+function mapToSensibleConnection(connection: ConnectionConfig) {
+  const queryLanguage = connection.queryEngine ?? "gremlin";
+  const dbUrl = connection.proxyConnection
+    ? connection.graphDbUrl
+    : connection.url;
+  // const apiUrl = connection.proxyConnection
+  //   ? connection.url
+  //   : getBaseExplorerUrl(window.location.href);
+  const apiUrl = getBaseExplorerUrl(window.location.href);
+
+  if (!dbUrl) {
+    throw new Error("Connection must have a database URL");
+  }
+
+  // create a hash of the query language, the dbUrl, and the apiUrl
+  const hash = createHash(queryLanguage, dbUrl, apiUrl);
+
+  const result = {
+    hash,
+    queryLanguage,
+    dbUrl,
+    apiUrl,
+  };
+
+  logger.debug("Sensible connection", result);
+
+  return result;
+}
+
+function createHash(...values: string[]) {
+  const str = values.join("::");
+  let hash = 0x811c9dc5; // FNV offset basis
+
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = (hash * 0x01000193) >>> 0; // FNV prime
+  }
+
+  return hash.toString(16).padStart(8, "0"); // Return hex string (8 chars)
+}
+
+function getBaseExplorerUrl(urlString: string): string {
+  const url = new URL(urlString);
+
+  const explorerIndex = url.pathname.indexOf("/explorer");
+  if (explorerIndex !== -1) {
+    // Keep up to and including "/explorer/"
+    const newPath = url.pathname.substring(
+      0,
+      explorerIndex + "/explorer/".length
+    );
+    return `${url.origin}${newPath}`;
+  }
+
+  // Otherwise, return full origin + pathname with a trailing slash
+  const pathname = url.pathname.endsWith("/")
+    ? url.pathname
+    : `${url.pathname}/`;
+  return `${url.origin}${pathname}`;
+}
+
 const explorerAtom = atom(get => {
   const explorerForTesting = get(explorerForTestingAtom);
   if (explorerForTesting) {
