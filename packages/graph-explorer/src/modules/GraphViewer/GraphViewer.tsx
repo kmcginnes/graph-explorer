@@ -51,6 +51,7 @@ import {
   ZoomOutIcon,
 } from "lucide-react";
 import { useAtom, useAtomValue } from "jotai";
+import ShareLinkButton from "./ShareLinkButton";
 
 const LAYOUT_OPTIONS = [
   {
@@ -192,6 +193,7 @@ export default function GraphViewer() {
             />
             <ExportGraphButton />
             <ImportGraphButton />
+            <ShareLinkButton />
             <PanelHeaderDivider />
             <PanelHeaderActionButton
               label="Zoom in"

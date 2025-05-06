@@ -1,7 +1,7 @@
-import { cn } from "@/utils";
+import { cn, logger } from "@/utils";
 import { Resizable } from "re-resizable";
 import { useCallback } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import {
   buttonStyles,
   EdgeIcon,
@@ -39,6 +39,7 @@ import defaultStyles from "./GraphExplorer.styles";
 import { APP_NAME } from "@/utils/constants";
 import { SearchSidebarPanel } from "@/modules/SearchSidebar";
 import { useAtom, useAtomValue } from "jotai";
+import { decompressFromEncodedURIComponent } from "lz-string";
 
 const RESIZE_ENABLE_TOP = {
   top: true,
@@ -51,7 +52,21 @@ const RESIZE_ENABLE_TOP = {
   topLeft: false,
 };
 
+function useGraphData() {
+  const [params] = useSearchParams();
+  const data = params.get("data");
+  logger.debug("Graph data from URL", data);
+  const result = data ? decompressFromEncodedURIComponent(data) : null;
+  logger.debug("Graph data from URL decompressed", result);
+  const json = result ? JSON.parse(result) : null;
+  logger.debug("Graph data from URL JSON", json);
+  return json;
+}
+
 const GraphExplorer = () => {
+  const graphData = useGraphData();
+  logger.debug("Graph data", graphData);
+
   const styleWithTheme = useWithTheme();
   const config = useConfiguration();
   const t = useTranslations();
