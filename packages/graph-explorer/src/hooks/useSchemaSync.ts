@@ -29,10 +29,13 @@ export function useSchemaSync() {
       ? config.schema
       : undefined;
 
+  const allowSyncing = !initialData || config.schema?.lastSyncFail === true;
+  console.log("initialData", { initialData, config, allowSyncing });
+
   const query = useQuery({
     ...schemaSyncQuery(replaceSchema, explorer),
     initialData: initialData,
-    enabled: !initialData || config.schema?.lastSyncFail === true,
+    // enabled: allowSyncing,
   });
   const { data, isFetching, status, error, refetch } = query;
 

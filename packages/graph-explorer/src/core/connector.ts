@@ -87,3 +87,14 @@ export function createLoggerFromConnection(
   );
   return new ServerLoggerConnector(connection.url);
 }
+
+/**
+ * Hook that provides a callback that changes the connection used for Graph Explorer.
+ */
+export function useSetConnection() {
+  // Set active UI
+  // Create explorer
+  // Set remove logger
+  // Clear query cache
+  // Reset app state
+}
