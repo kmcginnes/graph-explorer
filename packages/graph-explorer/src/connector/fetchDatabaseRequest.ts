@@ -1,7 +1,6 @@
-import { type ConnectionConfig } from "@shared/types";
 import { DEFAULT_SERVICE_TYPE } from "@/utils/constants";
 import { anySignal } from "./utils/anySignal";
-import { FeatureFlags } from "@/core";
+import { FeatureFlags, NormalizedConnection } from "@/core";
 import { z } from "zod";
 import { logger, NetworkError } from "@/utils";
 
@@ -57,7 +56,7 @@ async function decodeErrorSafely(response: Response): Promise<any> {
 
 // Construct the request headers based on the connection settings
 function getAuthHeaders(
-  connection: ConnectionConfig | undefined,
+  connection: NormalizedConnection | null,
   featureFlags: FeatureFlags,
   typeHeaders: HeadersInit | undefined
 ) {
@@ -77,7 +76,7 @@ function getAuthHeaders(
 }
 
 // Construct an AbortSignal for the fetch timeout if configured
-function getFetchTimeoutSignal(connection: ConnectionConfig | undefined) {
+function getFetchTimeoutSignal(connection: NormalizedConnection | null) {
   if (!connection?.fetchTimeoutMs) {
     return null;
   }
@@ -90,7 +89,7 @@ function getFetchTimeoutSignal(connection: ConnectionConfig | undefined) {
 }
 
 export async function fetchDatabaseRequest(
-  connection: ConnectionConfig | undefined,
+  connection: NormalizedConnection | null,
   featureFlags: FeatureFlags,
   uri: URL | RequestInfo,
   options: RequestInit
