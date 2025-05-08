@@ -1,5 +1,6 @@
 import {
   AttributeConfig,
+  ConfigurationId,
   EdgeTypeConfig,
   PrefixTypeConfig,
   VertexTypeConfig,
@@ -61,6 +62,27 @@ export const activeSchemaSelector = atom(
       updatedSchemaMap.set(schemaId, newValue);
 
       return updatedSchemaMap;
+    });
+  }
+);
+
+export const resetSchemaStatusAtom = atom(
+  null,
+  async (_get, set, configId: ConfigurationId) => {
+    await set(schemaAtom, async prev => {
+      const updated = new Map(await prev);
+      const currentSchema = updated.get(configId);
+      updated.set(configId, {
+        vertices: currentSchema?.vertices || [],
+        edges: currentSchema?.edges || [],
+        prefixes: currentSchema?.prefixes || [],
+        // If the URL or Engine change, show as not synchronized
+        lastUpdate: undefined,
+        lastSyncFail: undefined,
+        triedToSync: undefined,
+      });
+
+      return updated;
     });
   }
 );

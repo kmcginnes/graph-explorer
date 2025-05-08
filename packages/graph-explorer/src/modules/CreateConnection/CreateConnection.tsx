@@ -15,17 +15,13 @@ import {
   NeptuneServiceType,
 } from "@shared/types";
 import {
-  allGraphSessionsAtom,
   ConfigurationContextProps,
   createNewConfigurationId,
-  RawConfiguration,
+  deleteGraphSessionAtom,
   useWithTheme,
 } from "@/core";
-import {
-  activeConfigurationAtom,
-  configurationAtom,
-} from "@/core/StateProvider/configuration";
-import { schemaAtom } from "@/core/StateProvider/schema";
+import { createOrUpdateConfigurationAtom } from "@/core/StateProvider/configuration";
+import { resetSchemaStatusAtom } from "@/core/StateProvider/schema";
 import useResetState from "@/core/StateProvider/useResetState";
 import { cn, formatDate } from "@/utils";
 import defaultStyles from "./CreateConnection.styles";
@@ -34,6 +30,7 @@ import {
   DEFAULT_NODE_EXPAND_LIMIT,
 } from "@/utils/constants";
 import { useAtomCallback } from "jotai/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ConnectionForm = {
   name?: string;
@@ -86,7 +83,6 @@ const CreateConnection = ({
 }: CreateConnectionProps) => {
   const styleWithTheme = useWithTheme();
 
-  const configId = existingConfig?.id;
   const initialData: ConnectionForm | undefined = existingConfig
     ? {
         ...(existingConfig.connection || {}),
@@ -98,74 +94,38 @@ const CreateConnection = ({
       }
     : undefined;
 
+  const configId = existingConfig?.id ?? createNewConfigurationId();
+  const queryClient = useQueryClient();
   const onSave = useAtomCallback(
     useCallback(
       async (_get, set, data: Required<ConnectionForm>) => {
-        if (!configId) {
-          const newConfigId = createNewConfigurationId();
-          const newConfig: RawConfiguration = {
-            id: newConfigId,
-            displayLabel: data.name,
-            connection: mapToConnection(data),
-          };
-          await set(configurationAtom, async prevConfigMap => {
-            const updatedConfig = new Map(await prevConfigMap);
-            updatedConfig.set(newConfigId, newConfig);
-            return updatedConfig;
-          });
-          set(activeConfigurationAtom, newConfigId);
+        await set(createOrUpdateConfigurationAtom, {
+          id: configId,
+          displayLabel: data.name,
+          connection: mapToConnection(data),
+        });
+
+        if (!existingConfig || !existingConfig.connection) {
           return;
         }
 
-        await set(configurationAtom, async prevConfigMap => {
-          const updatedConfig = new Map(await prevConfigMap);
-          const currentConfig = updatedConfig.get(configId);
-
-          updatedConfig.set(configId, {
-            ...(currentConfig || {}),
-            id: configId,
-            displayLabel: data.name,
-            connection: mapToConnection(data),
-          });
-          return updatedConfig;
-        });
-
-        const urlChange = initialData?.url !== data.url;
-        const dbUrlChange = initialData?.graphDbUrl !== data.graphDbUrl;
-        const typeChange = initialData?.queryEngine !== data.queryEngine;
+        const urlChange = existingConfig.connection.url !== data.url;
+        const dbUrlChange =
+          existingConfig.connection.graphDbUrl !== data.graphDbUrl;
+        const typeChange =
+          existingConfig.connection.queryEngine !== data.queryEngine;
 
         if (urlChange || dbUrlChange || typeChange) {
           // Force a sync of the schema
-          await set(schemaAtom, async prevSchemaMap => {
-            const updatedSchema = new Map(await prevSchemaMap);
-            const currentSchema = updatedSchema.get(configId);
-            updatedSchema.set(configId, {
-              vertices: currentSchema?.vertices || [],
-              edges: currentSchema?.edges || [],
-              prefixes: currentSchema?.prefixes || [],
-              // If the URL or Engine change, show as not synchronized
-              lastUpdate: undefined,
-              lastSyncFail: undefined,
-              triedToSync: undefined,
-            });
-
-            return updatedSchema;
-          });
+          await set(resetSchemaStatusAtom, configId);
 
           // Delete previous session data
-          await set(allGraphSessionsAtom, async prev => {
-            const updatedGraphs = new Map(await prev);
-            updatedGraphs.delete(configId);
-            return updatedGraphs;
-          });
+          await set(deleteGraphSessionAtom, configId);
+
+          await queryClient.resetQueries();
         }
       },
-      [
-        configId,
-        initialData?.url,
-        initialData?.graphDbUrl,
-        initialData?.queryEngine,
-      ]
+      [configId, existingConfig, queryClient]
     )
   );
 
@@ -419,7 +379,7 @@ const CreateConnection = ({
           Cancel
         </Button>
         <Button variant="filled" onPress={onSubmit}>
-          {!configId ? "Add Connection" : "Update Connection"}
+          {!existingConfig ? "Add Connection" : "Update Connection"}
         </Button>
       </div>
     </div>

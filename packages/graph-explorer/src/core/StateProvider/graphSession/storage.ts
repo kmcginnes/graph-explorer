@@ -19,6 +19,17 @@ export const allGraphSessionsAtom = atomWithLocalForage(
   "graph-sessions"
 );
 
+export const deleteGraphSessionAtom = atom(
+  null,
+  async (_get, set, configId: ConfigurationId) => {
+    await set(allGraphSessionsAtom, async prev => {
+      const updatedGraphs = new Map(await prev);
+      updatedGraphs.delete(configId);
+      return updatedGraphs;
+    });
+  }
+);
+
 /** Gets or sets the active connection's graph session data. */
 export const activeGraphSessionAtom = atom(
   get => {
