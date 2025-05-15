@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { HashRouter as Router } from "react-router";
+import { BrowserRouter } from "react-router";
 import App from "./App";
 import "core-js/full/iterator";
 
@@ -10,9 +10,9 @@ import "@mantine/core/styles.css";
 const BootstrapApp = () => {
   return (
     <React.StrictMode>
-      <Router>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <App />
-      </Router>
+      </BrowserRouter>
     </React.StrictMode>
   );
 };
