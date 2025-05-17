@@ -1,19 +1,14 @@
 /// <reference types="vitest" />
-import react from "@vitejs/plugin-react";
+
+import { reactRouter } from "@react-router/dev/vite";
+import babel from "vite-plugin-babel";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { loadEnv, PluginOption } from "vite";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
+import { PluginOptions } from "babel-plugin-react-compiler";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-
-  // Construct the URL for the express server used by the Vite dev server
-  const expressServerUrl = (() => {
-    const httpPort = env.PROXY_SERVER_HTTP_PORT || 80;
-    const port = httpPort !== 80 ? `:${httpPort}` : "";
-    const baseUrl = `http://localhost${port}`;
-    return baseUrl;
-  })();
 
   const htmlPlugin = (): PluginOption => {
     return {
@@ -35,19 +30,7 @@ export default defineConfig(({ mode }) => {
       watch: {
         ignored: ["**/*.test.ts", "**/*.test.tsx"],
       },
-      proxy: {
-        // Forward these requests to the express server when in dev mode
-        "/defaultConnection": {
-          target: expressServerUrl,
-          changeOrigin: true,
-        },
-        "/status": {
-          target: expressServerUrl,
-          changeOrigin: true,
-        },
-      },
     },
-    base: env.GRAPH_EXP_ENV_ROOT_FOLDER,
     envPrefix: "GRAPH_EXP",
     define: {
       __GRAPH_EXP_VERSION__: JSON.stringify(process.env.npm_package_version),
@@ -55,15 +38,14 @@ export default defineConfig(({ mode }) => {
     plugins: [
       tsconfigPaths(),
       htmlPlugin(),
-      react({
-        babel: {
+      reactRouter(),
+      babel({
+        filter: /\.[jt]sx?$/,
+        babelConfig: {
+          presets: ["@babel/preset-typescript"],
           plugins: [
-            [
-              "babel-plugin-react-compiler",
-              {
-                target: "19", // '17' | '18' | '19'
-              },
-            ],
+            ["babel-plugin-react-compiler", ReactCompilerConfig],
+            ["@babel/plugin-syntax-jsx", {}],
           ],
         },
       }),
@@ -92,3 +74,7 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
+
+const ReactCompilerConfig: Partial<PluginOptions> = {
+  target: "19",
+};
