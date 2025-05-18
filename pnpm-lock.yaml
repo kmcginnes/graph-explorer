@@ -130,21 +130,12 @@ importers:
       '@react-aria/textfield':
         specifier: 3.17.2
         version: 3.17.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@react-stately/collections':
-        specifier: ^3.12.3
-        version: 3.12.3(react@19.1.0)
-      '@react-stately/list':
-        specifier: ^3.12.1
-        version: 3.12.1(react@19.1.0)
       '@tanstack/react-query':
         specifier: ^5.76.1
         version: 5.76.1(react@19.1.0)
       '@tanstack/react-query-devtools':
         specifier: ^5.76.1
         version: 5.76.1(@tanstack/react-query@5.76.1(react@19.1.0))(react@19.1.0)
-      '@types/wicg-file-system-access':
-        specifier: ^2023.10.6
-        version: 2023.10.6
       babel-plugin-react-compiler:
         specifier: 19.1.0-rc.2
         version: 19.1.0-rc.2
@@ -344,6 +335,9 @@ importers:
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
+      '@types/wicg-file-system-access':
+        specifier: ^2023.10.6
+        version: 2023.10.6
       '@vitejs/plugin-react':
         specifier: ^4.4.1
         version: 4.4.1(vite@6.3.5(@types/node@22.15.18)(jiti@1.21.7)(terser@5.39.1)(tsx@4.19.4)(yaml@2.7.1))
@@ -2029,11 +2023,6 @@ packages:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@react-stately/collections@3.12.3':
-    resolution: {integrity: sha512-QfSBME2QWDjUw/RmmUjrYl/j1iCYcYCIDsgZda1OeRtt63R11k0aqmmwrDRwCsA+Sv+D5QgkOp4KK+CokTzoVQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
   '@react-stately/flags@3.1.1':
     resolution: {integrity: sha512-XPR5gi5LfrPdhxZzdIlJDz/B5cBf63l4q6/AzNqVWFKgd0QqY5LvWJftXkklaIUpKSJkIKQb8dphuZXDtkWNqg==}
 
@@ -2042,18 +2031,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@react-stately/list@3.12.1':
-    resolution: {integrity: sha512-N+YCInNZ2OpY0WUNvJWUTyFHtzE5yBtZ9DI4EHJDvm61+jmZ2s3HszOfa7j+7VOKq78VW3m5laqsQNWvMrLFrQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
   '@react-stately/radio@3.10.12':
     resolution: {integrity: sha512-hFH45CXVa7uyXeTYQy7LGR0SnmGnNRx7XnEXS25w4Ch6BpH8m8SAbhKXqysgcmsE3xrhRas7P9zWw7wI24G28Q==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
-  '@react-stately/selection@3.20.1':
-    resolution: {integrity: sha512-K9MP6Rfg2yvFoY2Cr+ykA7bP4EBXlGaq5Dqfa1krvcXlEgMbQka5muLHdNXqjzGgcwPmS1dx1NECD15q63NtOw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -7594,12 +7573,6 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@react-stately/collections@3.12.3(react@19.1.0)':
-    dependencies:
-      '@react-types/shared': 3.29.0(react@19.1.0)
-      '@swc/helpers': 0.5.17
-      react: 19.1.0
-
   '@react-stately/flags@3.1.1':
     dependencies:
       '@swc/helpers': 0.5.17
@@ -7610,28 +7583,11 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
-  '@react-stately/list@3.12.1(react@19.1.0)':
-    dependencies:
-      '@react-stately/collections': 3.12.3(react@19.1.0)
-      '@react-stately/selection': 3.20.1(react@19.1.0)
-      '@react-stately/utils': 3.10.6(react@19.1.0)
-      '@react-types/shared': 3.29.0(react@19.1.0)
-      '@swc/helpers': 0.5.17
-      react: 19.1.0
-
   '@react-stately/radio@3.10.12(react@19.1.0)':
     dependencies:
       '@react-stately/form': 3.1.3(react@19.1.0)
       '@react-stately/utils': 3.10.6(react@19.1.0)
       '@react-types/radio': 3.8.8(react@19.1.0)
-      '@react-types/shared': 3.29.0(react@19.1.0)
-      '@swc/helpers': 0.5.17
-      react: 19.1.0
-
-  '@react-stately/selection@3.20.1(react@19.1.0)':
-    dependencies:
-      '@react-stately/collections': 3.12.3(react@19.1.0)
-      '@react-stately/utils': 3.10.6(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
