@@ -39,7 +39,7 @@ import {
 } from "@/utils/constants";
 import { useAtomCallback } from "jotai/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { VisuallyHidden } from "@mantine/core";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 type ConnectionForm = {
   name?: string;
