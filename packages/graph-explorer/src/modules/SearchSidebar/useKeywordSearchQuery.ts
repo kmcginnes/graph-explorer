@@ -17,7 +17,6 @@ export function useKeywordSearchQuery({
   exactMatch,
 }: SearchQueryRequest) {
   const explorer = useExplorer();
-  const queryClient = useQueryClient();
   const updateSchema = useUpdateSchemaFromEntities();
 
   const request: KeywordSearchRequest = {
@@ -28,9 +27,7 @@ export function useKeywordSearchQuery({
     searchByAttributes: debouncedSearchTerm ? searchByAttributes : undefined,
     exactMatch: debouncedSearchTerm ? exactMatch : undefined,
   };
-  const query = useQuery(
-    searchQuery(request, updateSchema, explorer, queryClient)
-  );
+  const query = useQuery(searchQuery(request, updateSchema, explorer));
 
   return query;
 }

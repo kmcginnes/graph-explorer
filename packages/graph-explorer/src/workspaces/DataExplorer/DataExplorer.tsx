@@ -1,10 +1,6 @@
 import { cn } from "@/utils";
 import { useRef } from "react";
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router";
 import {
   useUpdateSchemaFromEntities,
@@ -329,7 +325,6 @@ function useDataExplorerQuery(
   pageIndex: number
 ) {
   const explorer = useExplorer();
-  const queryClient = useQueryClient();
   const updateSchema = useUpdateSchemaFromEntities();
 
   const searchRequest: KeywordSearchRequest = {
@@ -338,7 +333,7 @@ function useDataExplorerQuery(
     offset: pageIndex * pageSize,
   };
   const query = useQuery({
-    ...searchQuery(searchRequest, updateSchema, explorer, queryClient),
+    ...searchQuery(searchRequest, updateSchema, explorer),
     placeholderData: keepPreviousData,
   });
 

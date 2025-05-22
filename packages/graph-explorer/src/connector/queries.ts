@@ -42,24 +42,22 @@ export function schemaSyncQuery(
  * Performs a search with the provided parameters.
  * @param request The search parameters to use for the query.
  * @param explorer The service client to use for fetching the neighbors count.
- * @param queryClient The query client to use for updating the cache.
  * @returns A list of nodes that match the search parameters.
  */
 export function searchQuery(
   request: KeywordSearchRequest,
   updateSchema: (entities: { vertices: Vertex[]; edges: Edge[] }) => void,
-  explorer: Explorer,
-  queryClient: QueryClient
+  explorer: Explorer
 ) {
   return queryOptions({
-    queryKey: ["keyword-search", request, explorer, queryClient],
-    queryFn: async ({ signal }): Promise<KeywordSearchResponse> => {
+    queryKey: ["keyword-search", request, explorer],
+    queryFn: async ({ signal, client }): Promise<KeywordSearchResponse> => {
       if (!request) {
         return toMappedQueryResults({});
       }
       const results = await explorer.keywordSearch(request, { signal });
 
-      updateVertexDetailsCache(explorer, queryClient, results.vertices);
+      updateVertexDetailsCache(explorer, client, results.vertices);
       updateSchema(results);
 
       return results;
