@@ -140,6 +140,55 @@ export function vertexDetailsQuery(vertexId: VertexId, explorer: Explorer) {
   });
 }
 
+export function verticesDetailsQuery(
+  vertexIds: VertexId[],
+  explorer: Explorer
+) {
+  return queryOptions({
+    queryKey: ["vertices", vertexIds, explorer],
+    queryFn: async ({ signal, client }): Promise<VertexDetailsResponse> => {
+      // Bail early if the vertex IDs are empty
+      if (vertexIds.length === 0) {
+        return { vertices: [] };
+      }
+
+      // Get cached results
+      const cachedResults = vertexIds
+        .values()
+        .map(id =>
+          client.getQueryData(vertexDetailsQuery(id, explorer).queryKey)
+        )
+        .filter(result => result != null)
+        .filter(result => result.__isFragment === false)
+        .toArray();
+
+      // Unique missing IDs
+      const missingIds = new Set(vertexIds).difference(
+        new Set(cachedResults.map(v => v.id))
+      );
+
+      // If all vertices are cached, return them
+      if (missingIds.size === 0) {
+        return { vertices: cachedResults };
+      }
+
+      // Fetch missing vertices
+      const result = await explorer.vertexDetails(
+        { vertexIds: missingIds.values().toArray() },
+        { signal }
+      );
+
+      // Update the cache
+      updateVertexDetailsCache(explorer, client, result.vertices);
+
+      // Combine the results
+      return {
+        vertices: [...cachedResults, ...result.vertices],
+      };
+    },
+  });
+}
+
 export function edgeDetailsQuery(edgeId: EdgeId, explorer: Explorer) {
   return queryOptions({
     queryKey: ["edge", edgeId, explorer],

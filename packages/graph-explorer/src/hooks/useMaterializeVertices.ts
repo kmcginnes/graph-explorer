@@ -1,4 +1,4 @@
-import { vertexDetailsQuery } from "@/connector";
+import { verticesDetailsQuery } from "@/connector";
 import { useExplorer, VertexId, Vertex, toNodeMap } from "@/core";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -8,18 +8,10 @@ export function useMaterializeVertices() {
   const explorer = useExplorer();
 
   return async (vertices: Map<VertexId, Vertex>) => {
-    const responses = await Promise.all(
-      vertices.values().map(async vertex => {
-        if (!vertex.__isFragment) {
-          return vertex;
-        }
-
-        const response = await queryClient.ensureQueryData(
-          vertexDetailsQuery(vertex.id, explorer)
-        );
-        return response;
-      })
+    const response = await queryClient.ensureQueryData(
+      verticesDetailsQuery(vertices.keys().toArray(), explorer)
     );
-    return toNodeMap(responses.filter(vertex => vertex != null));
+
+    return toNodeMap(response.vertices);
   };
 }

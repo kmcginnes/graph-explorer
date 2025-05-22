@@ -1,4 +1,4 @@
-import { edgeDetailsQuery, Explorer, vertexDetailsQuery } from "@/connector";
+import { edgeDetailsQuery, Explorer, verticesDetailsQuery } from "@/connector";
 import { VertexId, EdgeId } from "@/core";
 import { formatEntityCounts } from "@/utils";
 import { QueryClient } from "@tanstack/react-query";
@@ -16,10 +16,8 @@ export async function fetchEntityDetails(
   queryClient: QueryClient,
   explorer: Explorer
 ) {
-  const vertexResults = await Promise.allSettled(
-    vertices
-      .values()
-      .map(id => queryClient.ensureQueryData(vertexDetailsQuery(id, explorer)))
+  const vertexResults = await queryClient.ensureQueryData(
+    verticesDetailsQuery(vertices.values().toArray(), explorer)
   );
   const edgeResults = await Promise.allSettled(
     edges
@@ -27,25 +25,20 @@ export async function fetchEntityDetails(
       .map(id => queryClient.ensureQueryData(edgeDetailsQuery(id, explorer)))
   );
 
-  const vertexDetails = vertexResults
-    .filter(result => result.status === "fulfilled")
-    .map(result => result.value)
-    .filter(v => v != null);
+  const vertexDetails = vertexResults.vertices;
   const edgeDetails = edgeResults
     .filter(result => result.status === "fulfilled")
     .map(result => result.value.edge)
     .filter(e => e != null);
 
-  const countOfVertexErrors = vertexResults.reduce((sum, item) => {
-    return sum + (item.status === "rejected" ? 1 : 0);
-  }, 0);
+  // TODO: Handle errors
+  const countOfVertexErrors = 0;
   const countOfEdgeErrors = edgeResults.reduce((sum, item) => {
     return sum + (item.status === "rejected" ? 1 : 0);
   }, 0);
 
-  const countOfVertexNotFound = vertexResults.reduce((sum, item) => {
-    return sum + (item.status === "fulfilled" && item.value == null ? 1 : 0);
-  }, 0);
+  // TODO: Handle not found
+  const countOfVertexNotFound = 0;
   const countOfEdgeNotFound = edgeResults.reduce((sum, item) => {
     return (
       sum + (item.status === "fulfilled" && item.value.edge == null ? 1 : 0)
