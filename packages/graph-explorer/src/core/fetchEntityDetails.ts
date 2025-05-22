@@ -19,11 +19,7 @@ export async function fetchEntityDetails(
   const vertexResults = await Promise.allSettled(
     vertices
       .values()
-      .map(id =>
-        queryClient.ensureQueryData(
-          vertexDetailsQuery({ vertexId: id }, explorer)
-        )
-      )
+      .map(id => queryClient.ensureQueryData(vertexDetailsQuery(id, explorer)))
   );
   const edgeResults = await Promise.allSettled(
     edges

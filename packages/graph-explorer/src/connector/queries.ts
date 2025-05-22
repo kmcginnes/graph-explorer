@@ -7,7 +7,6 @@ import {
   KeywordSearchResponse,
   SchemaResponse,
   toMappedQueryResults,
-  VertexDetailsRequest,
   VertexDetailsResponse,
 } from "./useGEFetchTypes";
 import { Edge, Vertex, VertexId } from "@/core";
@@ -120,14 +119,11 @@ export const nodeCountByNodeTypeQuery = (
       }),
   });
 
-export function vertexDetailsQuery(
-  request: VertexDetailsRequest,
-  explorer: Explorer
-) {
+export function vertexDetailsQuery(vertexId: VertexId, explorer: Explorer) {
   return queryOptions({
-    queryKey: ["db", "vertex", "details", request, explorer],
+    queryKey: ["vertex", vertexId, explorer],
     queryFn: ({ signal }): Promise<VertexDetailsResponse> =>
-      explorer.vertexDetails(request, { signal }),
+      explorer.vertexDetails({ vertexId }, { signal }),
   });
 }
 
@@ -149,13 +145,10 @@ export function updateVertexDetailsCache(
   vertices: Vertex[]
 ) {
   for (const vertex of vertices.filter(v => !v.__isFragment)) {
-    const request: VertexDetailsRequest = {
-      vertexId: vertex.id,
-    };
     const response: VertexDetailsResponse = {
       vertex,
     };
-    const queryKey = vertexDetailsQuery(request, explorer).queryKey;
+    const queryKey = vertexDetailsQuery(vertex.id, explorer).queryKey;
     queryClient.setQueryData(queryKey, response);
   }
 }

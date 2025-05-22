@@ -1,4 +1,4 @@
-import { VertexDetailsRequest, vertexDetailsQuery } from "@/connector";
+import { vertexDetailsQuery } from "@/connector";
 import { useExplorer, VertexId, Vertex, toNodeMap } from "@/core";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -14,11 +14,8 @@ export function useMaterializeVertices() {
           return vertex;
         }
 
-        const request: VertexDetailsRequest = {
-          vertexId: vertex.id,
-        };
         const response = await queryClient.ensureQueryData(
-          vertexDetailsQuery(request, explorer)
+          vertexDetailsQuery(vertex.id, explorer)
         );
         return response.vertex;
       })
