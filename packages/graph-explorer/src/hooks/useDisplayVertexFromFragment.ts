@@ -17,6 +17,6 @@ export function useDisplayVertexFromFragment(
   types: Vertex["types"]
 ) {
   const query = useVertexDetailsQuery(id);
-  const vertex = query.data?.vertex ?? createVertex({ id, types });
+  const vertex = query.data ?? createVertex({ id, types });
   return useDisplayVertexFromVertex(vertex);
 }

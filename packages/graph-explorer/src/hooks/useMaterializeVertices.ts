@@ -17,7 +17,7 @@ export function useMaterializeVertices() {
         const response = await queryClient.ensureQueryData(
           vertexDetailsQuery(vertex.id, explorer)
         );
-        return response.vertex;
+        return response;
       })
     );
     return toNodeMap(responses.filter(vertex => vertex != null));

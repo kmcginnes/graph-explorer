@@ -1,4 +1,4 @@
-import { logger, query } from "@/utils";
+import { query } from "@/utils";
 import {
   ErrorResponse,
   VertexDetailsRequest,
@@ -27,9 +27,8 @@ export async function vertexDetails(
   gremlinFetch: GremlinFetch,
   request: VertexDetailsRequest
 ): Promise<VertexDetailsResponse> {
-  const template = query`
-    g.V(${idParam(request.vertexId)})
-  `;
+  const idTemplate = request.vertexIds.map(idParam).join(",");
+  const template = query`g.V(${idTemplate})`;
 
   // Fetch the vertex details
   const data = await gremlinFetch<Response | ErrorResponse>(template);
@@ -39,13 +38,11 @@ export async function vertexDetails(
 
   // Map the results
   const entities = mapResults(data.result.data);
-  const vertex = entities.vertices.length > 0 ? entities.vertices[0] : null;
-  if (!vertex) {
-    logger.warn("Vertex not found", request.vertexId);
-    return { vertex: null };
-  }
 
   // Always false for vertexDetails query, even if the vertex has no properties
-  vertex.__isFragment = false;
-  return { vertex };
+  for (const vertex of entities.vertices) {
+    vertex.__isFragment = false;
+  }
+
+  return { vertices: entities.vertices };
 }

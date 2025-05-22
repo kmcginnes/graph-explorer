@@ -13,10 +13,10 @@ describe("vertexDetails", () => {
       .mockImplementation(() => Promise.resolve(response));
 
     const result = await vertexDetails(mockFetch, {
-      vertexId: vertex.id,
+      vertexIds: [vertex.id],
     });
 
-    expect(result.vertex).toEqual(vertex);
+    expect(result.vertices).toEqual([vertex]);
   });
 
   it("should not be fragment if the response does not include the properties", async () => {
@@ -29,9 +29,9 @@ describe("vertexDetails", () => {
       .mockImplementation(() => Promise.resolve(response));
 
     const result = await vertexDetails(mockFetch, {
-      vertexId: vertex.id,
+      vertexIds: [vertex.id],
     });
 
-    expect(result.vertex?.__isFragment).toBe(false);
+    expect(result.vertices[0]?.__isFragment).toBe(false);
   });
 });

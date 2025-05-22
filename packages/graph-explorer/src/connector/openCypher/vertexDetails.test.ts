@@ -11,9 +11,9 @@ describe("vertexDetails", () => {
       .fn()
       .mockImplementation(() => Promise.resolve(response));
 
-    const result = await vertexDetails(mockFetch, { vertexId: vertex.id });
+    const result = await vertexDetails(mockFetch, { vertexIds: [vertex.id] });
 
-    expect(result.vertex).toEqual(vertex);
+    expect(result.vertices).toEqual([vertex]);
   });
 });
 

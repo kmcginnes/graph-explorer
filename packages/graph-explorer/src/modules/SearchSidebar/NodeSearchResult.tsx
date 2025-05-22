@@ -24,7 +24,7 @@ export function NodeSearchResult({ node }: { node: Vertex }) {
   const [expanded, setExpanded] = useState(false);
 
   const { data: detailsResponse } = useVertexDetailsQuery(node.id);
-  const preferredNode = detailsResponse?.vertex ?? node;
+  const preferredNode = detailsResponse ?? node;
   const displayNode = useDisplayVertexFromVertex(preferredNode);
 
   return (

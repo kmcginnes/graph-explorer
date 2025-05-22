@@ -12,11 +12,12 @@ import {
   SparqlValue,
 } from "./types";
 import { z } from "zod";
-import { createVertex, VertexId } from "@/core";
+import { createVertex, createVertexId, VertexId } from "@/core";
 import isErrorResponse from "../utils/isErrorResponse";
 import { idParam } from "./idParam";
 
 const bindingSchema = z.object({
+  source: sparqlUriValueSchema,
   label: sparqlUriValueSchema,
   value: sparqlValueSchema,
 });
@@ -27,24 +28,28 @@ export async function vertexDetails(
   sparqlFetch: SparqlFetch,
   request: VertexDetailsRequest
 ): Promise<VertexDetailsResponse> {
+  const idTemplate = request.vertexIds.map(idParam).join(" ");
+
   const template = query`
     # Get the resource attributes and class
     SELECT * 
     WHERE {
       {
         # Get the resource attributes
-        SELECT ?label ?value
+        SELECT ?source ?label ?value
         WHERE {
-          ${idParam(request.vertexId)} ?label ?value .
+          VALUES ?source { ${idTemplate} }
+          ?source ?label ?value .
           FILTER(isLiteral(?value))
         }
       }
       UNION
       {
         # Get the resource type
-        SELECT ?label ?value
+        SELECT ?source ?label ?value
         WHERE {
-          ${idParam(request.vertexId)} a ?value .
+          VALUES ?source { ${idTemplate} }
+          ?source a ?value .
           BIND(IRI("${rdfTypeUri}") AS ?label)
         }
       }
@@ -75,14 +80,18 @@ export async function vertexDetails(
   }
 
   // Map the results
-  if (parsed.data.results.bindings.length === 0) {
-    logger.warn("Vertex not found", request.vertexId, response);
-    return { vertex: null };
-  }
+  const groupedBindings = Map.groupBy(
+    parsed.data.results.bindings,
+    binding => binding.source.value
+  );
+  const vertices = groupedBindings
+    .entries()
+    .map(([resourceUri, bindings]) =>
+      mapToVertex(createVertexId(resourceUri), bindings)
+    )
+    .toArray();
 
-  const vertex = mapToVertex(request.vertexId, parsed.data.results.bindings);
-
-  return { vertex };
+  return { vertices };
 }
 
 function mapToVertex(id: VertexId, detailsBinding: VertexDetailsBinding[]) {

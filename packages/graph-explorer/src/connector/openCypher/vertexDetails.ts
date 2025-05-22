@@ -21,8 +21,9 @@ export async function vertexDetails(
   openCypherFetch: OpenCypherFetch,
   req: VertexDetailsRequest
 ): Promise<VertexDetailsResponse> {
+  const idTemplate = req.vertexIds.map(idParam).join(", ");
   const template = query`
-    MATCH (vertex) WHERE ID(vertex) = ${idParam(req.vertexId)} RETURN vertex
+    MATCH (vertex) WHERE ID(vertex) IN (${idTemplate}) RETURN vertex
   `;
 
   // Fetch the vertex details
@@ -32,13 +33,7 @@ export async function vertexDetails(
   }
 
   // Map the results
-  const ocVertex = data.results[0]?.vertex;
+  const vertices = data.results.map(result => mapApiVertex(result.vertex));
 
-  if (!ocVertex) {
-    console.warn("Vertex not found", req.vertexId);
-    return { vertex: null };
-  }
-
-  const vertex = mapApiVertex(ocVertex);
-  return { vertex };
+  return { vertices };
 }

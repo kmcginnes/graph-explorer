@@ -10,6 +10,7 @@ import {
 } from "./useGEFetchTypes";
 import { Edge, EdgeId, Vertex, VertexId } from "@/core";
 import { updateSchemaPrefixes } from "@/core/StateProvider/schema";
+import { logger } from "@/utils";
 
 /**
  * Fetches the schema from the given explorer and updates the local cache with the new schema.
@@ -121,8 +122,21 @@ export const nodeCountByNodeTypeQuery = (
 export function vertexDetailsQuery(vertexId: VertexId, explorer: Explorer) {
   return queryOptions({
     queryKey: ["vertex", vertexId, explorer],
-    queryFn: ({ signal }): Promise<VertexDetailsResponse> =>
-      explorer.vertexDetails({ vertexId }, { signal }),
+    queryFn: async ({ signal }) => {
+      const result = await explorer.vertexDetails(
+        { vertexIds: [vertexId] },
+        { signal }
+      );
+
+      // Get a single vertex
+      const vertex = result.vertices.length > 0 ? result.vertices[0] : null;
+      if (!vertex) {
+        logger.warn("Vertex not found", vertexId);
+        return null;
+      }
+
+      return vertex;
+    },
   });
 }
 
@@ -141,11 +155,8 @@ export function updateVertexDetailsCache(
   vertices: Vertex[]
 ) {
   for (const vertex of vertices.filter(v => !v.__isFragment)) {
-    const response: VertexDetailsResponse = {
-      vertex,
-    };
     const queryKey = vertexDetailsQuery(vertex.id, explorer).queryKey;
-    queryClient.setQueryData(queryKey, response);
+    queryClient.setQueryData(queryKey, vertex);
   }
 }
 

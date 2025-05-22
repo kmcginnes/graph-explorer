@@ -29,7 +29,7 @@ export async function fetchEntityDetails(
 
   const vertexDetails = vertexResults
     .filter(result => result.status === "fulfilled")
-    .map(result => result.value.vertex)
+    .map(result => result.value)
     .filter(v => v != null);
   const edgeDetails = edgeResults
     .filter(result => result.status === "fulfilled")
@@ -44,9 +44,7 @@ export async function fetchEntityDetails(
   }, 0);
 
   const countOfVertexNotFound = vertexResults.reduce((sum, item) => {
-    return (
-      sum + (item.status === "fulfilled" && item.value.vertex == null ? 1 : 0)
-    );
+    return sum + (item.status === "fulfilled" && item.value == null ? 1 : 0);
   }, 0);
   const countOfEdgeNotFound = edgeResults.reduce((sum, item) => {
     return (

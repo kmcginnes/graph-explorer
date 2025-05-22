@@ -1,6 +1,6 @@
 import { createRandomVertexForRdf } from "@/utils/testing";
 import { vertexDetails } from "./vertexDetails";
-import { createVertexId, Vertex } from "@/core";
+import { createVertexId, getRawId, Vertex } from "@/core";
 import { createRandomInteger } from "@shared/utils/testing";
 
 describe("vertexDetails", () => {
@@ -11,9 +11,9 @@ describe("vertexDetails", () => {
       .fn()
       .mockImplementation(() => Promise.resolve(response));
 
-    const result = await vertexDetails(mockFetch, { vertexId: vertex.id });
+    const result = await vertexDetails(mockFetch, { vertexIds: [vertex.id] });
 
-    expect(result.vertex).toEqual(vertex);
+    expect(result.vertices).toEqual([vertex]);
   });
 
   it("should throw an error when the vertex ID is not a string", async () => {
@@ -25,7 +25,7 @@ describe("vertexDetails", () => {
       .mockImplementation(() => Promise.resolve(response));
 
     await expect(
-      vertexDetails(mockFetch, { vertexId: vertex.id })
+      vertexDetails(mockFetch, { vertexIds: [vertex.id] })
     ).rejects.toThrow("ID must be a URI");
   });
 
@@ -38,7 +38,7 @@ describe("vertexDetails", () => {
       .mockImplementation(() => Promise.resolve(response));
 
     await expect(
-      vertexDetails(mockFetch, { vertexId: vertex.id })
+      vertexDetails(mockFetch, { vertexIds: [vertex.id] })
     ).rejects.toThrow("ID must be a URI");
   });
 });
@@ -46,11 +46,15 @@ describe("vertexDetails", () => {
 function createResponseFromVertex(vertex: Vertex) {
   return {
     head: {
-      vars: ["label", "value"],
+      vars: ["source", "label", "value"],
     },
     results: {
       bindings: [
         {
+          source: {
+            type: "uri",
+            value: getRawId(vertex.id),
+          },
           label: {
             type: "uri",
             value: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -61,6 +65,10 @@ function createResponseFromVertex(vertex: Vertex) {
           },
         },
         ...Object.entries(vertex.attributes).map(([key, value]) => ({
+          source: {
+            type: "uri",
+            value: getRawId(vertex.id),
+          },
           label: {
             type: "uri",
             value: key,
