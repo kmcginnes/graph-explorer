@@ -1,6 +1,5 @@
 import { QueryClient, queryOptions } from "@tanstack/react-query";
 import {
-  EdgeDetailsRequest,
   EdgeDetailsResponse,
   Explorer,
   KeywordSearchRequest,
@@ -9,7 +8,7 @@ import {
   toMappedQueryResults,
   VertexDetailsResponse,
 } from "./useGEFetchTypes";
-import { Edge, Vertex, VertexId } from "@/core";
+import { Edge, EdgeId, Vertex, VertexId } from "@/core";
 import { updateSchemaPrefixes } from "@/core/StateProvider/schema";
 
 /**
@@ -127,14 +126,11 @@ export function vertexDetailsQuery(vertexId: VertexId, explorer: Explorer) {
   });
 }
 
-export function edgeDetailsQuery(
-  request: EdgeDetailsRequest,
-  explorer: Explorer
-) {
+export function edgeDetailsQuery(edgeId: EdgeId, explorer: Explorer) {
   return queryOptions({
-    queryKey: ["db", "edge", "details", request, explorer],
+    queryKey: ["edge", edgeId, explorer],
     queryFn: ({ signal }): Promise<EdgeDetailsResponse> =>
-      explorer.edgeDetails(request, { signal }),
+      explorer.edgeDetails({ edgeId }, { signal }),
   });
 }
 
@@ -160,13 +156,10 @@ export function updateEdgeDetailsCache(
   edges: Edge[]
 ) {
   for (const edge of edges.filter(e => !e.__isFragment)) {
-    const request: EdgeDetailsRequest = {
-      edgeId: edge.id,
-    };
     const response: EdgeDetailsResponse = {
       edge,
     };
-    const queryKey = edgeDetailsQuery(request, explorer).queryKey;
+    const queryKey = edgeDetailsQuery(edge.id, explorer).queryKey;
     queryClient.setQueryData(queryKey, response);
   }
 }

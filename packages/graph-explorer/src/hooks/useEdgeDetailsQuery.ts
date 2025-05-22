@@ -4,6 +4,5 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useEdgeDetailsQuery(edgeId: EdgeId) {
   const explorer = useExplorer();
-  const query = useQuery(edgeDetailsQuery({ edgeId }, explorer));
-  return query;
+  return useQuery(edgeDetailsQuery(edgeId, explorer));
 }
