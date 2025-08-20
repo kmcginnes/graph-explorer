@@ -12,14 +12,6 @@ import {
 export function mapResults(data: GList) {
   const entities = data["@value"].flatMap(value => mapAnyValue(value));
 
-  // Promote the child values of a bundle if there is only one and it has no name
-  if (entities.length === 1) {
-    const firstEntity = entities[0];
-    if (firstEntity.entityType === "bundle" && firstEntity.name == null) {
-      return firstEntity.values;
-    }
-  }
-
   return entities;
 }
 

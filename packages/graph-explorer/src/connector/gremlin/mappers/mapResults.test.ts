@@ -52,12 +52,12 @@ describe("mapResults", () => {
     expect(results).toStrictEqual([createResultScalar({ value: 42 })]);
   });
 
-  it("should promote the values of a bundle if there is only one and it has no name", () => {
+  it("should not promote the values of a bundle if there is only one and it has no name", () => {
     const vertex = createTestableVertex().asResult("vertex");
     const results = mapResults(
       createGList([createGMap({ vertex: createGVertex(vertex) })])
     );
-    expect(results).toStrictEqual([vertex]);
+    expect(results).toStrictEqual(createResultBundle({ values: [vertex] }));
   });
 });
 
