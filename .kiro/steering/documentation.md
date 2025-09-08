@@ -104,7 +104,7 @@ additionaldocs/
 ### Links & Cross-References
 
 - Link to related sections:
-  `[installation guide](getting-started/installation.md)`
+  `[installation guide](getting-started/1-installation.md)`
 - Reference configuration files:
   `[sample config](../samples/docker-compose.yml)`
 - Use descriptive link text: "see the connection troubleshooting guide"

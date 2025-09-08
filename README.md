@@ -20,17 +20,18 @@ like [Amazon ECS](https://aws.amazon.com/ecs/).
 
 There are many ways to deploy and run Graph Explorer. If you are new to graph
 databases and Graph Explorer, we recommend that you check out the
-[Getting Started](./additionaldocs/getting-started/README.md) guide.
+[Getting Started](./additionaldocs/getting-started/1-installation.md) guide.
 
-- [Local Docker Setup](./additionaldocs/getting-started/README.md#local-docker-setup) -
-  A quick start guide to deploying Graph Explorer locally using the official
-  Docker image.
-- [Amazon EC2 Setup](./additionaldocs/getting-started/README.md#amazon-ec2-setup) -
-  A quick start guide to setting up Graph Explorer on Amazon EC2 with Neptune.
-- [Local Development](./additionaldocs/getting-started/README.md#local-development-setup) -
-  A quick start guide building the Docker image from source code.
-- [Troubleshooting](./additionaldocs/troubleshooting.md) - A collection of
-  helpful tips if you run in to issues while setting up Graph Explorer.
+- [Installation](./additionaldocs/getting-started/1-installation.md) - A quick
+  start guide to deploying Graph Explorer locally using Docker or building from
+  source.
+- [First Connection](./additionaldocs/getting-started/2-first-connection.md) - A
+  guide to connecting to your first graph database.
+- [Basic Usage](./additionaldocs/getting-started/3-basic-usage.md) - Essential
+  features and basic usage walkthrough.
+- [Troubleshooting](./additionaldocs/troubleshooting/1-common-issues.md) - A
+  collection of helpful tips if you run in to issues while setting up Graph
+  Explorer.
 - [Samples](./samples) - A collection of Docker Compose files that show various
   ways to configure and use Graph Explorer.
 
@@ -67,7 +68,7 @@ databases:
   view
 
 For complete documentation on all features and functionality, please see our
-[detailed features guide](./additionaldocs/features/README.md).
+[user guide](./additionaldocs/user-guide/2-graph-visualization.md).
 
 If you're interested in our future development plans, check out our
 [roadmap](./ROADMAP.md) and participate in the discussions.
@@ -78,7 +79,8 @@ Graph Explorer supports visualizing both **property graphs** and **RDF graphs**.
 You can connect to Amazon Neptune or you can also connect to open graph
 databases that implement an Apache TinkerPop Gremlin endpoint or the SPARQL 1.1
 protocol, such as Blazegraph. For additional details on connecting to different
-graph databases, see [Connections](./additionaldocs/connections.md).
+graph databases, see
+[Connections](./additionaldocs/user-guide/1-connections.md).
 
 ### Providing a Default Connection
 
@@ -175,7 +177,8 @@ docker run -p 80:80 -p 443:443 \
 
 ## Development
 
-For development guidance, see [Development](./additionaldocs/development.md).
+For development guidance, see
+[Development Setup](./additionaldocs/development/2-development-setup.md).
 
 ## Security
 
@@ -186,7 +189,7 @@ database endpoint.
 Graph Explorer supports the HTTPS protocol by default and provides a self-signed
 certificate as part of the Docker image. You can choose to use HTTP instead by
 changing the
-[environment variable default settings](./additionaldocs/development.md#environment-variables).
+[environment variable default settings](./additionaldocs/deployment/5-configuration.md).
 
 ### HTTPS Connections
 
@@ -220,7 +223,7 @@ systems will have slightly different steps.
 > [!TIP] 
 > 
 > To get rid of the “Not Secure” warning, see
-[Using self-signed certificates on Chrome](./additionaldocs/development.md#using-self-signed-certificates-on-chrome).
+[HTTPS Connections](./additionaldocs/troubleshooting/1-common-issues.md#https-connections).
 
 ## Permissions
 
@@ -230,7 +233,7 @@ through IAM roles.
 
 For information about what permissions Graph Explorer requires check out the
 documentation on
-[SageMaker configuration](./additionaldocs/sagemaker/README.md#minimum-database-permissions).
+[SageMaker configuration](./additionaldocs/deployment/4-sagemaker.md#minimum-database-permissions).
 
 <!-- prettier-ignore -->
 > [!CAUTION] 
