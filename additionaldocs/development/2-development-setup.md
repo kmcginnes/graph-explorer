@@ -78,11 +78,6 @@ Start the development servers for both frontend and backend:
 pnpm dev
 ```
 
-This will start:
-
-- **Frontend**: React development server on `http://localhost:5173`
-- **Backend**: Express proxy server on `http://localhost:3000`
-
 Launch your web browser and navigate to:
 
 ```
@@ -90,7 +85,9 @@ http://localhost:5173
 ```
 
 At this point, Graph Explorer should be successfully running and asking for
-connection details.
+connection details for your database. See the
+[First Connection Guide](../getting-started/2-first-connection.md) to configure
+your first database connection.
 
 ## Build Process
 
