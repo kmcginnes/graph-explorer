@@ -91,14 +91,6 @@ your first database connection.
 
 ## Build Process
 
-### Development Build
-
-For development with hot reloading:
-
-```bash
-pnpm dev
-```
-
 ### Production Build
 
 Building Graph Explorer for production:
@@ -118,17 +110,14 @@ You'll end up with two `dist` folders:
 
 ### Running Production Build
 
-The recommended way to serve Graph Explorer is using the proxy server:
+To serve the production build, use the proxy server:
 
 ```bash
 pnpm start
 ```
 
-However, if you want to run Graph Explorer without the proxy server:
-
-```bash
-pnpm start:client
-```
+This starts the Express.js proxy server which serves the built frontend
+application and handles backend API requests.
 
 ## Development Workflows
 
