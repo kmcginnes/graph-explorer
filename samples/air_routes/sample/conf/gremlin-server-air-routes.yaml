@@ -37,10 +37,7 @@ scriptEngines:
                 methodImports: [java.lang.Math#*],
               },
             org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin:
-              {
-                files:
-                  [/opt/gremlin-server/sample/scripts/load-air-routes.groovy],
-              },
+              { files: [/sample/scripts/load-air-routes.groovy] },
           },
       },
   }

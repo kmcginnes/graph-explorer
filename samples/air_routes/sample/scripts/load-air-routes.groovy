@@ -33,7 +33,7 @@ globals << [hook : [
     // An example of an initialization script that can be configured to run in Gremlin Server.
     def gLoader = traversal().withEmbedded(graph)
     try {
-        gLoader.io('/opt/gremlin-server/sample/data/air-routes-small-latest.graphml').read().iterate()
+        gLoader.io('/sample/data/air-routes-small-latest.graphml').read().iterate()
     } catch (Exception ex) {
         ctx.logger.error(ex)
     } finally {
