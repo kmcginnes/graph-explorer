@@ -88,7 +88,7 @@ function VertexTypeList({
         >
           <div
             className={cn(
-              "border-x border-b",
+              "border-item-border bg-item border-x border-b",
               index === 0 && "rounded-t-lg border-t",
               index === vtConfigs.length - 1 && "rounded-b-lg",
             )}

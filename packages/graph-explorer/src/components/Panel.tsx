@@ -16,7 +16,7 @@ export function PanelGroup({
     <div
       data-slot="panel-group"
       className={cn(
-        "bg-brand-100 flex min-h-0 min-w-0 flex-1 gap-2 p-2",
+        "bg-brand-100 flex min-h-0 min-w-0 flex-1 gap-2 p-2 dark:bg-gray-950",
         className,
       )}
       {...props}
@@ -31,7 +31,7 @@ function Panel({ variant = "default", className, ...props }: PanelProps) {
       className={cn(
         "bg-background-default flex h-full flex-col overflow-hidden",
         variant === "default" &&
-          "shadow-primary-foreground/25 rounded-lg shadow",
+          "shadow-primary-foreground/25 ring-border rounded-lg shadow ring-1",
         className,
       )}
       {...props}
@@ -64,7 +64,7 @@ function PanelHeader({
   return (
     <div
       className={cn(
-        "bg-background-default flex min-h-[48px] w-full shrink-0 items-center gap-4 overflow-x-auto border-b px-3 py-1",
+        "bg-background-default flex min-h-[48px] w-full shrink-0 items-center gap-4 overflow-x-auto border-b px-3 py-1 dark:border-transparent",
         className,
       )}
       {...props}
@@ -120,9 +120,8 @@ function PanelHeaderDivider({
 }
 PanelHeaderDivider.displayName = "PanelHeaderDivider";
 
-export interface PanelHeaderCloseButtonProps extends React.PropsWithChildren<
-  React.ComponentPropsWithoutRef<"div">
-> {
+export interface PanelHeaderCloseButtonProps
+  extends React.PropsWithChildren<React.ComponentPropsWithoutRef<"div">> {
   onClose: () => void;
 }
 

@@ -157,7 +157,10 @@ function SidebarTabs({
   return (
     <TabsPrimitive.Root
       data-slot="workspace-sidebar-tabs"
-      className={cn("grid size-full grid-cols-[auto_1fr]", className)}
+      className={cn(
+        "ring-border grid size-full grid-cols-[auto_1fr] ring-1",
+        className,
+      )}
       {...props}
     />
   );
@@ -171,7 +174,7 @@ function SidebarTabsList({
     <TabsPrimitive.List
       data-slot="workspace-sidebar-tabs-list"
       className={cn(
-        "bg-primary-subtle border-border/50 text-muted-foreground flex flex-col items-center gap-2 border-r p-2",
+        "bg-primary-subtle border-border/50 text-muted-foreground flex flex-col items-center gap-2 border-r p-2 dark:bg-gray-800",
         className,
       )}
       {...props}
@@ -206,10 +209,10 @@ function SidebarTabsTrigger({
               value={value}
               onClick={handleClick}
               className={cn(
-                "text-brand-900 active:bg-brand-300 data-[state=active]:bg-brand-500 inline-flex size-10 items-center justify-center rounded-md bg-transparent p-2 ring-0 transition-colors duration-100 focus:shadow-none active:text-white disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-white [&_svg]:size-6",
-                "hover:data-[state=active]:bg-brand-400 hover:bg-primary-subtle-hover",
-                "dark:text-brand-300 dark:data-[state=active]:bg-brand-400 dark:hover:data-[state=active]:bg-brand-500 dark:hover:bg-gray-800 dark:data-[state=active]:text-white",
-                "focus-visible:ring-brand-500 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-hidden active:ring-0",
+                "inline-flex items-center justify-center gap-2 font-medium focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 disabled:saturate-0 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:saturate-0 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+                "size-10 rounded-md px-4 text-base [&_svg]:size-5",
+                "text-primary-foreground hover:bg-primary-subtle data-open:bg-primary-subtle dark:text-foreground dark:hover:bg-neutral-subtle-hover",
+                "data-[state=active]:bg-brand data-[state=active]:hover:bg-brand-hover data-[state=active]:text-white",
                 className,
               )}
               {...props}

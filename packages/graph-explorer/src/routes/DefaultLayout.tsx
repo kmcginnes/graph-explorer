@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components";
 import { Toaster } from "@/components/Toaster";
 import AppErrorPage from "@/core/AppErrorPage";
 import AppStatusLoader from "@/core/AppStatusLoader";
+import { ThemeProvider } from "@/core/ThemeProvider";
 
 import { ExplorerInjector } from "../core/ExplorerInjector";
 import { createQueryClient } from "../core/queryClient";
@@ -20,13 +21,15 @@ export default function DefaultLayout() {
   return (
     <ErrorBoundary FallbackComponent={AppErrorPage}>
       <QueryClientProvider client={queryClient}>
-        <ExplorerInjector />
-        <TooltipProvider delayDuration={200}>
-          <AppStatusLoader>
-            <Outlet />
-            <Toaster />
-          </AppStatusLoader>
-        </TooltipProvider>
+        <ThemeProvider>
+          <ExplorerInjector />
+          <TooltipProvider delayDuration={200}>
+            <AppStatusLoader>
+              <Outlet />
+              <Toaster />
+            </AppStatusLoader>
+          </TooltipProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

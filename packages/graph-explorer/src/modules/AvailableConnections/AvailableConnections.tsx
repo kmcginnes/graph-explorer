@@ -87,7 +87,7 @@ const AvailableConnections = ({
             >
               <div
                 key={connection.id}
-                className="has-[:checked]:bg-secondary-subtle group has-[:checked]:ring-primary-main rounded-lg ring-1 ring-gray-200 has-[:checked]:ring-2"
+                className="has-checked:bg-item-active group has-checked:ring-item-active-border ring-item-border bg-item text-item-foreground has-checked:text-item-active-foreground rounded-lg ring-1 has-checked:ring-2"
               >
                 <ConnectionRow
                   connection={connection}

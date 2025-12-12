@@ -37,7 +37,7 @@ export function SearchResultCollapsible({
       {...props}
       className={cn(
         "group ring-border content-auto intrinsic-size-[4.75rem] rounded-xl shadow-xs ring-1 transition duration-100 ease-in-out",
-        isEven(level) ? "bg-gray-50" : "bg-default",
+        isEven(level) ? "bg-background-alt" : "bg-background",
         highlighted ? "shadow-primary-dark/50 ring-primary-dark/75" : "",
         className,
       )}

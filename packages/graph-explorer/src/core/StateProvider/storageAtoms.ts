@@ -58,6 +58,7 @@ const [
   allowLoggingDbQueryAtom,
   defaultNeighborExpansionLimitEnabledAtom,
   defaultNeighborExpansionLimitAtom,
+  themeAtom,
 ] = await Promise.all([
   atomWithLocalForage<ConfigurationId | null>("active-configuration", null),
   atomWithLocalForage<Map<ConfigurationId, RawConfiguration>>(
@@ -84,6 +85,8 @@ const [
   atomWithLocalForage<boolean>("defaultNeighborExpansionLimitEnabled", true),
   /** Setting that defines the default limit for neighbor expansion. */
   atomWithLocalForage<number>("defaultNeighborExpansionLimit", 10),
+  /** Enables dark mode theme. Off by default, dev-only toggle. */
+  atomWithLocalForage<"dark" | "light" | "system">("theme", "light"),
 ]);
 
 export {
@@ -97,4 +100,5 @@ export {
   allowLoggingDbQueryAtom,
   defaultNeighborExpansionLimitEnabledAtom,
   defaultNeighborExpansionLimitAtom,
+  themeAtom,
 };

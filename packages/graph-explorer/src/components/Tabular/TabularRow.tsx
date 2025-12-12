@@ -47,7 +47,7 @@ const TabularRow = <T extends object>({
   return (
     <tr
       {...rowProps}
-      className="group/tr text-text-primary data-selected:text-primary-dark data-selected:border-primary-dark data-selected:bg-background-secondary grow-0 border border-x-transparent border-t-transparent data-[selection-mode='row']:hover:cursor-pointer data-[selection-mode='row']:hover:bg-gray-50 data-[selection-mode='row']:data-selected:hover:bg-blue-200/75"
+      className="group/tr text-text-primary data-selected:text-primary-dark data-selected:border-primary-dark data-selected:bg-background-secondary grow-0 border border-x-transparent border-t-transparent data-[selection-mode='row']:hover:cursor-pointer data-[selection-mode='row']:hover:not-dark:bg-gray-50 data-[selection-mode='row']:data-selected:hover:not-dark:bg-blue-200/75"
       onClick={() =>
         rowSelectionMode === "row" && selectable && row.toggleRowSelected()
       }

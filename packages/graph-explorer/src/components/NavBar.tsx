@@ -61,12 +61,12 @@ function NavBarLogo({ className, ...rest }: ComponentPropsWithRef<"div">) {
     <div
       data-slot="nav-bar-logo"
       className={cn(
-        "bg-logo-gradient mr-2 grid aspect-square h-full place-content-center overflow-hidden text-white",
+        "dark:from-brand-800 dark:to-brand-600 from-brand-700 to-brand-500 mr-2 grid aspect-square h-full place-content-center overflow-hidden bg-linear-to-tr text-white",
         className,
       )}
       {...rest}
     >
-      <GraphExplorerIcon width="2em" height="2em" />
+      <GraphExplorerIcon className="size-8" />
     </div>
   );
 }

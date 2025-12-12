@@ -12,6 +12,7 @@ import {
   LabelledSetting,
   NotInProduction,
   PageHeading,
+  SelectField,
   SettingsSection,
   SettingsSectionContainer,
   ToggleSetting,
@@ -22,6 +23,7 @@ import {
   defaultNeighborExpansionLimitAtom,
   defaultNeighborExpansionLimitEnabledAtom,
   showDebugActionsAtom,
+  themeAtom,
 } from "@/core";
 import { saveLocalForageToFile } from "@/core/StateProvider/localDb";
 
@@ -30,6 +32,8 @@ import LoadConfigButton from "./LoadConfigButton";
 export default function SettingsGeneral() {
   const [isDebugOptionsEnabled, setIsDebugOptionsEnabled] =
     useAtom(showDebugActionsAtom);
+
+  const [theme, setTheme] = useAtom(themeAtom);
 
   const [allowLoggingDbQuery, setAllowLoggingDbQuery] = useAtom(
     allowLoggingDbQueryAtom,
@@ -134,6 +138,22 @@ export default function SettingsGeneral() {
             label="Show debug actions"
             description="Shows debug actions in various places around the app such as buttons to delete the schema or reset the last sync time."
           />
+          <LabelledSetting
+            label="Theme"
+            description="Select the color theme. This feature is still in development."
+          >
+            <SelectField
+              aria-label="Theme"
+              className="w-36"
+              options={[
+                { label: "Light", value: "light" },
+                { label: "Dark", value: "dark" },
+                { label: "System", value: "system" },
+              ]}
+              value={theme}
+              onValueChange={value => setTheme(value as typeof theme)}
+            />
+          </LabelledSetting>
         </NotInProduction>
       </SettingsSection>
     </SettingsSectionContainer>

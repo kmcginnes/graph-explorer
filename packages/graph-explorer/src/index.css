@@ -107,6 +107,14 @@
   --color-input-background: var(--color-white);
   --color-input-border: var(--color-gray-300);
 
+  /* Semantic colors for a bordered item (connections, prefixes, node types, etc) */
+  --color-item: var(--color-background);
+  --color-item-foreground: var(--color-foreground);
+  --color-item-border: var(--color-border);
+  --color-item-active: var(--color-primary-subtle);
+  --color-item-active-foreground: var(--color-primary-foreground);
+  --color-item-active-border: var(--color-primary);
+
   /* Semantic colors for shadcn/ui components */
 
   --color-destructive: var(--color-danger);
@@ -146,6 +154,64 @@
   --text-color-brand: var(--color-primary-foreground);
 
   --border-color-input: var(--color-input-border);
+}
+
+/* Dark theme overrides */
+.dark {
+  --color-foreground: var(--color-gray-300);
+  --color-background: var(--color-gray-900);
+  --color-background-alt: var(--color-gray-800);
+
+  --color-muted-foreground: var(--color-gray-400);
+  --color-muted: var(--color-gray-800);
+
+  /* Used for highlights and selections */
+  --color-accent-foreground: var(--color-brand-300);
+  --color-accent: var(--color-brand-800);
+  --color-accent-hover: var(--color-brand-700);
+
+  --color-neutral-foreground: var(--color-gray-100);
+  --color-neutral: var(--color-gray-100);
+  --color-neutral-hover: var(--color-gray-300);
+  --color-neutral-subtle: var(--color-gray-700);
+  --color-neutral-subtle-hover: var(--color-gray-600);
+
+  --color-primary-foreground: var(--color-brand-400);
+  --color-primary: var(--color-brand-600);
+  --color-primary-hover: var(--color-brand-700);
+  --color-primary-subtle: --alpha(var(--color-brand-800) / 50%);
+  --color-primary-subtle-hover: var(--color-brand-950);
+
+  --color-danger-foreground: var(--color-red-400);
+  --color-danger: var(--color-red-500);
+  --color-danger-hover: var(--color-red-400);
+  --color-danger-subtle: var(--color-red-950);
+  --color-danger-subtle-hover: var(--color-red-900);
+
+  --color-warning-foreground: var(--color-amber-400);
+  --color-warning: var(--color-amber-500);
+  --color-warning-hover: var(--color-amber-400);
+  --color-warning-subtle: var(--color-amber-950);
+  --color-warning-subtle-hover: var(--color-amber-900);
+
+  --color-success-foreground: var(--color-emerald-400);
+  --color-success: var(--color-emerald-500);
+  --color-success-hover: var(--color-emerald-400);
+  --color-success-subtle: var(--color-emerald-950);
+  --color-success-subtle-hover: var(--color-emerald-900);
+
+  --color-border: var(--color-gray-800);
+
+  --color-input-background: var(--color-gray-800);
+  --color-input-border: var(--color-gray-600);
+
+  /* Semantic colors for a bordered item (connections, prefixes, node types, etc) */
+  --color-item: var(--color-gray-900);
+  --color-item-foreground: var(--color-foreground);
+  --color-item-border: var(--color-border);
+  --color-item-active: var(--color-primary-subtle);
+  --color-item-active-foreground: var(--color-primary-foreground);
+  --color-item-active-border: var(--color-primary);
 }
 
 @layer base {

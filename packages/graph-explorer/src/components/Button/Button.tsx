@@ -12,7 +12,7 @@ const buttonStyles = cva({
       primary:
         "bg-brand hover:bg-brand-hover data-open:bg-brand-hover text-white",
       secondary:
-        "text-text-primary bg-gray-100 hover:bg-gray-200 data-open:bg-gray-200",
+        "text-neutral-foreground bg-neutral-subtle hover:bg-neutral-subtle-hover data-open:bg-neutral-subtle-hover",
       ghost:
         "text-primary-foreground hover:bg-primary-subtle data-open:bg-primary-subtle",
       outline:
