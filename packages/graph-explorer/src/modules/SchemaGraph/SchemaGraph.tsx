@@ -82,7 +82,7 @@ function SchemaGraphContent({
             <SchemaGraphControls />
           </PanelHeaderActions>
         </PanelHeader>
-        <PanelContent className="bg-background-secondary grid">
+        <PanelContent className="bg-background-secondary relative">
           {isEmpty ? (
             <PanelEmptyState
               title="No Schema Data"
@@ -99,7 +99,7 @@ function SchemaGraphContent({
                 onSelectedElementIdsChange={handleSelectionChange}
                 styles={styles}
                 layout={layout}
-                className="col-start-1 row-start-1 min-h-0 min-w-0"
+                className="size-full"
                 onContextMenu={onContextMenu}
               />
               <SchemaDetailsSidebar

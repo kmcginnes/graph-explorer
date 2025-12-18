@@ -46,7 +46,7 @@ export function SchemaDetailsSidebar({
 
   return (
     <Activity mode={isVisible(hasSelection)}>
-      <div className="z-20 grid min-h-0 justify-self-end p-3">
+      <div className="absolute top-3 right-3 z-20 max-h-[calc(100%-1.5rem)] overflow-auto">
         {selection.nodeId && (
           <NodeLabelDetails nodeLabel={selection.nodeId} onClose={onClose} />
         )}
