@@ -7,13 +7,13 @@ import {
   NavBarActions,
   NavBarTitle,
   NavBarVersion,
-  PanelEmptyState,
   PanelGroup,
   Workspace,
   WorkspaceContent,
 } from "@/components";
-import { DatabaseIcon } from "@/components/icons";
+import { DatabaseIcon, ExplorerIcon } from "@/components/icons";
 import { useConfiguration } from "@/core";
+import { SchemaGraph } from "@/modules/SchemaGraph";
 import { LABELS } from "@/utils/constants";
 
 export default function SchemaExplorer() {
@@ -36,6 +36,13 @@ export default function SchemaExplorer() {
         <NavBarActions>
           <NavBarVersion>{__GRAPH_EXP_VERSION__}</NavBarVersion>
           <Link
+            to="/graph-explorer"
+            className={cn(buttonStyles({ variant: "default" }))}
+          >
+            <ExplorerIcon />
+            Open {LABELS.APP_NAME}
+          </Link>
+          <Link
             to="/connections"
             className={cn(buttonStyles({ variant: "filled" }))}
           >
@@ -46,11 +53,7 @@ export default function SchemaExplorer() {
       </NavBar>
       <WorkspaceContent>
         <PanelGroup className="grid">
-          <PanelEmptyState
-            title="Schema Explorer"
-            subtitle={`Visualize the schema for ${config?.displayLabel || config?.id}. Coming soon!`}
-            className="p-6"
-          />
+          <SchemaGraph />
         </PanelGroup>
       </WorkspaceContent>
     </Workspace>

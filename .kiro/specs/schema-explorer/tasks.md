@@ -85,19 +85,19 @@
     - **Property 8: Edge connection serialization round-trip**
     - **Validates: Requirements 5.4, 5.5**
 
-- [ ] 7. Create Schema Explorer route
-  - [ ] 7.1 Create SchemaExplorer route component
+- [x] 7. Create Schema Explorer route
+  - [x] 7.1 Create SchemaExplorer route component
     - Create `packages/graph-explorer/src/routes/SchemaExplorer/` directory
     - Create `SchemaExplorer.tsx` with NavBar and layout structure
     - Handle redirect when no active connection
     - _Requirements: 1.3, 1.4_
-  - [ ] 7.2 Add route to App.tsx
+  - [x] 7.2 Add route to App.tsx
     - Add `/schema-explorer` route to router configuration
     - _Requirements: 1.3_
-  - [ ] 7.3 Add navigation link from Connections page
+  - [x] 7.3 Add navigation link from Connections page
     - Add link/button to navigate to Schema Explorer
     - _Requirements: 1.1_
-  - [ ] 7.4 Add navigation link from Graph Explorer page
+  - [x] 7.4 Add navigation link from Graph Explorer page
     - Add link/button to navigate to Schema Explorer
     - _Requirements: 1.2_
   - [ ] 7.5 Write unit tests for route navigation
