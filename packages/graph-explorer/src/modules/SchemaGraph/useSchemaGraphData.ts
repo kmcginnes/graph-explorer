@@ -59,8 +59,10 @@ export function useSchemaGraphNodes(): SchemaGraphNode[] {
   return nodes;
 }
 
-/** Transforms edge connections into schema graph edges. */
-export function useSchemaGraphEdges(): SchemaGraphEdge[] {
+/** Transforms edge connections into schema graph edges, filtering out edges with missing nodes. */
+export function useSchemaGraphEdges(
+  existingNodeIds: Set<string>,
+): SchemaGraphEdge[] {
   const schema = useActiveSchema();
   const edgeConnections = schema.edgeConnections ?? [];
   const etConfigs = useDisplayEdgeTypeConfigs();
@@ -68,6 +70,10 @@ export function useSchemaGraphEdges(): SchemaGraphEdge[] {
   const edges: SchemaGraphEdge[] = [];
 
   for (const connection of edgeConnections) {
+    // Skip edges where source or target node doesn't exist
+    if (!existingNodeIds.has(connection.sourceLabel)) continue;
+    if (!existingNodeIds.has(connection.targetLabel)) continue;
+
     const edgeConfig = etConfigs.get(connection.edgeType);
     const displayLabel = edgeConfig?.displayLabel ?? connection.edgeType;
 
@@ -92,6 +98,7 @@ export function useSchemaGraphEdges(): SchemaGraphEdge[] {
 /** Returns both schema graph nodes and edges. */
 export function useSchemaGraphData() {
   const nodes = useSchemaGraphNodes();
-  const edges = useSchemaGraphEdges();
+  const existingNodeIds = new Set(nodes.map(n => n.data.id));
+  const edges = useSchemaGraphEdges(existingNodeIds);
   return { nodes, edges };
 }
