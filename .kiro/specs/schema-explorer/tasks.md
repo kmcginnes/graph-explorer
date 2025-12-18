@@ -105,12 +105,12 @@
     - Test redirect when no connection
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 8. Create schema graph transformation utilities
-  - [ ] 8.1 Create useSchemaGraphNodes hook
+- [x] 8. Create schema graph transformation utilities
+  - [x] 8.1 Create useSchemaGraphNodes hook
     - Transform VertexTypeConfig array to graph nodes
     - Include display labels, colors, icons from config
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
-  - [ ] 8.2 Create useSchemaGraphEdges hook
+  - [x] 8.2 Create useSchemaGraphEdges hook
     - Transform EdgeConnection array to graph edges
     - Create unique IDs for each edge connection
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
@@ -121,22 +121,22 @@
     - **Property 5: Multiple edge types between same labels**
     - **Validates: Requirements 2.1, 2.2, 4.1, 4.2, 4.3**
 
-- [ ] 9. Create SchemaGraph module
-  - [ ] 9.1 Create SchemaGraph component
+- [x] 9. Create SchemaGraph module
+  - [x] 9.1 Create SchemaGraph component
     - Create `packages/graph-explorer/src/modules/SchemaGraph/` directory
     - Create `SchemaGraph.tsx` using Graph component
     - Wire up schema graph nodes and edges
     - _Requirements: 2.1, 4.1_
-  - [ ] 9.2 Add graph controls (zoom, fit, layout)
+  - [x] 9.2 Add graph controls (zoom, fit, layout)
     - Add zoom in/out buttons
     - Add fit-to-canvas button
     - Add layout selection dropdown
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
-  - [ ] 9.3 Implement node and edge selection handling
+  - [x] 9.3 Implement node and edge selection handling
     - Track selected node/edge state
     - Emit selection changes for details panel
     - _Requirements: 3.1, 7.1_
-  - [ ] 9.4 Add empty state handling
+  - [x] 9.4 Add empty state handling
     - Display empty state when no node labels
     - Display nodes without edges when no edge connections
     - _Requirements: 8.1, 8.2_

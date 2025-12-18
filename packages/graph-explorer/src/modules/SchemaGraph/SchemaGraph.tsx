@@ -13,6 +13,7 @@ import { GraphProvider, useGraphRef } from "@/components/Graph/GraphContext";
 import type { SelectedElements } from "@/components/Graph/Graph.model";
 import { useSchemaGraphData } from "./useSchemaGraphData";
 import { useSchemaGraphStyles } from "./useSchemaGraphStyles";
+import { SchemaDetailsSidebar } from "./SchemaDetailsSidebar";
 import {
   FullscreenIcon,
   GitCompareArrowsIcon,
@@ -89,17 +90,26 @@ function SchemaGraphContent({
               className="p-6"
             />
           ) : (
-            <Graph
-              nodes={nodes}
-              edges={edges}
-              selectedNodesIds={selectedNodeId ? [selectedNodeId] : []}
-              selectedEdgesIds={selectedEdgeId ? [selectedEdgeId] : []}
-              onSelectedElementIdsChange={handleSelectionChange}
-              styles={styles}
-              layout={layout}
-              className="col-start-1 row-start-1 min-h-0 min-w-0"
-              onContextMenu={onContextMenu}
-            />
+            <>
+              <Graph
+                nodes={nodes}
+                edges={edges}
+                selectedNodesIds={selectedNodeId ? [selectedNodeId] : []}
+                selectedEdgesIds={selectedEdgeId ? [selectedEdgeId] : []}
+                onSelectedElementIdsChange={handleSelectionChange}
+                styles={styles}
+                layout={layout}
+                className="col-start-1 row-start-1 min-h-0 min-w-0"
+                onContextMenu={onContextMenu}
+              />
+              <SchemaDetailsSidebar
+                selection={{ nodeId: selectedNodeId, edgeId: selectedEdgeId }}
+                onClose={() => {
+                  setSelectedNodeId(null);
+                  setSelectedEdgeId(null);
+                }}
+              />
+            </>
           )}
         </PanelContent>
       </Panel>
