@@ -22,6 +22,7 @@ import {
   WorkspaceContent,
 } from "@/components";
 import { DatabaseIcon, EmptyWidgetIcon, GraphIcon } from "@/components/icons";
+import { NetworkIcon } from "lucide-react";
 import GridIcon from "@/components/icons/GridIcon";
 import {
   DEFAULT_TABLE_VIEW_HEIGHT,
@@ -91,6 +92,13 @@ const GraphExplorer = () => {
             />
           </div>
           <Divider axis="vertical" className="h-[50%]" />
+          <Link
+            to="/schema-explorer"
+            className={cn(buttonStyles({ variant: "default" }))}
+          >
+            <NetworkIcon className="size-4" />
+            Schema
+          </Link>
           <Link
             to="/connections"
             className={cn(buttonStyles({ variant: "filled" }))}

@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import {
   Button,
+  buttonStyles,
   Chip,
   EdgeIcon,
   EditIcon,
@@ -32,6 +33,8 @@ import {
   TrayArrowIcon,
 } from "@/components";
 import { LinkButton } from "@/components/Button";
+import { Link } from "react-router";
+import { cn } from "@/utils";
 import {
   activeSchemaSelector,
   type ConfigurationContextProps,
@@ -65,6 +68,7 @@ import {
   GlobeIcon,
   HammerIcon,
   LinkIcon,
+  NetworkIcon,
 } from "lucide-react";
 import { useDeleteActiveConfiguration } from "@/hooks/useDeleteConfig";
 import { useSetAtom } from "jotai";
@@ -157,6 +161,27 @@ function ConnectionDetail({ config }: ConnectionDetailProps) {
             <InfoItemContent>
               <InfoItemLabel>Last Synchronization</InfoItemLabel>
               <LastSyncInfo config={config} />
+            </InfoItemContent>
+          </InfoItem>
+        </InfoBar>
+        <InfoBar className="hidden @sm:flex">
+          <InfoItem>
+            <InfoItemIcon>
+              <NetworkIcon />
+            </InfoItemIcon>
+            <InfoItemContent>
+              <InfoItemLabel>Schema Visualization</InfoItemLabel>
+              <InfoItemValue>
+                <Link
+                  to="/schema-explorer"
+                  className={cn(
+                    buttonStyles({ variant: "default", size: "small" }),
+                  )}
+                >
+                  <NetworkIcon className="size-4" />
+                  Open Schema Explorer
+                </Link>
+              </InfoItemValue>
             </InfoItemContent>
           </InfoItem>
         </InfoBar>
