@@ -73,7 +73,7 @@ function SchemaGraphContent({
   const isEmpty = nodes.length === 0;
 
   return (
-    <div className={cn("size-full min-h-0 grow", className)} {...props}>
+    <div className={cn("size-full min-h-0 flex-1", className)} {...props}>
       <Panel>
         <PanelHeader>
           <PanelTitle>Schema Graph</PanelTitle>
@@ -82,7 +82,7 @@ function SchemaGraphContent({
             <SchemaGraphControls />
           </PanelHeaderActions>
         </PanelHeader>
-        <PanelContent className="bg-background-secondary relative">
+        <PanelContent className="bg-background-secondary grid size-full min-h-0 min-w-0">
           {isEmpty ? (
             <PanelEmptyState
               title="No Schema Data"
@@ -99,16 +99,19 @@ function SchemaGraphContent({
                 onSelectedElementIdsChange={handleSelectionChange}
                 styles={styles}
                 layout={layout}
-                className="size-full"
+                className="col-start-1 row-start-1 size-full"
                 onContextMenu={onContextMenu}
               />
-              <SchemaDetailsSidebar
-                selection={{ nodeId: selectedNodeId, edgeId: selectedEdgeId }}
-                onClose={() => {
-                  setSelectedNodeId(null);
-                  setSelectedEdgeId(null);
-                }}
-              />
+              <div className="pointer-events-none z-20 col-start-1 row-start-1 p-3 *:pointer-events-auto">
+                <SchemaDetailsSidebar
+                  className="place-self-end"
+                  selection={{ nodeId: selectedNodeId, edgeId: selectedEdgeId }}
+                  onClose={() => {
+                    setSelectedNodeId(null);
+                    setSelectedEdgeId(null);
+                  }}
+                />
+              </div>
             </>
           )}
         </PanelContent>

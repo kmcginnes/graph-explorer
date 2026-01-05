@@ -1,5 +1,5 @@
-import { Activity } from "react";
-import { isVisible } from "@/utils";
+import { Activity, type ComponentPropsWithRef } from "react";
+import { cn, isVisible } from "@/utils";
 import { NodeLabelDetails } from "./NodeLabelDetails";
 import { EdgeConnectionDetails } from "./EdgeConnectionDetails";
 import type { SchemaGraphSelection } from "./SchemaGraph";
@@ -25,7 +25,8 @@ function parseEdgeConnectionId(edgeId: string) {
 export function SchemaDetailsSidebar({
   selection,
   onClose,
-}: SchemaDetailsSidebarProps) {
+  className,
+}: SchemaDetailsSidebarProps & ComponentPropsWithRef<"div">) {
   const schema = useActiveSchema();
   const hasSelection = Boolean(selection.nodeId || selection.edgeId);
 
@@ -46,7 +47,7 @@ export function SchemaDetailsSidebar({
 
   return (
     <Activity mode={isVisible(hasSelection)}>
-      <div className="absolute top-3 right-3 z-20 max-h-[calc(100%-1.5rem)] overflow-auto">
+      <div className={cn("min-w-72", className)}>
         {selection.nodeId && (
           <NodeLabelDetails nodeLabel={selection.nodeId} onClose={onClose} />
         )}

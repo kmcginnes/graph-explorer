@@ -8,7 +8,11 @@ import {
   toHumanString,
   VertexSymbolByType,
 } from "@/components";
-import { useDisplayVertexTypeConfig, useVertexTypeTotal } from "@/core";
+import {
+  useDisplayVertexTypeConfig,
+  useVertexTypeTotal,
+  type DisplayConfigAttribute,
+} from "@/core";
 
 export type NodeLabelDetailsProps = {
   nodeLabel: string;
@@ -23,7 +27,7 @@ export function NodeLabelDetails({
   const total = useVertexTypeTotal(nodeLabel);
 
   return (
-    <Panel className="max-w-sm shadow-md">
+    <Panel className="max-w-sm shadow-lg">
       <PanelHeader>
         <PanelTitle className="flex items-center gap-2">
           <VertexSymbolByType vertexType={nodeLabel} className="size-6" />
@@ -57,19 +61,29 @@ export function NodeLabelDetails({
               No attributes discovered
             </div>
           ) : (
-            <ul className="space-y-1">
-              {config.attributes.map(attr => (
-                <li
-                  key={attr.name}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <span className="text-text-primary">{attr.displayLabel}</span>
-                </li>
-              ))}
-            </ul>
+            <AttributeList attributes={config.attributes} />
           )}
         </div>
       </PanelContent>
     </Panel>
+  );
+}
+
+function AttributeList({
+  attributes,
+}: {
+  attributes: DisplayConfigAttribute[];
+}) {
+  return (
+    <ul className="space-y-1.5">
+      {attributes.map(attr => (
+        <li key={attr.name} className="grid grid-cols-2">
+          <div className="text-text-primary">{attr.displayLabel}</div>
+          <div className="text-muted-foreground bg-muted place-self-end rounded-md px-2 py-0.5 text-right font-mono text-sm lowercase">
+            {attr.dataType}
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }

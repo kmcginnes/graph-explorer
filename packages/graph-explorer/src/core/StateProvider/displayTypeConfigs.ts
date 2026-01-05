@@ -33,6 +33,7 @@ export type DisplayConfigAttribute = {
   name: string;
   displayLabel: string;
   isSearchable: boolean;
+  dataType: string;
 };
 
 /** Gets the matching vertex type config or a generated default value. */
@@ -161,6 +162,7 @@ export function mapToDisplayVertexTypeConfig(
       name: attr.name,
       displayLabel: textTransform(attr.name),
       isSearchable: isAttributeSearchable(attr),
+      dataType: attr.dataType ?? LABELS.MISSING_TYPE,
     }))
     .toSorted(sortAttributeByName);
 

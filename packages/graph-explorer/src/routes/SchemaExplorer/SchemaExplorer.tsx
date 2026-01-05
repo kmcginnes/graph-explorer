@@ -52,7 +52,7 @@ export default function SchemaExplorer() {
         </NavBarActions>
       </NavBar>
       <WorkspaceContent>
-        <PanelGroup className="grid">
+        <PanelGroup className="flex min-h-0">
           <SchemaGraph />
         </PanelGroup>
       </WorkspaceContent>
