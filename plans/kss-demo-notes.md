@@ -79,9 +79,12 @@ Graph Explorer comes pre-installed with Neptune Notebooks. It's also packaged as
 ### 7. Query Editor (~5 min)
 
 - Position as a power user tool: "Everything so far has been no-code, but if you want full control..."
-- Write a live Gremlin query — suggestions:
+- Write a live Gremlin query
+- Show results appearing in the sidebar
+- Add results to the graph
+- Using Gremlin for this demo (mention openCypher and SPARQL are also supported)
 
-  ```groovy
+```java
   // find top-rated movies
   g.V().hasLabel('Movie')
    .has('rating', gte(8.5))
@@ -91,11 +94,7 @@ Graph Explorer comes pre-installed with Neptune Notebooks. It's also packaged as
   g.V().has('Person', 'name', 'Tom Hanks')
    .out('ACTED_IN')
    .values('title')
-  ```
-
-- Show results appearing in the sidebar
-- Add results to the graph
-- Using Gremlin for this demo (mention openCypher and SPARQL are also supported)
+```
 
 ### 8. Wrap-Up (~2 min)
 
