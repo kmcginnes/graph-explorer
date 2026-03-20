@@ -80,8 +80,19 @@ Graph Explorer comes pre-installed with Neptune Notebooks. It's also packaged as
 
 - Position as a power user tool: "Everything so far has been no-code, but if you want full control..."
 - Write a live Gremlin query — suggestions:
-  - `g.V().hasLabel('Movie').has('rating', gte(8.5)).order().by('rating', desc)` — find top-rated movies
-  - `g.V().has('Person', 'name', 'Tom Hanks').out('ACTED_IN').values('title')` — list Tom Hanks movies
+
+  ```groovy
+  // find top-rated movies
+  g.V().hasLabel('Movie')
+   .has('rating', gte(8.5))
+   .order().by('rating', desc)
+
+  // list Tom Hanks movies
+  g.V().has('Person', 'name', 'Tom Hanks')
+   .out('ACTED_IN')
+   .values('title')
+  ```
+
 - Show results appearing in the sidebar
 - Add results to the graph
 - Using Gremlin for this demo (mention openCypher and SPARQL are also supported)
@@ -112,7 +123,7 @@ If the audience is quiet, lead with "A question I get a lot is..."
 - All user data stored client-side (IndexedDB) — the server stores nothing
 - Open-source stack: Cytoscape.js for graph rendering, Jotai for state management, TanStack Query for data fetching
 
-## Things to Avoid
+## Things to Avoidg.V().hasLabel('Movie').has('rating', gte(8.5)).order().by('rating', desc)
 
 - Don't mention counts per type in schema explorer (unreliable)
 - Don't mention conditional styling based on property values (not supported)
