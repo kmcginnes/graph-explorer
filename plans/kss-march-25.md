@@ -1,8 +1,8 @@
 # Graph Explorer Internal Knowledge Sharing Session
 
-**Date:** March 25, 2026
-**Format:** Virtual video conference, 60 minutes, solo presenter
-**Audience:** Mixed internal AWS employees (devs, SAs, support, PMs) — assume graph database familiarity but no prior Graph Explorer experience
+- **Date:** March 25, 2026
+- **Format:** Virtual video conference, 60 minutes, solo presenter
+- **Audience:** Mixed internal AWS employees (devs, SAs, support, PMs) — assume graph database familiarity but no prior Graph Explorer experience
 
 ---
 
@@ -56,13 +56,13 @@ If the audience is quiet, lead with "A question I get a lot is..."
 
 ### By end of Friday, March 20
 
-- [ ] Create Neptune instance
-- [ ] Deploy Graph Explorer against it
-- [ ] Generate and load movie dataset
+- [x] Create Neptune instance
+- [x] Deploy Graph Explorer against it
+- [x] Generate and load movie dataset
 
 ### By end of weekend / Monday, March 23
 
-- [ ] Create slides
+- [x] Create slides
 - [ ] Pre-plan the exact demo path through the movie data (which actor → which movie → which expansion → surprise connection)
 - [ ] Test the full demo flow end to end
 
