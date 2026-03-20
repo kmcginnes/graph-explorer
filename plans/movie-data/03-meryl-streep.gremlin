@@ -1,0 +1,93 @@
+// Meryl Streep cluster
+// Run after 02-tom-hanks.gremlin
+// Cross-connections: Tom Hanks (The Post), Steven Spielberg (directed The Post)
+
+// --- People ---
+g
+.addV('Person').property(id, 'person-meryl-streep').property('name', 'Meryl Streep').property('birthYear', 1949)
+.addV('Person').property(id, 'person-clint-eastwood').property('name', 'Clint Eastwood').property('birthYear', 1930)
+.addV('Person').property(id, 'person-jack-nicholson').property('name', 'Jack Nicholson').property('birthYear', 1937)
+.addV('Person').property(id, 'person-amy-adams').property('name', 'Amy Adams').property('birthYear', 1974)
+.addV('Person').property(id, 'person-philip-seymour-hoffman').property('name', 'Philip Seymour Hoffman').property('birthYear', 1967)
+.addV('Person').property(id, 'person-anne-hathaway').property('name', 'Anne Hathaway').property('birthYear', 1982)
+.addV('Person').property(id, 'person-david-frankel').property('name', 'David Frankel').property('birthYear', 1959)
+.addV('Person').property(id, 'person-nancy-meyers').property('name', 'Nancy Meyers').property('birthYear', 1949)
+.addV('Person').property(id, 'person-mike-nichols').property('name', 'Mike Nichols').property('birthYear', 1931)
+.addV('Person').property(id, 'person-dustin-hoffman').property('name', 'Dustin Hoffman').property('birthYear', 1937)
+.addV('Person').property(id, 'person-robert-benton').property('name', 'Robert Benton').property('birthYear', 1932)
+.addV('Person').property(id, 'person-john-patrick-shanley').property('name', 'John Patrick Shanley').property('birthYear', 1950)
+
+// --- Movies ---
+g
+.addV('Movie').property(id, 'movie-the-devil-wears-prada').property('title', 'The Devil Wears Prada').property('year', 2006).property('rating', 6.9).property('tagline', 'Hell on heels')
+.addV('Movie').property(id, 'movie-bridges-of-madison-county').property('title', 'The Bridges of Madison County').property('year', 1995).property('rating', 7.6).property('tagline', 'This kind of certainty comes but once in a lifetime')
+.addV('Movie').property(id, 'movie-somethings-gotta-give').property('title', "Something's Gotta Give").property('year', 2003).property('rating', 6.7).property('tagline', 'Sexy. Funny. Unexpected.')
+.addV('Movie').property(id, 'movie-doubt').property('title', 'Doubt').property('year', 2008).property('rating', 7.5).property('tagline', 'There is no evidence. There are no witnesses. But for one, there is no doubt.')
+.addV('Movie').property(id, 'movie-kramer-vs-kramer').property('title', 'Kramer vs. Kramer').property('year', 1979).property('rating', 7.8).property('tagline', 'There are three sides to this love story')
+.addV('Movie').property(id, 'movie-the-post').property('title', 'The Post').property('year', 2017).property('rating', 7.2).property('tagline', 'Truth be told')
+.addV('Movie').property(id, 'movie-silkwood').property('title', 'Silkwood').property('year', 1983).property('rating', 7.1).property('tagline', 'On November 13, 1974, Karen Silkwood set out to meet a reporter')
+.addV('Movie').property(id, 'movie-sophies-choice').property('title', "Sophie's Choice").property('year', 1982).property('rating', 7.6).property('tagline', 'A story of love, madness, and the Holocaust')
+
+// --- ACTED_IN ---
+g
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-the-devil-wears-prada')).property('role', 'Miranda Priestly')
+.V('person-anne-hathaway').addE('ACTED_IN').to(__.V('movie-the-devil-wears-prada')).property('role', 'Andy Sachs')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-bridges-of-madison-county')).property('role', 'Francesca Johnson')
+.V('person-clint-eastwood').addE('ACTED_IN').to(__.V('movie-bridges-of-madison-county')).property('role', 'Robert Kincaid')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-somethings-gotta-give')).property('role', 'Zoe')
+.V('person-jack-nicholson').addE('ACTED_IN').to(__.V('movie-somethings-gotta-give')).property('role', 'Harry Sanborn')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-doubt')).property('role', 'Sister Aloysius Beauvier')
+.V('person-philip-seymour-hoffman').addE('ACTED_IN').to(__.V('movie-doubt')).property('role', 'Father Brendan Flynn')
+.V('person-amy-adams').addE('ACTED_IN').to(__.V('movie-doubt')).property('role', 'Sister James')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-kramer-vs-kramer')).property('role', 'Joanna Kramer')
+.V('person-dustin-hoffman').addE('ACTED_IN').to(__.V('movie-kramer-vs-kramer')).property('role', 'Ted Kramer')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-the-post')).property('role', 'Katharine Graham')
+.V('person-tom-hanks').addE('ACTED_IN').to(__.V('movie-the-post')).property('role', 'Ben Bradlee')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-silkwood')).property('role', 'Karen Silkwood')
+.V('person-meryl-streep').addE('ACTED_IN').to(__.V('movie-sophies-choice')).property('role', 'Sophie Zawistowski')
+
+// --- DIRECTED ---
+g
+.V('person-david-frankel').addE('DIRECTED').to(__.V('movie-the-devil-wears-prada'))
+.V('person-clint-eastwood').addE('DIRECTED').to(__.V('movie-bridges-of-madison-county'))
+.V('person-nancy-meyers').addE('DIRECTED').to(__.V('movie-somethings-gotta-give'))
+.V('person-john-patrick-shanley').addE('DIRECTED').to(__.V('movie-doubt'))
+.V('person-robert-benton').addE('DIRECTED').to(__.V('movie-kramer-vs-kramer'))
+.V('person-steven-spielberg').addE('DIRECTED').to(__.V('movie-the-post'))
+.V('person-mike-nichols').addE('DIRECTED').to(__.V('movie-silkwood'))
+
+// --- HAS_GENRE ---
+g
+.V('movie-the-devil-wears-prada').addE('HAS_GENRE').to(__.V('genre-comedy'))
+.V('movie-the-devil-wears-prada').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-bridges-of-madison-county').addE('HAS_GENRE').to(__.V('genre-romance'))
+.V('movie-bridges-of-madison-county').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-somethings-gotta-give').addE('HAS_GENRE').to(__.V('genre-comedy'))
+.V('movie-somethings-gotta-give').addE('HAS_GENRE').to(__.V('genre-romance'))
+.V('movie-doubt').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-kramer-vs-kramer').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-the-post').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-the-post').addE('HAS_GENRE').to(__.V('genre-history'))
+.V('movie-silkwood').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-silkwood').addE('HAS_GENRE').to(__.V('genre-biography'))
+.V('movie-sophies-choice').addE('HAS_GENRE').to(__.V('genre-drama'))
+.V('movie-sophies-choice').addE('HAS_GENRE').to(__.V('genre-romance'))
+
+// --- PRODUCED_BY ---
+g
+.V('movie-the-devil-wears-prada').addE('PRODUCED_BY').to(__.V('studio-fox'))
+.V('movie-bridges-of-madison-county').addE('PRODUCED_BY').to(__.V('studio-warner'))
+.V('movie-somethings-gotta-give').addE('PRODUCED_BY').to(__.V('studio-columbia'))
+.V('movie-doubt').addE('PRODUCED_BY').to(__.V('studio-miramax'))
+.V('movie-kramer-vs-kramer').addE('PRODUCED_BY').to(__.V('studio-columbia'))
+.V('movie-the-post').addE('PRODUCED_BY').to(__.V('studio-fox'))
+.V('movie-silkwood').addE('PRODUCED_BY').to(__.V('studio-fox'))
+.V('movie-sophies-choice').addE('PRODUCED_BY').to(__.V('studio-universal'))
+
+// --- WON_AWARD ---
+g
+.V('person-meryl-streep').addE('WON_AWARD').to(__.V('award-best-actress')).property('year', 1983)
+.V('person-meryl-streep').addE('WON_AWARD').to(__.V('award-best-actress')).property('year', 2012)
+.V('person-meryl-streep').addE('WON_AWARD').to(__.V('award-best-supporting-actress')).property('year', 1980)
+.V('movie-kramer-vs-kramer').addE('WON_AWARD').to(__.V('award-best-picture')).property('year', 1980)
+.V('person-dustin-hoffman').addE('WON_AWARD').to(__.V('award-best-actor')).property('year', 1980)

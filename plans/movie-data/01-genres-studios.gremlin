@@ -1,0 +1,43 @@
+// Shared genres, studios, and awards — run this first
+// Paste each batch into Graph Explorer's query editor
+
+// --- Genres ---
+g
+.addV('Genre').property(id, 'genre-drama').property('name', 'Drama')
+.addV('Genre').property(id, 'genre-comedy').property('name', 'Comedy')
+.addV('Genre').property(id, 'genre-thriller').property('name', 'Thriller')
+.addV('Genre').property(id, 'genre-scifi').property('name', 'Science Fiction')
+.addV('Genre').property(id, 'genre-romance').property('name', 'Romance')
+.addV('Genre').property(id, 'genre-action').property('name', 'Action')
+.addV('Genre').property(id, 'genre-crime').property('name', 'Crime')
+.addV('Genre').property(id, 'genre-war').property('name', 'War')
+.addV('Genre').property(id, 'genre-biography').property('name', 'Biography')
+.addV('Genre').property(id, 'genre-history').property('name', 'History')
+.addV('Genre').property(id, 'genre-adventure').property('name', 'Adventure')
+.addV('Genre').property(id, 'genre-fantasy').property('name', 'Fantasy')
+.addV('Genre').property(id, 'genre-animation').property('name', 'Animation')
+.addV('Genre').property(id, 'genre-musical').property('name', 'Musical')
+.addV('Genre').property(id, 'genre-horror').property('name', 'Horror')
+
+// --- Studios ---
+g
+.addV('Studio').property(id, 'studio-paramount').property('name', 'Paramount Pictures')
+.addV('Studio').property(id, 'studio-warner').property('name', 'Warner Bros.')
+.addV('Studio').property(id, 'studio-universal').property('name', 'Universal Pictures')
+.addV('Studio').property(id, 'studio-disney').property('name', 'Walt Disney Pictures')
+.addV('Studio').property(id, 'studio-columbia').property('name', 'Columbia Pictures')
+.addV('Studio').property(id, 'studio-fox').property('name', '20th Century Fox')
+.addV('Studio').property(id, 'studio-dreamworks').property('name', 'DreamWorks')
+.addV('Studio').property(id, 'studio-mgm').property('name', 'MGM')
+.addV('Studio').property(id, 'studio-lionsgate').property('name', 'Lionsgate')
+.addV('Studio').property(id, 'studio-miramax').property('name', 'Miramax')
+.addV('Studio').property(id, 'studio-newline').property('name', 'New Line Cinema')
+
+// --- Awards ---
+g
+.addV('Award').property(id, 'award-best-picture').property('name', 'Academy Award for Best Picture')
+.addV('Award').property(id, 'award-best-actor').property('name', 'Academy Award for Best Actor')
+.addV('Award').property(id, 'award-best-actress').property('name', 'Academy Award for Best Actress')
+.addV('Award').property(id, 'award-best-director').property('name', 'Academy Award for Best Director')
+.addV('Award').property(id, 'award-best-supporting-actor').property('name', 'Academy Award for Best Supporting Actor')
+.addV('Award').property(id, 'award-best-supporting-actress').property('name', 'Academy Award for Best Supporting Actress')

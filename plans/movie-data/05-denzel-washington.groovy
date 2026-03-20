@@ -1,0 +1,87 @@
+// Denzel Washington cluster
+// Cross-connections: studios, genres
+
+// === People ===
+g.addV('Person').property(id, 'person-denzel-washington').property('name', 'Denzel Washington').property('birthYear', 1954)
+g.addV('Person').property(id, 'person-antoine-fuqua').property('name', 'Antoine Fuqua').property('birthYear', 1966)
+g.addV('Person').property(id, 'person-ethan-hawke').property('name', 'Ethan Hawke').property('birthYear', 1970)
+g.addV('Person').property(id, 'person-spike-lee').property('name', 'Spike Lee').property('birthYear', 1957)
+g.addV('Person').property(id, 'person-edward-zwick').property('name', 'Edward Zwick').property('birthYear', 1952)
+g.addV('Person').property(id, 'person-morgan-freeman').property('name', 'Morgan Freeman').property('birthYear', 1937)
+g.addV('Person').property(id, 'person-russell-crowe').property('name', 'Russell Crowe').property('birthYear', 1964)
+g.addV('Person').property(id, 'person-ridley-scott').property('name', 'Ridley Scott').property('birthYear', 1937)
+g.addV('Person').property(id, 'person-tony-scott').property('name', 'Tony Scott').property('birthYear', 1944)
+g.addV('Person').property(id, 'person-julia-roberts').property('name', 'Julia Roberts').property('birthYear', 1967)
+g.addV('Person').property(id, 'person-norman-jewison').property('name', 'Norman Jewison').property('birthYear', 1926)
+
+// === Movies ===
+g.addV('Movie').property(id, 'movie-training-day').property('title', 'Training Day').property('year', 2001).property('rating', 7.7).property('tagline', 'The only thing more dangerous than the line being crossed, is the cop who will cross it')
+g.addV('Movie').property(id, 'movie-glory').property('title', 'Glory').property('year', 1989).property('rating', 7.8).property('tagline', 'Their fight for freedom began with the fight of their lives')
+g.addV('Movie').property(id, 'movie-malcolm-x').property('title', 'Malcolm X').property('year', 1992).property('rating', 7.7).property('tagline', 'By any means necessary')
+g.addV('Movie').property(id, 'movie-american-gangster').property('title', 'American Gangster').property('year', 2007).property('rating', 7.8).property('tagline', 'There are two sides to the American dream')
+g.addV('Movie').property(id, 'movie-man-on-fire').property('title', 'Man on Fire').property('year', 2004).property('rating', 7.7).property('tagline', 'Creasy is art is the art of death')
+g.addV('Movie').property(id, 'movie-the-pelican-brief').property('title', 'The Pelican Brief').property('year', 1993).property('rating', 6.4).property('tagline', 'Two had the story. One had the key.')
+g.addV('Movie').property(id, 'movie-fences').property('title', 'Fences').property('year', 2016).property('rating', 7.2).property('tagline', 'Every dream has a price')
+g.addV('Movie').property(id, 'movie-the-hurricane').property('title', 'The Hurricane').property('year', 1999).property('rating', 7.6).property('tagline', 'His greatest fight was for justice')
+g.addV('Movie').property(id, 'movie-remember-the-titans').property('title', 'Remember the Titans').property('year', 2000).property('rating', 7.8).property('tagline', 'History is written by the winners')
+g.addV('Movie').property(id, 'movie-in-the-heat-of-the-night').property('title', 'In the Heat of the Night').property('year', 1967).property('rating', 7.9).property('tagline', 'They got a murder on their hands. They don\\'t know what to do with it.')
+
+// === ACTED_IN ===
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-training-day')).property('role', 'Alonzo Harris')
+g.V('person-ethan-hawke').addE('ACTED_IN').to(g.V('movie-training-day')).property('role', 'Jake Hoyt')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-glory')).property('role', 'Private Trip')
+g.V('person-morgan-freeman').addE('ACTED_IN').to(g.V('movie-glory')).property('role', 'Sgt. Major John Rawlins')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-malcolm-x')).property('role', 'Malcolm X')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-american-gangster')).property('role', 'Frank Lucas')
+g.V('person-russell-crowe').addE('ACTED_IN').to(g.V('movie-american-gangster')).property('role', 'Richie Roberts')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-man-on-fire')).property('role', 'John Creasy')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-the-pelican-brief')).property('role', 'Gray Grantham')
+g.V('person-julia-roberts').addE('ACTED_IN').to(g.V('movie-the-pelican-brief')).property('role', 'Darby Shaw')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-fences')).property('role', 'Troy Maxson')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-the-hurricane')).property('role', 'Rubin Carter')
+g.V('person-denzel-washington').addE('ACTED_IN').to(g.V('movie-remember-the-titans')).property('role', 'Coach Herman Boone')
+
+// === DIRECTED ===
+g.V('person-antoine-fuqua').addE('DIRECTED').to(g.V('movie-training-day'))
+g.V('person-edward-zwick').addE('DIRECTED').to(g.V('movie-glory'))
+g.V('person-spike-lee').addE('DIRECTED').to(g.V('movie-malcolm-x'))
+g.V('person-ridley-scott').addE('DIRECTED').to(g.V('movie-american-gangster'))
+g.V('person-tony-scott').addE('DIRECTED').to(g.V('movie-man-on-fire'))
+g.V('person-denzel-washington').addE('DIRECTED').to(g.V('movie-fences'))
+g.V('person-norman-jewison').addE('DIRECTED').to(g.V('movie-the-hurricane'))
+
+// === HAS_GENRE ===
+g.V('movie-training-day').addE('HAS_GENRE').to(g.V('genre-crime'))
+g.V('movie-training-day').addE('HAS_GENRE').to(g.V('genre-thriller'))
+g.V('movie-glory').addE('HAS_GENRE').to(g.V('genre-drama'))
+g.V('movie-glory').addE('HAS_GENRE').to(g.V('genre-war'))
+g.V('movie-glory').addE('HAS_GENRE').to(g.V('genre-history'))
+g.V('movie-malcolm-x').addE('HAS_GENRE').to(g.V('genre-biography'))
+g.V('movie-malcolm-x').addE('HAS_GENRE').to(g.V('genre-drama'))
+g.V('movie-malcolm-x').addE('HAS_GENRE').to(g.V('genre-history'))
+g.V('movie-american-gangster').addE('HAS_GENRE').to(g.V('genre-crime'))
+g.V('movie-american-gangster').addE('HAS_GENRE').to(g.V('genre-drama'))
+g.V('movie-man-on-fire').addE('HAS_GENRE').to(g.V('genre-action'))
+g.V('movie-man-on-fire').addE('HAS_GENRE').to(g.V('genre-thriller'))
+g.V('movie-the-pelican-brief').addE('HAS_GENRE').to(g.V('genre-thriller'))
+g.V('movie-the-pelican-brief').addE('HAS_GENRE').to(g.V('genre-crime'))
+g.V('movie-fences').addE('HAS_GENRE').to(g.V('genre-drama'))
+g.V('movie-the-hurricane').addE('HAS_GENRE').to(g.V('genre-biography'))
+g.V('movie-the-hurricane').addE('HAS_GENRE').to(g.V('genre-drama'))
+g.V('movie-remember-the-titans').addE('HAS_GENRE').to(g.V('genre-drama'))
+g.V('movie-remember-the-titans').addE('HAS_GENRE').to(g.V('genre-biography'))
+
+// === PRODUCED_BY ===
+g.V('movie-training-day').addE('PRODUCED_BY').to(g.V('studio-warner'))
+g.V('movie-glory').addE('PRODUCED_BY').to(g.V('studio-columbia'))
+g.V('movie-malcolm-x').addE('PRODUCED_BY').to(g.V('studio-warner'))
+g.V('movie-american-gangster').addE('PRODUCED_BY').to(g.V('studio-universal'))
+g.V('movie-man-on-fire').addE('PRODUCED_BY').to(g.V('studio-fox'))
+g.V('movie-the-pelican-brief').addE('PRODUCED_BY').to(g.V('studio-warner'))
+g.V('movie-fences').addE('PRODUCED_BY').to(g.V('studio-paramount'))
+g.V('movie-the-hurricane').addE('PRODUCED_BY').to(g.V('studio-universal'))
+g.V('movie-remember-the-titans').addE('PRODUCED_BY').to(g.V('studio-disney'))
+
+// === WON_AWARD ===
+g.V('person-denzel-washington').addE('WON_AWARD').to(g.V('award-best-actor')).property('year', 2002)
+g.V('person-denzel-washington').addE('WON_AWARD').to(g.V('award-best-supporting-actor')).property('year', 1990)
