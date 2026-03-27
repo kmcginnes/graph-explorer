@@ -33,6 +33,8 @@ export default defineConfig(({ mode }) => {
   return {
     server: {
       host: true,
+      port: env.GRAPH_EXP_DEV_PORT ? Number(env.GRAPH_EXP_DEV_PORT) : undefined,
+      strictPort: !!env.GRAPH_EXP_DEV_PORT,
       watch: {
         ignored: ["**/*.test.ts", "**/*.test.tsx"],
       },
