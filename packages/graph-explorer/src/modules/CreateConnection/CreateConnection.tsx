@@ -24,6 +24,7 @@ import {
   type SkipReport,
   validateAndTransform,
 } from "@/connector/localData";
+import { inferAndStoreSchema } from "@/connector/localData/inferSchema";
 import { sampleDataPayload } from "@/connector/localData/sampleData";
 import {
   activeConfigurationAtom,
@@ -296,9 +297,18 @@ const CreateConnection = ({
 
   const reset = useResetState();
   const loadLocalDataIntoCache = useAtomCallback(
-    useCallback((_get, set, dataset: { vertices: any[]; edges: any[] }) => {
-      set(localDataCacheAtom, dataset);
-    }, []),
+    useCallback(
+      async (
+        get,
+        set,
+        connectionId: string,
+        dataset: { vertices: any[]; edges: any[] },
+      ) => {
+        set(localDataCacheAtom, dataset);
+        await inferAndStoreSchema(get, set, connectionId as any, dataset);
+      },
+      [],
+    ),
   );
 
   const onSubmit = async () => {
@@ -329,7 +339,7 @@ const CreateConnection = ({
 
         const result = validateAndTransform(payload);
         if (result.success) {
-          loadLocalDataIntoCache({
+          await loadLocalDataIntoCache(connectionId, {
             vertices: result.vertices,
             edges: result.edges,
           });

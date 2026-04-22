@@ -16,13 +16,13 @@ import {
   configurationAtom,
   createNewConfigurationId,
   type RawConfiguration,
-  schemaAtom,
 } from "@/core";
 import { localDataCacheAtom } from "@/core/connector";
 import { logger } from "@/utils";
 
 import type { PendingPostMessage } from "./usePostMessageListener";
 
+import { inferAndStoreSchema } from "./inferSchema";
 import { saveLocalData } from "./storage";
 import { validateAndTransform } from "./validateAndTransform";
 
@@ -41,7 +41,7 @@ export function PostMessagePrompt({
 
   const createAndLoad = useAtomCallback(
     useCallback(
-      async (_get, set) => {
+      async (get, set) => {
         const result = validateAndTransform(pending.payload);
         if (!result.success) {
           logger.error("[PostMessage] Validation failed:", result.error);
@@ -64,53 +64,9 @@ export function PostMessagePrompt({
 
         await saveLocalData(configId, pending.payload);
 
-        // Load into memory and activate
-        set(localDataCacheAtom, {
-          vertices: result.vertices,
-          edges: result.edges,
-        });
-
-        // Infer schema
-        const { createLocalDataExplorer } = await import("./localDataExplorer");
-        const tempExplorer = createLocalDataExplorer(
-          {
-            url: "",
-            graphDbUrl: "",
-            queryEngine: "localData",
-            proxyConnection: false,
-            awsAuthEnabled: false,
-          },
-          { vertices: result.vertices, edges: result.edges },
-        );
-        const schema = await tempExplorer.fetchSchema();
-
-        set(schemaAtom, prev => {
-          const updated = new Map(prev);
-          updated.set(configId, {
-            vertices: schema.vertices.map(v => ({
-              type: v.type,
-              attributes: v.attributes.map(a => ({
-                name: a.name,
-                dataType: a.dataType,
-              })),
-              total: v.total,
-            })),
-            edges: schema.edges.map(e => ({
-              type: e.type,
-              attributes: e.attributes.map(a => ({
-                name: a.name,
-                dataType: a.dataType,
-              })),
-              total: e.total,
-            })),
-            edgeConnections: schema.edgeConnections,
-            totalVertices: schema.totalVertices,
-            totalEdges: schema.totalEdges,
-            lastUpdate: new Date(),
-            lastSyncFail: false,
-          });
-          return updated;
-        });
+        const dataset = { vertices: result.vertices, edges: result.edges };
+        set(localDataCacheAtom, dataset);
+        await inferAndStoreSchema(get, set, configId, dataset);
 
         set(activeConfigurationAtom, configId);
         onDismiss();
