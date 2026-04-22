@@ -24,6 +24,7 @@ import {
   type SkipReport,
   validateAndTransform,
 } from "@/connector/localData";
+import { sampleDataPayload } from "@/connector/localData/sampleData";
 import {
   activeConfigurationAtom,
   allGraphSessionsAtom,
@@ -123,6 +124,20 @@ const CreateConnection = ({
   const [localDataFile, setLocalDataFile] = useState<File | null>(null);
   const [localDataError, setLocalDataError] = useState<string | null>(null);
   const [localDataSkipped, setLocalDataSkipped] = useState<SkipReport[]>([]);
+  const [localDataSource, setLocalDataSource] = useState<"file" | "sample">(
+    "sample",
+  );
+
+  const handleDataSourceChange = (value: string) => {
+    const source = value as "file" | "sample";
+    setLocalDataSource(source);
+    if (source === "sample" && !configId) {
+      setForm(prev => ({
+        ...prev,
+        name: sampleDataPayload.meta.name,
+      }));
+    }
+  };
 
   const onSave = useAtomCallback(
     useCallback(
@@ -264,10 +279,18 @@ const CreateConnection = ({
           ["nodeExpansionLimit"]: value ? DEFAULT_NODE_EXPAND_LIMIT : undefined,
         }));
       } else {
-        setForm(prev => ({
-          ...prev,
-          [attribute]: value,
-        }));
+        setForm(prev => {
+          const updates: Partial<ConnectionForm> = { [attribute]: value };
+          // Default the name to the sample dataset when switching to localData
+          if (
+            attribute === "queryEngine" &&
+            value === "localData" &&
+            !configId
+          ) {
+            updates.name = sampleDataPayload.meta.name;
+          }
+          return { ...prev, ...updates };
+        });
       }
     };
 
@@ -285,21 +308,26 @@ const CreateConnection = ({
     }
 
     if (form.queryEngine === "localData") {
-      if (!localDataFile && !configId) {
+      if (localDataSource === "file" && !localDataFile && !configId) {
         setLocalDataError("Please select a JSON file to import");
         return;
       }
 
       const connectionId = onSave(form as Required<ConnectionForm>);
 
-      // If a file was selected, process and store it
-      if (localDataFile && connectionId) {
+      // Determine the payload to store
+      let payload: LocalDataPayload | null = null;
+      if (localDataSource === "sample") {
+        payload = sampleDataPayload;
+      } else if (localDataFile) {
         const text = await localDataFile.text();
-        const json = JSON.parse(text) as LocalDataPayload;
-        await saveLocalData(connectionId, json);
+        payload = JSON.parse(text) as LocalDataPayload;
+      }
 
-        // Load into memory cache
-        const result = validateAndTransform(json);
+      if (payload && connectionId) {
+        await saveLocalData(connectionId, payload);
+
+        const result = validateAndTransform(payload);
         if (result.success) {
           loadLocalDataIntoCache({
             vertices: result.vertices,
@@ -358,35 +386,56 @@ const CreateConnection = ({
           />
         </FormItem>
         {isLocalData ? (
-          <FormItem>
-            <Label>Import JSON File</Label>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json,application/json"
-              className="file:bg-primary-main block w-full text-sm file:mr-4 file:rounded file:border-0 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:cursor-pointer"
-              onChange={e => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  void handleLocalDataFile(file);
-                }
-              }}
-            />
-            {localDataFile && (
-              <p className="text-primary-main text-sm">
-                ✓ {localDataFile.name}
+          <>
+            <FormItem>
+              <Label>Data Source</Label>
+              <SelectField
+                options={[
+                  { label: "Sample Dataset (Air Routes)", value: "sample" },
+                  { label: "Import from File", value: "file" },
+                ]}
+                value={localDataSource}
+                onValueChange={handleDataSourceChange}
+              />
+            </FormItem>
+            {localDataSource === "sample" && (
+              <p className="text-text-secondary text-sm">
+                A small air routes graph with airports, countries, and routes to
+                help you explore Graph Explorer.
               </p>
             )}
-            {localDataError && (
-              <p className="text-error-main text-sm">{localDataError}</p>
+            {localDataSource === "file" && (
+              <FormItem>
+                <Label>Import JSON File</Label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".json,application/json"
+                  className="file:bg-primary-main block w-full text-sm file:mr-4 file:rounded file:border-0 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:cursor-pointer"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      void handleLocalDataFile(file);
+                    }
+                  }}
+                />
+                {localDataFile && (
+                  <p className="text-primary-main text-sm">
+                    ✓ {localDataFile.name}
+                  </p>
+                )}
+                {localDataError && (
+                  <p className="text-error-main text-sm">{localDataError}</p>
+                )}
+                {localDataSkipped.length > 0 && (
+                  <p className="text-warning-main text-sm">
+                    {localDataSkipped.length} record(s) will be skipped during
+                    import.
+                  </p>
+                )}
+              </FormItem>
             )}
-            {localDataSkipped.length > 0 && (
-              <p className="text-warning-main text-sm">
-                {localDataSkipped.length} record(s) will be skipped during
-                import.
-              </p>
-            )}
-          </FormItem>
+          </>
         ) : (
           <>
             <FormItem>
