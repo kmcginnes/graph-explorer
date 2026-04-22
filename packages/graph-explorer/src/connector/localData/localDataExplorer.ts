@@ -189,7 +189,10 @@ export function createLocalDataExplorer(
 
     async keywordSearch(req) {
       const searchTerm = req.searchTerm?.toLowerCase() ?? "";
-      const filterTypes = req.vertexTypes ? new Set(req.vertexTypes) : null;
+      const filterTypes =
+        req.vertexTypes && req.vertexTypes.length > 0
+          ? new Set(req.vertexTypes)
+          : null;
       const filterAttrs = req.searchByAttributes
         ? new Set(req.searchByAttributes)
         : null;

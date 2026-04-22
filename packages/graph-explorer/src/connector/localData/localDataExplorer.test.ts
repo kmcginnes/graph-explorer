@@ -129,6 +129,18 @@ describe("createLocalDataExplorer", () => {
   });
 
   describe("keywordSearch", () => {
+    it("should return all vertices when no search term and empty vertex types", async () => {
+      const explorer = createLocalDataExplorer(
+        testConnection,
+        createTestDataset(),
+      );
+      const result = await explorer.keywordSearch({
+        vertexTypes: [],
+        limit: 10,
+      });
+      expect(result.vertices).toHaveLength(3);
+    });
+
     it("should find vertices by attribute value", async () => {
       const explorer = createLocalDataExplorer(
         testConnection,
