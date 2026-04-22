@@ -156,7 +156,7 @@ describe("createExportedConnection", () => {
     const exportedConnection = createExportedConnection(connection);
 
     expect(exportedConnection).toEqual({
-      dbUrl: connection.url,
+      dbUrl: connection.url!,
       queryEngine: connection.queryEngine!,
     } satisfies ExportedGraphConnection);
   });
@@ -354,7 +354,7 @@ describe("isMatchingConnection", () => {
     connection.proxyConnection = true;
     connection.graphDbUrl = createRandomUrlString();
     const exportedConnection = createRandomExportedGraphConnection();
-    exportedConnection.dbUrl = connection.url;
+    exportedConnection.dbUrl = connection.url!;
     exportedConnection.queryEngine = connection.queryEngine!;
 
     expect(isMatchingConnection(connection, exportedConnection)).toBeFalsy();

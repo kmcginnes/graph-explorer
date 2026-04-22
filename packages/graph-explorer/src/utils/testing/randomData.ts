@@ -630,18 +630,26 @@ export function createRandomRawConfiguration(): RawConfiguration {
 /**
  * Returnes a random query engine.
  * @param graphType - If "pg" then a random property graph query engine is
- * returned. If "rdf" then "sparql" is returned. If undefined then a random
- * query engine is returned.
+ * returned. If "rdf" then "sparql" is returned. If "localData" then "localData"
+ * is returned. If undefined then a random database query engine is returned
+ * (excludes localData since it has fundamentally different behavior).
  * @returns The query engine.
  */
-export function createRandomQueryEngine(graphType?: "pg" | "rdf"): QueryEngine {
+export function createRandomQueryEngine(
+  graphType?: "pg" | "rdf" | "localData",
+): QueryEngine {
   if (graphType === "rdf") {
     return "sparql";
   }
   if (graphType === "pg") {
     return pickRandomElement(["gremlin", "openCypher"]);
   }
-  return pickRandomElement([...queryEngineOptions]);
+  if (graphType === "localData") {
+    return "localData";
+  }
+  // Exclude localData from random selection since it has fundamentally
+  // different behavior (no URL, no schema sync, in-memory data)
+  return pickRandomElement(queryEngineOptions.filter(e => e !== "localData"));
 }
 
 export function createRandomServiceType(): NeptuneServiceType {

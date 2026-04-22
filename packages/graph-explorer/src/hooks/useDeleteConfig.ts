@@ -2,6 +2,7 @@ import { useAtomValue } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import { useCallback } from "react";
 
+import { removeLocalData } from "@/connector/localData";
 import {
   activeConfigurationAtom,
   allGraphSessionsAtom,
@@ -39,6 +40,9 @@ export function useDeleteConfig() {
         updatedGraphs.delete(id);
         return updatedGraphs;
       });
+
+      // Remove local data blob from IndexedDB (no-op if not a local data connection)
+      void removeLocalData(id);
     }, []),
   );
 }

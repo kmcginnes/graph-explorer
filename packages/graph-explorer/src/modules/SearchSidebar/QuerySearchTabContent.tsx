@@ -160,6 +160,8 @@ function QueryTextArea({
         return "e.g. MATCH (n) RETURN n LIMIT 10";
       case "sparql":
         return "e.g. CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o } LIMIT 10";
+      case "localData":
+        return "";
     }
   })();
 

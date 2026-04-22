@@ -15,6 +15,7 @@ import {
   SidebarTabsList,
   SidebarTabsTrigger,
 } from "@/components/SidebarTabs";
+import { useQueryEngine } from "@/core/connector";
 import { cn } from "@/utils";
 
 import { SidebarCloseButton } from "../SidebarCloseButton";
@@ -25,6 +26,8 @@ export const selectedTabAtom = atomWithReset("filter");
 
 export function SearchSidebarPanel() {
   const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
+  const queryEngine = useQueryEngine();
+  const isLocalData = queryEngine === "localData";
 
   return (
     <Layout>
@@ -33,17 +36,21 @@ export function SearchSidebarPanel() {
           <SidebarTabsTrigger value="filter">
             <ListFilterIcon /> Filter
           </SidebarTabsTrigger>
-          <SidebarTabsTrigger value="query">
-            <CodeIcon />
-            Query
-          </SidebarTabsTrigger>
+          {!isLocalData && (
+            <SidebarTabsTrigger value="query">
+              <CodeIcon />
+              Query
+            </SidebarTabsTrigger>
+          )}
         </SidebarTabsList>
         <SidebarTabsContent value="filter">
           <FilterSearchTabContent />
         </SidebarTabsContent>
-        <SidebarTabsContent value="query">
-          <QuerySearchTabContent />
-        </SidebarTabsContent>
+        {!isLocalData && (
+          <SidebarTabsContent value="query">
+            <QuerySearchTabContent />
+          </SidebarTabsContent>
+        )}
       </SidebarTabs>
     </Layout>
   );

@@ -16,6 +16,7 @@ import {
   ZoomOutButton,
   ZoomToFitButton,
 } from "@/components/Graph";
+import { useQueryEngine } from "@/core/connector";
 import { useSchemaSync } from "@/hooks/useSchemaSync";
 import { logger } from "@/utils";
 
@@ -23,6 +24,9 @@ import { schemaGraphLayoutAtom } from "./SchemaGraph";
 
 /** Toolbar for schema graph with layout controls and schema refresh */
 export function SchemaGraphToolbar() {
+  const queryEngine = useQueryEngine();
+  const isLocalData = queryEngine === "localData";
+
   return (
     <PanelHeader>
       <PanelTitle>Schema Graph</PanelTitle>
@@ -43,9 +47,12 @@ export function SchemaGraphToolbar() {
         <ZoomInButton />
         <ZoomOutButton />
 
-        <PanelHeaderDivider />
-
-        <SchemaRefreshButton />
+        {!isLocalData && (
+          <>
+            <PanelHeaderDivider />
+            <SchemaRefreshButton />
+          </>
+        )}
       </PanelHeaderActions>
     </PanelHeader>
   );

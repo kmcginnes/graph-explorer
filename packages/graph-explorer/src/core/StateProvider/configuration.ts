@@ -119,7 +119,7 @@ export function normalizeConnection(connection: ConnectionConfig) {
   return {
     ...connection,
     // Remove trailing slash
-    url: connection.url.replace(/\/$/, "") || "",
+    url: connection.url?.replace(/\/$/, "") || "",
     queryEngine: connection.queryEngine || "gremlin",
     graphDbUrl: connection.graphDbUrl?.replace(/\/$/, "") || "",
     proxyConnection:

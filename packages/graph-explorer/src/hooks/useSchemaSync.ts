@@ -7,6 +7,7 @@ import {
   maybeActiveSchemaAtom,
   useConfiguration,
 } from "@/core";
+import { useQueryEngine } from "@/core/connector";
 import { logger } from "@/utils";
 
 /** Returns true if any schema sync query is running. Will not trigger the query to run. */
@@ -42,12 +43,14 @@ export function useSchemaSync() {
   // options stay consistent when switching connections.
   const activeSchema = useAtomValue(maybeActiveSchemaAtom);
   const connectionId = useAtomValue(activeConfigurationAtom);
+  const queryEngine = useQueryEngine();
 
   const schemaDiscoveryQuery = useQuery(
     schemaSyncQuery({
       connectionId,
       activeSchema,
       hasConnection: config != null,
+      queryEngine,
     }),
   );
   const edgeDiscoveryQuery = useQuery(

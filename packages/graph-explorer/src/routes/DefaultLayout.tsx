@@ -6,6 +6,9 @@ import { Outlet } from "react-router";
 
 import { TooltipProvider } from "@/components";
 import { Toaster } from "@/components/Toaster";
+import { PostMessagePrompt } from "@/connector/localData/PostMessagePrompt";
+import { useLocalDataLoader } from "@/connector/localData/useLocalDataLoader";
+import { usePostMessageListener } from "@/connector/localData/usePostMessageListener";
 import { diagnosticLoggingAtom } from "@/core";
 import AppErrorPage from "@/core/AppErrorPage";
 import AppStatusLoader from "@/core/AppStatusLoader";
@@ -36,6 +39,8 @@ export default function DefaultLayout() {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider delayDuration={200}>
           <AppStatusLoader>
+            <LocalDataLoaderMount />
+            <PostMessageListenerMount />
             <Outlet />
             <Toaster />
           </AppStatusLoader>
@@ -43,4 +48,19 @@ export default function DefaultLayout() {
       </QueryClientProvider>
     </ErrorBoundary>
   );
+}
+
+/** Mounts the local data loader hook to handle local data connection activation. */
+function LocalDataLoaderMount() {
+  useLocalDataLoader();
+  return null;
+}
+
+/** Mounts the postMessage listener and shows the prompt dialog when data arrives. */
+function PostMessageListenerMount() {
+  const { pending, dismiss } = usePostMessageListener();
+  if (!pending) {
+    return null;
+  }
+  return <PostMessagePrompt pending={pending} onDismiss={dismiss} />;
 }

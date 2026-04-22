@@ -83,11 +83,15 @@ function ConnectionDetail({ config }: ConnectionDetailProps) {
 
   const deleteActiveConfig = useDeleteActiveConfiguration();
 
-  const dbUrl = config.connection
-    ? config.connection.proxyConnection
-      ? config.connection.graphDbUrl
-      : config.connection.url
-    : LABELS.MISSING_VALUE;
+  const isLocalData = config.connection?.queryEngine === "localData";
+
+  const dbUrl = isLocalData
+    ? "Local Data"
+    : config.connection
+      ? config.connection.proxyConnection
+        ? config.connection.graphDbUrl
+        : config.connection.url
+      : LABELS.MISSING_VALUE;
 
   const connectionName = config.displayLabel || config.id;
 
@@ -198,6 +202,22 @@ function MainContentLayout(_props: { config: RawConfiguration }) {
   const { isFetching, schemaDiscoveryQuery, refreshSchema } = useSchemaSync();
   const hasSchema = useHasActiveSchema();
   const cancel = useCancelSchemaSync();
+  const isLocalData = _props.config.connection?.queryEngine === "localData";
+
+  if (isLocalData) {
+    if (!hasSchema) {
+      return (
+        <PanelEmptyState
+          variant="info"
+          icon={<SyncIcon />}
+          title="No Data Loaded"
+          subtitle="Import a JSON file to explore the data."
+          className="p-6"
+        />
+      );
+    }
+    return <ConnectionData />;
+  }
 
   if (isFetching) {
     return (

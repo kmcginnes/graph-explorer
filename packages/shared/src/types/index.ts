@@ -1,4 +1,9 @@
-export const queryEngineOptions = ["gremlin", "openCypher", "sparql"] as const;
+export const queryEngineOptions = [
+  "gremlin",
+  "openCypher",
+  "sparql",
+  "localData",
+] as const;
 export type QueryEngine = (typeof queryEngineOptions)[number];
 
 export const neptuneServiceTypeOptions = [
@@ -9,9 +14,10 @@ export type NeptuneServiceType = (typeof neptuneServiceTypeOptions)[number];
 
 export type ConnectionConfig = {
   /**
-   * Base URL to access to the database through HTTPs endpoints
+   * Base URL to access to the database through HTTPs endpoints.
+   * Optional for local data connections.
    */
-  url: string;
+  url?: string;
   /**
    * Choose between gremlin or sparQL engines.
    * By default, it uses gremlin

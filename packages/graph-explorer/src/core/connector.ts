@@ -6,6 +6,10 @@ import type { Explorer } from "@/connector/useGEFetchTypes";
 import { emptyExplorer } from "@/connector/emptyExplorer";
 import { createGremlinExplorer } from "@/connector/gremlin/gremlinExplorer";
 import {
+  createLocalDataExplorer,
+  type LocalDataset,
+} from "@/connector/localData";
+import {
   ClientLoggerConnector,
   type LoggerConnector,
   ServerLoggerConnector,
@@ -19,6 +23,12 @@ import {
   activeConnectionAtom,
   type NormalizedConnection,
 } from "./StateProvider/configuration";
+
+/**
+ * Holds the in-memory dataset for the active local data connection.
+ * Populated when a local data connection is activated, cleared on deactivation.
+ */
+export const localDataCacheAtom = atom<LocalDataset | null>(null);
 
 export const explorerAtom = atom(get => {
   const explorerForTesting = get(explorerForTestingAtom);
@@ -41,6 +51,13 @@ export const explorerAtom = atom(get => {
       return createSparqlExplorer(connection, featureFlags, new Map());
     case "gremlin":
       return createGremlinExplorer(connection, featureFlags);
+    case "localData": {
+      const dataset = get(localDataCacheAtom);
+      if (!dataset) {
+        return emptyExplorer;
+      }
+      return createLocalDataExplorer(connection, dataset);
+    }
   }
 });
 

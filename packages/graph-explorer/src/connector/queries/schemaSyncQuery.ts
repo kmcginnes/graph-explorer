@@ -37,17 +37,22 @@ export function schemaSyncQuery({
   connectionId,
   activeSchema,
   hasConnection,
+  queryEngine,
 }: {
   connectionId: ConfigurationId | null;
   activeSchema: SchemaStorageModel | undefined;
   hasConnection: boolean;
+  queryEngine?: string;
 }) {
   return queryOptions({
     queryKey: schemaSyncQueryKey(connectionId),
     staleTime: Infinity,
     retryOnMount: false,
     initialData: activeSchema,
-    enabled: hasConnection && !activeSchema?.lastSyncFail,
+    enabled:
+      hasConnection &&
+      !activeSchema?.lastSyncFail &&
+      queryEngine !== "localData",
     queryFn: async ({ signal, meta }) => {
       const explorer = getExplorer(meta);
       const store = getStore(meta);

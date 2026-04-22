@@ -12,6 +12,7 @@ const translations: Record<QueryEngine, Record<string, string>> = {
   gremlin: flatten(gremlinTs),
   sparql: flatten(sparqlTs),
   openCypher: flatten(openCypherTs),
+  localData: flatten(gremlinTs),
 };
 
 type TranslationPaths = Leaves<
