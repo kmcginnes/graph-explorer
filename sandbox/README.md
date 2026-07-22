@@ -11,28 +11,26 @@ any connection form — the graph is ready to explore as soon as the app loads.
 
 ## Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) (or a compatible runtime)
-- [Node](https://nodejs.org) `24.16.0` — the version in [`.nvmrc`](../.nvmrc)
-- [pnpm](https://pnpm.io) `11.9.0` via Corepack
+- A container runtime that provides the `docker compose` command — [Docker
+  Desktop](https://docs.docker.com/get-docker/), or a compatible alternative
+  such as [Podman](https://podman.io) or [Colima](https://github.com/abiosoft/colima)
+- [Node](https://nodejs.org) `24.16.0` (the version in [`.nvmrc`](../.nvmrc))
+  active in your shell. Use whatever version manager you prefer — nvm, fnm,
+  asdf, etc. — from the repo root to pick it up automatically, e.g. `nvm use`
+  or `fnm use`. (pnpm is not a separate prerequisite; Corepack installs the
+  pinned version in the next step.)
 
 ## Setup
 
-1. Use the Node version pinned in [`.nvmrc`](../.nvmrc) (`24.16.0`). If you use
-   a Node version manager (nvm, fnm, asdf, …) it will pick this up from the
-   repo root — e.g. `nvm use`, or `fnm use`. Then enable Corepack so the pinned
-   pnpm version is used (Corepack must run against the selected Node):
+1. Enable Corepack (so the pinned pnpm version is used) and install
+   dependencies:
 
    ```sh
    corepack enable
-   ```
-
-2. Install dependencies:
-
-   ```sh
    pnpm install
    ```
 
-3. Start the Gremlin Server database:
+2. Start the Gremlin Server database:
 
    ```sh
    docker compose -f sandbox/docker-compose.yaml up -d
@@ -41,23 +39,33 @@ any connection form — the graph is ready to explore as soon as the app loads.
    This serves Gremlin over HTTP at `http://localhost:8282`. The air routes
    data is generated at startup and is not persisted between restarts.
 
-4. Start the app:
+3. Start the app:
 
    ```sh
    pnpm dev
    ```
 
-5. Open <http://localhost:5173>.
+4. Open <http://localhost:5173>.
 
 ## Smoke test
 
-You're ready when:
+The Graph View starts empty — search finds data, then you add it to the
+canvas. Confirm the environment is wired up correctly:
 
-- The app loads at <http://localhost:5173> **without** prompting you to fill
-  out a connection form.
-- Opening the graph and searching lets you see airport nodes and route edges.
+1. The app loads at <http://localhost:5173> **without** prompting you to fill
+   out a connection form.
+2. In the **Search** sidebar panel (**Filter** tab), searching returns
+   results (airports).
+3. Adding a result to the canvas works — click a result's **+** button, or
+   **Add All** at the top of the results list — and the node appears.
 
-If either fails, stop and resolve it before continuing.
+If any step fails, stop and resolve it before continuing.
+
+Once it's working, the [Getting Started guide](../docs/getting-started/README.md)
+is a short hands-on tutorial for the same air routes data — searching, expanding
+neighbors to draw route edges, filtering, and styling. (It's written for the
+Docker sample on port `8080`; here the app runs on <http://localhost:5173>, but
+every in-app step is identical.)
 
 ## How it fits together
 
