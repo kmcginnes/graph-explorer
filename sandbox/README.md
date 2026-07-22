@@ -17,8 +17,7 @@ any connection form — the graph is ready to explore as soon as the app loads.
 - [Node](https://nodejs.org) `24.16.0` (the version in [`.nvmrc`](../.nvmrc))
   active in your shell. Use whatever version manager you prefer — nvm, fnm,
   asdf, etc. — from the repo root to pick it up automatically, e.g. `nvm use`
-  or `fnm use`. (pnpm is not a separate prerequisite; Corepack installs the
-  pinned version in the next step.)
+  or `fnm use`.
 
 ## Setup
 
@@ -36,8 +35,10 @@ any connection form — the graph is ready to explore as soon as the app loads.
    docker compose -f sandbox/docker-compose.yaml up -d
    ```
 
-   This serves Gremlin over HTTP at `http://localhost:8282`. The air routes
-   data is generated at startup and is not persisted between restarts.
+   This serves Gremlin over HTTP at `http://localhost:8282`. Give it a few
+   seconds to finish loading the air routes data before you run queries. The
+   data lives only in memory, so each restart of the container rebuilds it from
+   scratch — nothing you change in the graph is saved.
 
 3. Start the app:
 
@@ -63,9 +64,8 @@ If any step fails, stop and resolve it before continuing.
 
 Once it's working, the [Getting Started guide](../docs/getting-started/README.md)
 is a short hands-on tutorial for the same air routes data — searching, expanding
-neighbors to draw route edges, filtering, and styling. (It's written for the
-Docker sample on port `8080`; here the app runs on <http://localhost:5173>, but
-every in-app step is identical.)
+neighbors to draw route edges, filtering, and styling. Its in-app steps apply
+here; just use <http://localhost:5173> instead of the port it mentions.
 
 ## How it fits together
 
@@ -75,6 +75,21 @@ every in-app step is identical.)
   proxy server on `8181` (off the privileged port `80`).
 - `packages/graph-explorer/defaultConnection.json` pre-seeds the "Default
   Connection" (Gremlin, proxy mode) pointing at `http://localhost:8282`.
+
+## Troubleshooting
+
+**Port already in use.** This sandbox uses three host ports: `5173` (app),
+`8181` (proxy server), and `8282` (database). If a port is occupied, that
+service won't start or the app won't connect. Free the port, or change it —
+the app and proxy ports live in `packages/graph-explorer/.env.local`, and the
+database port is the left-hand side of the mapping in
+`sandbox/docker-compose.yaml`. If you change the database port, update
+`GRAPH_EXP_CONNECTION_URL` in `packages/graph-explorer/defaultConnection.json`
+to match.
+
+For more, see the [configuration reference](../docs/references/configuration.md),
+the [development guide](../docs/development.md), and the
+[troubleshooting guide](../docs/guides/troubleshooting.md).
 
 ## Shut down
 
