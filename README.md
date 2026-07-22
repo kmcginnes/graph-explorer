@@ -1,4 +1,4 @@
-# Local Sandbox
+# Interview Setup
 
 Spin up Graph Explorer against a local Gremlin Server preloaded with the
 [air routes dataset](https://tinkerpop.apache.org/docs/3.8.1/upgrade/#air-routes-dataset).
@@ -67,15 +67,6 @@ Once it's working, the [Getting Started guide](./docs/getting-started/README.md)
 is a short hands-on tutorial for the same air routes data — searching, expanding
 neighbors to draw route edges, filtering, and styling. Its in-app steps apply
 here; just use <http://localhost:5173> instead of the port it mentions.
-
-## How it fits together
-
-- `sandbox/docker-compose.yaml` runs `tinkerpop/gremlin-server:3.8` with the
-  config and loader under `sandbox/sample/`.
-- `packages/graph-explorer/.env.local` pins the dev ports: Vite on `5173`, the
-  proxy server on `8181` (off the privileged port `80`).
-- `packages/graph-explorer/defaultConnection.json` pre-seeds the "Default
-  Connection" (Gremlin, proxy mode) pointing at `http://localhost:8282`.
 
 ## Troubleshooting
 
