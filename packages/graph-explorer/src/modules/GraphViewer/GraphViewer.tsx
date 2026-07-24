@@ -55,10 +55,12 @@ import { ExportGraphButton } from "./ExportGraphButton";
 import { GraphViewerEmptyState } from "./GraphViewerEmptyState";
 import { ImportGraphButton } from "./ImportGraphButton";
 import ContextMenu from "./internalComponents/ContextMenu";
+import { NodeHoverCard } from "./internalComponents/NodeHoverCard";
 import useContextMenu from "./useContextMenu";
 import { useGraphSelection } from "./useGraphSelection";
 import useGraphStyles from "./useGraphStyles";
 import useNodeBadges from "./useNodeBadges";
+import { useNodeHoverCard } from "./useNodeHoverCard";
 
 const graphLayoutSelectionAtom = atom<LayoutName>("F_COSE");
 
@@ -129,6 +131,15 @@ function GraphViewerContent({
     renderContextLayer,
   } = useContextMenu();
 
+  const {
+    hoveredNodeId,
+    isHoverCardOpen,
+    onNodeMouseOver,
+    onNodeMouseOut,
+    renderHoverCardLayer,
+    hoverCardLayerProps,
+  } = useNodeHoverCard();
+
   const styles = useGraphStyles();
   const getNodeBadges = useNodeBadges();
 
@@ -196,6 +207,8 @@ function GraphViewerContent({
             outOfFocusEdgesIds={edgesOutRenderedIds}
             onSelectedElementIdsChange={onSelectedElementIdsChange}
             onNodeDoubleClick={onNodeDoubleClick}
+            onNodeMouseOver={onNodeMouseOver}
+            onNodeMouseOut={onNodeMouseOut}
             onNodeRightClick={onNodeRightClick}
             onEdgeRightClick={onEdgeRightClick}
             onGraphRightClick={onGraphRightClick}
@@ -216,6 +229,18 @@ function GraphViewerContent({
                   affectedNodesIds={contextNodeId ? [contextNodeId] : []}
                   affectedEdgesIds={contextEdgeId ? [contextEdgeId] : []}
                 />
+              </div>,
+            )}
+
+          {isHoverCardOpen &&
+            hoveredNodeId &&
+            renderHoverCardLayer(
+              <div
+                {...hoverCardLayerProps}
+                style={hoverCardLayerProps.style}
+                className="z-popover"
+              >
+                <NodeHoverCard vertexId={hoveredNodeId} />
               </div>,
             )}
 
